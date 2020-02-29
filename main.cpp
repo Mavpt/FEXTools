@@ -11,45 +11,38 @@ using namespace std;
 int main()
 {
     ofstream Stream("/home/bruno/Dev/FEXTools/InputTest.txt");
-    ofstream Stream2("/home/bruno/Dev/FEXTools/InputTest2.txt");
 
     double* x   = new double[30];
     double* y   = new double[30];
     double* e_x = new double[30];
     double* e_y = new double[30];
 
-    double* x2   = new double[30];
-    double* y2   = new double[30];
-    double* e_x2 = new double[30];
-    double* e_y2 = new double[30];
-
     for (int i = 0; i < 30; i++)
     {
         x[i]   = ((double)i) / 2;
-        y[i]   = 3 * x[i] * x[i];
-        e_x[i] = 0;
-        e_y[i] = 0;
+        y[i]   = 5 * x[i] * x[i];
+        e_x[i] = .6;
+        e_y[i] = 20;
 
-        x2[i]   = ((double)i) / 2;
-        y2[i]   = 5 * x[i];
-        e_x2[i] = 0;
-        e_y2[i] = 0;
-
-        Stream << x[i] << "   " << y[i] << "  " << e_x[i] << "  " << e_y[i] << endl;
-        Stream2 << x2[i] << "   " << y2[i] << "  " << e_x2[i] << "  " << e_y2[i] << endl;
+        Stream << ((double)i) / 2 << " " << 50 * i << " " << .3 << " " << 10 << endl;
     }
 
     Stream.close();
 
-    DataSet dataSet({ "MyDataSetTest", "MyX", "MyY" }, "/home/bruno/Dev/FEXTools/InputTest.txt");
-    dataSet.Draw("/home/bruno/Dev/FEXTools/Test.eps");
-    DataSet dataSet2({ "MyDataSetTest2", "MyX", "MyY" }, "/home/bruno/Dev/FEXTools/InputTest2.txt");
-    dataSet2.Draw("/home/bruno/Dev/FEXTools/Test.eps");
+    DataSet DataSetTest1({ "DataSetTest1", "xAxis1", "yAxis1" }, "/home/bruno/Dev/FEXTools/InputTest.txt");
+    DataSetTest1.Draw("/home/bruno/Dev/FEXTools/Test.eps");
+    DataSet DataSetTest2({ "DataSetTest2", "xAxis2", "yAxis1" }, 30, x, y, e_x, e_y);
+    DataSetTest2.Draw("/home/bruno/Dev/FEXTools/Test.eps");
 
-    DataStack MyDataStack({ "MyDataStackTest", "MyXTEST", "MyTESTY" });
-    MyDataStack.Add(&dataSet);
-    MyDataStack.Add(&dataSet2);
-    MyDataStack.Draw("/home/bruno/Dev/FEXTools/Test.eps");
+    DataStack DataStackTest({ "DataStackTest", "xAxisStack", "xAxisStack" });
+    DataStackTest.Add(DataSetTest1);
+    DataStackTest.Add(DataSetTest2);
+    DataStackTest.Draw("/home/bruno/Dev/FEXTools/Test.eps");
+
+    delete[] x;
+    delete[] y;
+    delete[] e_x;
+    delete[] e_y;
 
     return 0;
 }

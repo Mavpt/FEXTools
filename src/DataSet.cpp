@@ -6,15 +6,11 @@
 #include <TAxis.h>
 #include <TStyle.h>
 
-#include <iostream>
-
 #include "DataSet.h"
 
-DataSet::DataSet(const DrawProperties& Properties, const Int_t N, const Double_t* x, const Double_t* e_x, const Double_t* y, const Double_t* e_y)
+DataSet::DataSet(const DrawProperties& Properties, const Int_t N, const Double_t* x, const Double_t* y, const Double_t* e_x, const Double_t* e_y)
 {
     m_Graph = new TGraphErrors(N, x, y, e_x, e_y);
-
-    for (int i = 0; i < N; i++) std::cout << i << " " << x[i] << "   " << y[i] << std::endl;
 
     m_Graph->SetNameTitle(Properties.Title, Properties.Title);
 
@@ -58,12 +54,15 @@ void DataSet::Draw(const char* FilePath, const bool Flush) const
 {
     if (Flush)
     {
-        TCanvas* MyCanvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
-        m_Graph->Draw("PA");
-        MyCanvas->Update();
-        MyCanvas->SaveAs(FilePath);
+        TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+        Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
 
-        delete MyCanvas;
+        m_Graph->Draw("PA");
+
+        Canvas->Update();
+        Canvas->SaveAs(FilePath);
+
+        delete Canvas;
     }
 
     else

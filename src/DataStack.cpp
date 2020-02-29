@@ -7,39 +7,44 @@
 
 #include <iostream>
 
-DataStack::DataStack(const DrawProperties& Properties) : m_DrawProperties(Properties)
+DataStack::DataStack(const DrawProperties& Properties) : NSets(0)
 {
+    m_DataStack = new TMultiGraph(Properties.Title, Properties.Title);
+
+    m_DataStack->GetXaxis()->SetTitle(Properties.xTitle);
+    m_DataStack->GetYaxis()->SetTitle(Properties.yTitle);
+}
+
+DataStack::~DataStack() {}
+
+void DataStack::Add(DataSet& i_DataSet)
+{
+    std::map<int, Color_t> ColorMap;
     ColorMap[0] = kRed;
     ColorMap[1] = kBlue;
     ColorMap[2] = kGreen;
     ColorMap[3] = kMagenta;
     ColorMap[4] = kCyan;
     ColorMap[5] = kYellow;
-}
 
-DataStack::~DataStack() {}
+    i_DataSet.SetDrawProperties({ i_DataSet.GetTitle(), i_DataSet.GetxTitle(), i_DataSet.GetyTitle(), ColorMap[NSets % 6], kFullDotLarge, 0.5 });
 
-void DataStack::Add(DataSet* i_DataSet)
-{
-    i_DataSet->SetDrawProperties({ m_DrawProperties.Title, m_DrawProperties.xTitle, m_DrawProperties.yTitle, ColorMap[m_DataStack.size() % 6], kFullDotLarge, 0.5 });
+    m_DataStack->Add((TGraph*)i_DataSet);
 
-    m_DataStack.push_back(i_DataSet);
+    NSets++;
 }
 
 void DataStack::Draw(const char* FilePath) const
 {
-    TCanvas* MyCanvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+    TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
 
-    for (DataSet* dataSet : m_DataStack)
-    {
-        std::cout << dataSet->GetTitle() << std::endl << std::endl;
-        dataSet->Draw("", false);
-    }
+    m_DataStack->Draw("PA");
 
-    // gPad->BuildLegend();
+    gPad->BuildLegend();
 
-    MyCanvas->Update();
-    MyCanvas->SaveAs(FilePath);
+    Canvas->Update();
+    Canvas->SaveAs(FilePath);
 
-    delete MyCanvas;
+    delete Canvas;
 }

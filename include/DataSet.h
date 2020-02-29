@@ -26,7 +26,7 @@ class DataSet
 {
 public:
     DataSet() = delete;
-    DataSet(const DrawProperties& Properties, const Int_t N, const Double_t* x, const Double_t* e_x, const Double_t* y, const Double_t* e_y);
+    DataSet(const DrawProperties& Properties, const Int_t N, const Double_t* x, const Double_t* y, const Double_t* e_x, const Double_t* e_y);
     DataSet(const DrawProperties& Properties, const char* FilePath);
 
     virtual ~DataSet();
