@@ -5,7 +5,9 @@
 build/
 
 # Files
+**/*.clang-format
 **/*.o
 **/*.exe
 
 **/*.eps
+**/*.txt
