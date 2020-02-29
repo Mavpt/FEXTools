@@ -6,51 +6,68 @@
 #include <TAxis.h>
 #include <TStyle.h>
 
-#include "Core.h"
+#include <iostream>
+
 #include "DataSet.h"
 
-using namespace std;
-
-DataSet::DataSet(const char* Title, const Int_t N, const char* xTitle, const Double_t* x, const Double_t* e_x, const char* yTitle, const Double_t* y, const Double_t* e_y)
+DataSet::DataSet(const DrawProperties& Properties, const Int_t N, const Double_t* x, const Double_t* e_x, const Double_t* y, const Double_t* e_y)
 {
     m_Graph = new TGraphErrors(N, x, y, e_x, e_y);
 
-    m_Graph->SetTitle(Title);
-    m_Graph->SetNameTitle(Title, Title);
+    for (int i = 0; i < N; i++) std::cout << i << " " << x[i] << "   " << y[i] << std::endl;
 
-    m_Graph->GetXaxis()->SetTitle(xTitle);
-    m_Graph->GetYaxis()->SetTitle(yTitle);
+    m_Graph->SetNameTitle(Properties.Title, Properties.Title);
 
-    m_Graph->SetMarkerStyle(kFullDotLarge);
-    m_Graph->SetMarkerSize(.5);
-    m_Graph->SetMarkerColor(kRed);
+    m_Graph->GetXaxis()->SetTitle(Properties.xTitle);
+    m_Graph->GetYaxis()->SetTitle(Properties.yTitle);
+
+    m_Graph->SetMarkerColor(Properties.MarkerColor);
+    m_Graph->SetMarkerStyle(Properties.MarkerStyle);
+    m_Graph->SetMarkerSize(Properties.MarkerSize);
 }
 
-DataSet::DataSet(const char* Title, const char* xTitle, const char* yTitle, const char* FilePath)
+DataSet::DataSet(const DrawProperties& Properties, const char* FilePath)
 {
     m_Graph = new TGraphErrors(FilePath);
 
-    m_Graph->SetTitle(Title);
-    m_Graph->SetNameTitle(Title, Title);
+    m_Graph->SetNameTitle(Properties.Title, Properties.Title);
 
-    m_Graph->GetXaxis()->SetTitle(xTitle);
-    m_Graph->GetYaxis()->SetTitle(yTitle);
+    m_Graph->GetXaxis()->SetTitle(Properties.xTitle);
+    m_Graph->GetYaxis()->SetTitle(Properties.yTitle);
 
-    m_Graph->SetMarkerStyle(kFullDotLarge);
-    m_Graph->SetMarkerSize(.5);
-    m_Graph->SetMarkerColor(kRed);
+    m_Graph->SetMarkerColor(Properties.MarkerColor);
+    m_Graph->SetMarkerStyle(Properties.MarkerStyle);
+    m_Graph->SetMarkerSize(Properties.MarkerSize);
 }
 
 DataSet::~DataSet() { delete m_Graph; }
 
-void DataSet::Draw(const char* FilePath) const
+void DataSet::SetDrawProperties(const DrawProperties& Properties)
 {
-    TCanvas* MyCanvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+    m_Graph->SetNameTitle(Properties.Title, Properties.Title);
 
-    m_Graph->Draw("PA");
+    m_Graph->GetXaxis()->SetTitle(Properties.xTitle);
+    m_Graph->GetYaxis()->SetTitle(Properties.yTitle);
 
-    MyCanvas->Update();
-    MyCanvas->SaveAs(FilePath);
+    m_Graph->SetMarkerColor(Properties.MarkerColor);
+    m_Graph->SetMarkerStyle(Properties.MarkerStyle);
+    m_Graph->SetMarkerSize(Properties.MarkerSize);
+}
 
-    delete MyCanvas;
+void DataSet::Draw(const char* FilePath, const bool Flush) const
+{
+    if (Flush)
+    {
+        TCanvas* MyCanvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+        m_Graph->Draw("PA");
+        MyCanvas->Update();
+        MyCanvas->SaveAs(FilePath);
+
+        delete MyCanvas;
+    }
+
+    else
+    {
+        m_Graph->Draw("PASAME");
+    }
 }
