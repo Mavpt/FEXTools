@@ -1,0 +1,11 @@
+# .gitignore
+
+# Directories
+.vscode/
+build/
+
+# Files
+**/*.o
+**/*.exe
+
+**/*.eps
