@@ -5,14 +5,15 @@
 
 #include "DataStack.h"
 
-#include <iostream>
-
-DataStack::DataStack(const DrawProperties& Properties) : NSets(0)
+DataStack::DataStack(const DataProperties& i_DataProperties) : NSets(0)
 {
-    m_DataStack = new TMultiGraph(Properties.Title, Properties.Title);
+    m_MultiGraph = new TMultiGraph(i_DataProperties.Title, i_DataProperties.Title);
 
-    m_DataStack->GetXaxis()->SetTitle(Properties.xTitle);
-    m_DataStack->GetYaxis()->SetTitle(Properties.yTitle);
+    m_MultiGraph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
+    m_MultiGraph->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
+
+    m_MultiGraph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
+    m_MultiGraph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
 }
 
 DataStack::~DataStack() {}
@@ -27,9 +28,9 @@ void DataStack::Add(DataSet& i_DataSet)
     ColorMap[4] = kCyan;
     ColorMap[5] = kYellow;
 
-    i_DataSet.SetDrawProperties({ i_DataSet.GetTitle(), i_DataSet.GetxTitle(), i_DataSet.GetyTitle(), ColorMap[NSets % 6], kFullDotLarge, 0.5 });
+    i_DataSet.SetDrawProperties({ ColorMap[NSets % 6], kFullDotLarge, 0.5 });
 
-    m_DataStack->Add((TGraph*)i_DataSet);
+    m_MultiGraph->Add((TGraph*)i_DataSet);
 
     NSets++;
 }
@@ -39,7 +40,7 @@ void DataStack::Draw(const char* FilePath) const
     TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
     Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
 
-    m_DataStack->Draw("PA");
+    m_MultiGraph->Draw("PA");
 
     gPad->BuildLegend();
 

@@ -12,17 +12,15 @@
 class DataStack
 {
 public:
-    DataStack(const DrawProperties& Properties);
+    DataStack(const DataProperties& i_DataProperties);
     ~DataStack();
 
     void Add(DataSet& i_DataSet);
 
-    virtual void Draw(const char* = "DataStack.eps") const;
-
-    void Print() const;
+    virtual void Draw(const char* FilePath = "DataStack.eps") const;
 
 protected:
-    TMultiGraph* m_DataStack;
+    TMultiGraph* m_MultiGraph;
 
     int NSets;
 };
