@@ -34,5 +34,6 @@ Utilizar o cmake presente na pasta ExampleProject ('''mkdir build && cd build &&
 ## Planos futuros
 1. Adicionar DataSets e funções 3D
 2. Melhorar os CMakes
-3. Limpar o código, em geral
-4. ...
+4. Permitir o ajuste simultâneo de vários DataSets
+5. Limpar o código, em geral
+6. ...
