@@ -28,7 +28,7 @@ void DataStack::Add(DataSet& i_DataSet)
     ColorMap[4] = kCyan;
     ColorMap[5] = kYellow;
 
-    i_DataSet.SetDrawProperties({ ColorMap[NSets % 6], kFullDotLarge, 0.5 });
+    i_DataSet.SetDrawProperties({ ColorMap[NSets % 6], kFullDotLarge, 0.5, ColorMap[NSets % 6], kSolid, 1 });
 
     m_MultiGraph->Add((TGraph*)i_DataSet);
 

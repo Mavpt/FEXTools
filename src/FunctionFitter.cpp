@@ -7,6 +7,7 @@
 #include <TCanvas.h>
 #include <TStyle.h>
 
+#include "Core.h"
 #include "FunctionFitter.h"
 
 void ReplaceString(std::string& subject, const std::string& search, const std::string& replace);
@@ -62,35 +63,36 @@ void FunctionFitter::ReadFile(const char* FilePath)
 {
     std::ifstream Stream(FilePath);
 
-    int         i = 0;
-    std::string line;
-    size_t      Start, End;
+    unsigned int i = 0;
+    std::string  line;
+    size_t       Start, End;
     while (getline(Stream, line))
     {
-        if (line.find("#Results") != std::string::npos && line.length() > 0)
+        if (line.find("#Results") != std::string::npos || line.length() == 0)
             continue;
 
-        else if (line.find("#Function") == std::string::npos && line.length() > 0)
-        {
-            Start = 0;
-            End   = line.find_first_of(" =");
-
-            m_VariableMap[line.substr(Start, End - Start)] = i;
-
-            Start = End + 3;
-            End   = line.find_last_not_of(" (");
-
-            std::cout << line << " | " << Start << " | " << End << " | " << line.substr(Start) << std::endl;
-            m_VariableValues.push_back(std::stod(line.substr(Start, End)));
-
-            i++;
-        }
-
-        else if (line.length() != 0)
+        else if (line.find("#Function ") != std::string::npos)
         {
             Start = line.find_first_not_of("#Function ");
 
             m_FormulaStr = line.substr(Start);
+
+            // std::cout << m_FormulaStr << std::endl;
+        }
+
+        else
+        {
+            Start = 0;
+            End   = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
+            // std::cout << "\n\n" << line << std::endl << "(" << Start << ", " << End << ") : " << line.substr(Start, End - Start) << std::endl;
+            m_VariableMap[line.substr(Start, End - Start)] = i;
+
+            Start = line.find_first_not_of(" = ", End);
+            End   = line.find_first_of(" (\n\r", Start);
+            // std::cout << "(" << Start << ", " << End << ") : " << line.substr(Start, End - Start) << std::endl;
+            m_VariableValues.push_back(std::stod(line.substr(Start, End - Start)));
+
+            i++;
         }
     }
 
@@ -103,18 +105,23 @@ TString FunctionFitter::ProcessFormula()
 {
     std::string tmpFormula(m_FormulaStr);
 
-    std::cout << "\nFunction = " << m_FormulaStr << std::endl << std::endl;
-
-    for (std::pair<std::string, const int> Variable : m_VariableMap)
+    for (auto it = m_VariableMap.rbegin(); it != m_VariableMap.rend(); it++)
     {
         std::stringstream ss;
-        ss << "[" << Variable.second << "]";
-        ReplaceString(tmpFormula, Variable.first, ss.str());
+        if (it->first.find("Const") != std::string::npos)
+        {
+            ss << "(" << m_VariableValues[it->second] << ")";
+            ReplaceString(tmpFormula, it->first.substr(6), ss.str());
+        }
+
+        else
+        {
+            ss << "[" << it->second << "]";
+            ReplaceString(tmpFormula, it->first, ss.str());
+        }
     }
 
-    std::cout << "\nFunction = " << tmpFormula << std::endl;
-
-    std::cout << tmpFormula << std::endl;
+    // std::cout << "Formula = " << m_FormulaStr << " | " << tmpFormula << std::endl;
 
     return TString(tmpFormula.c_str());
 }
@@ -141,7 +148,16 @@ void FunctionFitter::PrintResult(const char* FilePath)
     Stream << "\n#Function " << m_FormulaStr << "\n" << std::endl;
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
-        Stream << Variable.first << " = " << m_VariableValues[Variable.second] << " (+- " << m_VariableErrors[Variable.second] << ")" << std::endl;
+        if (Variable.first.find("Const") != std::string::npos)
+        {
+            Stream << FORMATL(10, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << std::endl;
+        }
+
+        else
+        {
+            Stream << FORMATL(10, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << " (+- " << FORMATR(10, 7)
+                   << m_VariableErrors[Variable.second] << ")" << std::endl;
+        }
 
     Stream.close();
 }

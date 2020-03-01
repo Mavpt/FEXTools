@@ -1,9 +1,9 @@
-#Results of fitting the dataset "FEXToolsTest" with the function "R*Uk/sqrt((R+rb)**2+(2*pi*x*L-1/(2*pi*x*C))**2)" (Chi^2 = 393.266)
+#Results of fitting the dataset "FEXToolsTest" with the function "R*Uk/sqrt((R+Rb)**2+(2*pi*x*L-1/(2*pi*x*C))**2)" (Chi^2 = 44.7862)
 
-#Function R*Uk/sqrt((R+rb)**2+(2*pi*x*L-1/(2*pi*x*C))**2)
+#Function R*Uk/sqrt((R+Rb)**2+(2*pi*x*L-1/(2*pi*x*C))**2)
 
-C = -0.000180416 (+- 5.08803e-06)
-L = -0.000337706 (+- 9.52169e-06)
-R = 0.427926 (+- 0.0185278)
-Uk = 1.47367 (+- 0.0502429)
-rb = 0.0291029 (+- 0.014704)
+Const C    = 4.86e-06  
+Const R    = 10        
+Const Rb   = 7.1       
+Const Uk   = 2.4       
+L          = 0.01266635 (+- 8.114041e-05)

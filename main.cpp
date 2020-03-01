@@ -17,5 +17,12 @@ int main()
 
     FunctionFitterTest.Draw("/home/bruno/Dev/FEXTools/Test.eps");
 
+    /*
+    DataStack DataStackTest(u_DataProperties);
+    DataStackTest.Add(FunctionFitterTest);
+
+    DataStackTest.Draw("/home/bruno/Dev/FEXTools/Test.eps");
+    */
+
     return 0;
 }

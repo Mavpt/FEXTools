@@ -33,9 +33,9 @@ protected:
     TF1*        m_Function2Fit;
     std::string m_FormulaStr;
 
-    std::map<std::string, int> m_VariableMap;
-    std::vector<double>        m_VariableValues;
-    std::vector<double>        m_VariableErrors;
+    std::map<std::string, unsigned int> m_VariableMap;
+    std::vector<double>                 m_VariableValues;
+    std::vector<double>                 m_VariableErrors;
 };
 
 #endif
