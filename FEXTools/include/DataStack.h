@@ -3,7 +3,7 @@
 #ifndef __DATA_STACK_H__
 #define __DATA_STACK_H__
 
-#include <map>
+#include <vector>
 
 #include <TMultiGraph.h>
 
@@ -15,14 +15,14 @@ public:
     DataStack(const DataProperties& i_DataProperties);
     ~DataStack();
 
-    void Add(DataSet& i_DataSet);
+    void Add(DataSet* i_DataSet, const DrawProperties& i_DrawProperties);
 
-    virtual void Draw(const char* FilePath = "DataStack.eps") const;
+    virtual void Draw(const char* FilePath, const bool MakeLegend = 0) const;
 
 protected:
-    TMultiGraph* m_MultiGraph;
+    std::vector<DataSet*> m_DataSets;
 
-    int NSets;
+    DataSet DummySet;
 };
 
 #endif

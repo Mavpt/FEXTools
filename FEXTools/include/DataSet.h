@@ -58,7 +58,7 @@ public:
     inline const char* GetxTitle() const { return m_Graph->GetXaxis()->GetTitle(); }
     inline const char* GetyTitle() const { return m_Graph->GetYaxis()->GetTitle(); }
 
-    virtual void Draw(const char* FilePath = "DataSet.eps") const;
+    virtual void Draw(const char* FilePath, const bool Flush = 1) const;
     inline void  Print() const { m_Graph->Print(); }
 
     operator TGraphErrors*() { return m_Graph; }

@@ -19,7 +19,7 @@ public:
 
     virtual void SetDrawProperties(const DrawProperties& i_DrawProperties) override;
 
-    virtual void Draw(const char* FilePath = "DataStack.eps") const override;
+    virtual void Draw(const char* FilePath, const bool Flush = 1) const;
 
 private:
     void    ReadFile(const char* FilePath);

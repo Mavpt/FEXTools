@@ -51,15 +51,23 @@ void DataSet::SetDrawProperties(const DrawProperties& i_DrawProperties)
     m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
 }
 
-void DataSet::Draw(const char* FilePath) const
+void DataSet::Draw(const char* FilePath, const bool Flush) const
 {
-    TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
-    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    if (Flush)
+    {
+        TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+        Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
 
-    m_Graph->Draw("PA");
+        m_Graph->Draw("PA");
 
-    Canvas->Update();
-    Canvas->SaveAs(FilePath);
+        Canvas->Update();
+        Canvas->SaveAs(FilePath);
 
-    delete Canvas;
+        delete Canvas;
+    }
+
+    else
+    {
+        m_Graph->Draw("PASAME");
+    }
 }

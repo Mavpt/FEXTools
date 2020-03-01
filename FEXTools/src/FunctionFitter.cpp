@@ -46,17 +46,27 @@ void FunctionFitter::SetDrawProperties(const DrawProperties& i_DrawProperties)
     m_Function2Fit->SetLineWidth(i_DrawProperties.LineWidth);
 }
 
-void FunctionFitter::Draw(const char* FilePath) const
+void FunctionFitter::Draw(const char* FilePath, const bool Flush) const
 {
-    TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
-    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    if (Flush)
+    {
+        TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+        Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
 
-    m_Graph->Draw("PA");
+        m_Graph->Draw("PA");
+        m_Function2Fit->Draw("SAME");
 
-    Canvas->Update();
-    Canvas->SaveAs(FilePath);
+        Canvas->Update();
+        Canvas->SaveAs(FilePath);
 
-    delete Canvas;
+        delete Canvas;
+    }
+
+    else
+    {
+        m_Graph->Draw("PA");
+        m_Function2Fit->Draw("SAME");
+    }
 }
 
 void FunctionFitter::ReadFile(const char* FilePath)

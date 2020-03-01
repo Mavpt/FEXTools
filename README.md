@@ -22,11 +22,11 @@ Utilizar o cmake presente na pasta ExampleProject, alterando o path da instalaç
 
 ##Outras coisas
 #Bugs conhecidos
-O DataStack não funciona, de todo.
+~~O DataStack não funciona, de todo.~~
 
 #Planos futuros
 1. Adicionar DataSets e funções 3D
-2. Permitr usar DataStacks de funções
+~~2. Permitr usar DataStacks de funções~~
 3. Melhorar os CMakes
 4. Limpar o código, em geral
 5. ...
