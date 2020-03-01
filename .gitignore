@@ -1,11 +1,17 @@
 # .gitignore
 
 # Directories
+**/build/
+
+# Editors
+.vs/
 .vscode/
-build/
+.atom/
+.idea/
 
 # Files
 **/*.clang-format
+
 **/*.o
 **/*.exe
 
