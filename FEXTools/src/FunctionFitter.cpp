@@ -23,7 +23,7 @@ FunctionFitter::FunctionFitter(const DataProperties &i_DataProperties, const Dra
 
     m_Function2Fit->GetXaxis()->SetTitle(i_DataProperties.xTitle);
     m_Function2Fit->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
-    m_Function2Fit->GetXaxis()->SetMaxDigits(5);
+    m_Function2Fit->GetXaxis()->SetMaxDigits(4);
 
     m_Function2Fit->GetYaxis()->SetTitle(i_DataProperties.yTitle);
     m_Function2Fit->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
