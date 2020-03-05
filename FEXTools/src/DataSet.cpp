@@ -18,9 +18,11 @@ DataSet::DataSet(const DataProperties &i_DataProperties, const DrawProperties &i
 
     m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
     m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetMaxDigits(5);
 
     m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
     m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
+    m_Graph->GetYaxis()->SetMaxDigits(3);
 
     m_Graph->SetMarkerColor(i_DrawProperties.MarkerColor);
     m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
@@ -35,9 +37,11 @@ DataSet::DataSet(const DataProperties &i_DataProperties, const DrawProperties &i
 
     m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
     m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetMaxDigits(5);
 
     m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
     m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
+    m_Graph->GetYaxis()->SetMaxDigits(3);
 
     m_Graph->SetMarkerColor(i_DrawProperties.MarkerColor);
     m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
