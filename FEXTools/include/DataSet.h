@@ -61,7 +61,7 @@ public:
     virtual void Draw(const char* FilePath, const bool Flush = 1) const;
     inline void  Print() const { m_Graph->Print(); }
 
-    operator TGraphErrors*() { return m_Graph; }
+    operator TGraphErrors*() const { return m_Graph; }
 
 protected:
     TGraphErrors* m_Graph;

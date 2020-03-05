@@ -22,6 +22,7 @@ public:
 protected:
     std::vector<DataSet*> m_DataSets;
 
+    double DummyVar;
     DataSet DummySet;
 };
 

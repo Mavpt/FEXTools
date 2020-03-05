@@ -8,14 +8,16 @@
 
 #include "DataSet.h"
 
-DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const Int_t N, const Double_t* x, const Double_t* y, const Double_t* e_x, const Double_t* e_y)
+#include <iostream>
+
+DataSet::DataSet(const DataProperties &i_DataProperties, const DrawProperties &i_DrawProperties, const Int_t N, const Double_t *x, const Double_t *y, const Double_t *e_x, const Double_t *e_y)
 {
     m_Graph = new TGraphErrors(N, x, y, e_x, e_y);
 
     m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
 
     m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
-    m_Graph->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
 
     m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
     m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
@@ -25,14 +27,14 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
     m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
 }
 
-DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* FilePath)
+DataSet::DataSet(const DataProperties &i_DataProperties, const DrawProperties &i_DrawProperties, const char *FilePath)
 {
     m_Graph = new TGraphErrors(FilePath);
 
     m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
 
     m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
-    m_Graph->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
 
     m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
     m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
@@ -44,18 +46,18 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
 
 DataSet::~DataSet() { delete m_Graph; }
 
-void DataSet::SetDrawProperties(const DrawProperties& i_DrawProperties)
+void DataSet::SetDrawProperties(const DrawProperties &i_DrawProperties)
 {
     m_Graph->SetMarkerColor(i_DrawProperties.MarkerColor);
     m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
     m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
 }
 
-void DataSet::Draw(const char* FilePath, const bool Flush) const
+void DataSet::Draw(const char *FilePath, const bool Flush) const
 {
     if (Flush)
     {
-        TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+        TCanvas *Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
         Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
 
         m_Graph->Draw("PA");
@@ -68,6 +70,6 @@ void DataSet::Draw(const char* FilePath, const bool Flush) const
 
     else
     {
-        m_Graph->Draw("PASAME");
+        m_Graph->Draw("P");
     }
 }
