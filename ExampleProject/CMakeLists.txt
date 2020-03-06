@@ -1,6 +1,6 @@
 # FEXTools
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
-project("FEXTools_ExampleProject")
+project("ExampleProject.exe")
 
 # Compiler flags
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
@@ -23,7 +23,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../FEXTools/include)
 
 # Source files
 set (SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
 
 # Define executable
