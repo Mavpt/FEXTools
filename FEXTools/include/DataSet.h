@@ -65,6 +65,8 @@ public:
 
 protected:
     TGraphErrors* m_Graph;
+
+    DataProperties m_DataProperties;
 };
 
 #endif

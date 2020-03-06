@@ -10,9 +10,9 @@
 #include "Core.h"
 #include "FunctionFitter.h"
 
-void ReplaceString(std::string &subject, const std::string &search, const std::string &replace);
+void ReplaceString(std::string& subject, const std::string& search, const std::string& replace);
 
-FunctionFitter::FunctionFitter(const DataProperties &i_DataProperties, const DrawProperties &i_DrawProperties, const char *DataPath, const char *FunctionPath, const char *ResultPath)
+FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath, const char* ResultPath)
     : DataSet(i_DataProperties, i_DrawProperties, DataPath)
 {
     ReadFile(FunctionPath);
@@ -34,12 +34,16 @@ FunctionFitter::FunctionFitter(const DataProperties &i_DataProperties, const Dra
     m_Function2Fit->SetLineWidth(i_DrawProperties.LineWidth);
 
     Fit();
+
+    std::cout << "In " << __PRETTY_FUNCTION__ << ":\n Function = " << m_Function2Fit->GetExpFormula() << "\n Parameters: " << std::endl;
+    for (int i = 0; i < 6; i++) std::cout << "[" << i << "] = " << m_Function2Fit->GetParameter(i) << std::endl;
+
     PrintResult(ResultPath);
 }
 
 FunctionFitter::~FunctionFitter() { delete m_Function2Fit; }
 
-void FunctionFitter::SetDrawProperties(const DrawProperties &i_DrawProperties)
+void FunctionFitter::SetDrawProperties(const DrawProperties& i_DrawProperties)
 {
     DataSet::SetDrawProperties(i_DrawProperties);
 
@@ -48,11 +52,11 @@ void FunctionFitter::SetDrawProperties(const DrawProperties &i_DrawProperties)
     m_Function2Fit->SetLineWidth(i_DrawProperties.LineWidth);
 }
 
-void FunctionFitter::Draw(const char *FilePath, const bool Flush) const
+void FunctionFitter::Draw(const char* FilePath, const bool Flush) const
 {
     if (Flush)
     {
-        TCanvas *Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+        TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
         Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
 
         m_Graph->Draw("PA");
@@ -71,13 +75,13 @@ void FunctionFitter::Draw(const char *FilePath, const bool Flush) const
     }
 }
 
-void FunctionFitter::ReadFile(const char *FilePath)
+void FunctionFitter::ReadFile(const char* FilePath)
 {
     std::ifstream Stream(FilePath);
 
     unsigned int i = 0;
-    std::string line;
-    size_t Start, End;
+    std::string  line;
+    size_t       Start, End;
     while (getline(Stream, line))
     {
         if (line.find("#Results") != std::string::npos || line.length() == 0)
@@ -95,12 +99,12 @@ void FunctionFitter::ReadFile(const char *FilePath)
         else
         {
             Start = 0;
-            End = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
+            End   = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
             // std::cout << "\n\n" << line << std::endl << "(" << Start << ", " << End << ") : " << line.substr(Start, End - Start) << std::endl;
             m_VariableMap[line.substr(Start, End - Start)] = i;
 
             Start = line.find_first_not_of(" = ", End);
-            End = line.find_first_of(" (\n\r", Start);
+            End   = line.find_first_of(" (\n\r", Start);
             // std::cout << "(" << Start << ", " << End << ") : " << line.substr(Start, End - Start) << std::endl;
             m_VariableValues.push_back(std::stod(line.substr(Start, End - Start)));
 
@@ -133,17 +137,22 @@ TString FunctionFitter::ProcessFormula()
         }
     }
 
-    // std::cout << "Formula = " << m_FormulaStr << " | " << tmpFormula << std::endl;
+    std::cout << "Formula = " << m_FormulaStr << " | " << tmpFormula << std::endl;
 
     return TString(tmpFormula.c_str());
 }
 
 void FunctionFitter::Fit()
 {
-    for (unsigned int i = 0; i < m_VariableValues.size(); i++)
-        m_Function2Fit->SetParameter(i, m_VariableValues[i]);
+    for (unsigned int i = 0; i < m_VariableValues.size(); i++) m_Function2Fit->SetParameter(i, m_VariableValues[i]);
 
-    m_Graph->Fit(m_Function2Fit, "E");
+    std::cout << "In " << __PRETTY_FUNCTION__ << ":\n Function = " << m_Function2Fit->GetExpFormula() << "\n Parameters: " << std::endl;
+    for (int i = 0; i < 6; i++) std::cout << "[" << i << "] = " << m_Function2Fit->GetParameter(i) << std::endl;
+
+    m_Graph->Fit(m_Function2Fit, "E", "", m_DataProperties.xMin, m_DataProperties.xMax);
+
+    std::cout << "In " << __PRETTY_FUNCTION__ << ":\n Function = " << m_Function2Fit->GetExpFormula() << "\n Parameters: " << std::endl;
+    for (int i = 0; i < 6; i++) std::cout << "[" << i << "] = " << m_Function2Fit->GetParameter(i) << std::endl;
 
     for (unsigned int i = 0; i < m_VariableValues.size(); i++)
     {
@@ -152,14 +161,13 @@ void FunctionFitter::Fit()
     }
 }
 
-void FunctionFitter::PrintResult(const char *FilePath)
+void FunctionFitter::PrintResult(const char* FilePath)
 {
     std::ofstream Stream(FilePath);
     Stream << "#Results of fitting the dataset \"" << GetTitle() << "\" with the function \"" << m_FormulaStr
            << "\" (Chi^2 = " << m_Function2Fit->GetChisquare() << ")" << std::endl;
 
-    Stream << "\n#Function " << m_FormulaStr << "\n"
-           << std::endl;
+    Stream << "\n#Function " << m_FormulaStr << "\n" << std::endl;
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
         if (Variable.first.find("Const") != std::string::npos)
@@ -176,7 +184,7 @@ void FunctionFitter::PrintResult(const char *FilePath)
     Stream.close();
 }
 
-void ReplaceString(std::string &subject, const std::string &search, const std::string &replace)
+void ReplaceString(std::string& subject, const std::string& search, const std::string& replace)
 {
     size_t pos = 0;
     while ((pos = subject.find(search, pos)) != std::string::npos)
