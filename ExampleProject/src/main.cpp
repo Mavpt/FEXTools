@@ -17,7 +17,7 @@ int main()
     DataSetTest.Draw("../IO/DataSetTest.eps");
 
     // FunctionFitter
-    FunctionFitter FunctionFitterTest(u_DataProperties, DrawProperties(), "../IO/Data.txt", "../IO/Function.txt", "../IO/Function.txt");
+    FunctionFitter FunctionFitterTest(u_DataProperties, DrawProperties(), "../IO/Data.txt", "../IO/Function.txt");
     FunctionFitterTest.Draw("../IO/FunctionFitterTest.eps");
 
     // DataStack

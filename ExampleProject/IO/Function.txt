@@ -7,3 +7,6 @@ Const R    = 10
 Const Rb   = 7.1       
 Const Uk   = 2.4       
 L          = 0.01266635 (+- 8.114041e-05)
+
+#InternalFunction (10)*(2.4)/sqrt(pow(((10)+(7.1)),2)+pow((2*pi*x*[p4]-1/(2*pi*x*(4.86e-06))),2))
+

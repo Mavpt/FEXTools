@@ -23,6 +23,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Source files
 set (SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/RootProperties.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DataSet.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DataStack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/FunctionFitter.cpp

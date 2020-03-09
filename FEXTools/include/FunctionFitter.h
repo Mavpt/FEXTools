@@ -14,7 +14,7 @@
 class FunctionFitter : public DataSet
 {
 public:
-    FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath, const char* ResultPath);
+    FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
     virtual ~FunctionFitter();
 
     virtual void SetDrawProperties(const DrawProperties& i_DrawProperties) override;

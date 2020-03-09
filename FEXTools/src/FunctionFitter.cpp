@@ -12,7 +12,7 @@
 
 void ReplaceString(std::string& subject, const std::string& search, const std::string& replace);
 
-FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath, const char* ResultPath)
+FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath)
     : DataSet(i_DataProperties, i_DrawProperties, DataPath)
 {
     ReadFile(FunctionPath);
@@ -35,10 +35,7 @@ FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const Dra
 
     Fit();
 
-    std::cout << "In " << __PRETTY_FUNCTION__ << ":\n Function = " << m_Function2Fit->GetExpFormula() << "\n Parameters: " << std::endl;
-    for (int i = 0; i < 6; i++) std::cout << "[" << i << "] = " << m_Function2Fit->GetParameter(i) << std::endl;
-
-    PrintResult(ResultPath);
+    PrintResult(FunctionPath);
 }
 
 FunctionFitter::~FunctionFitter() { delete m_Function2Fit; }
@@ -56,7 +53,7 @@ void FunctionFitter::Draw(const char* FilePath, const bool Flush) const
 {
     if (Flush)
     {
-        TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
+        TCanvas* Canvas = new TCanvas("Canvas", "Canvas", 600, 500);
         Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
         Canvas->SetGrid();
 
@@ -85,7 +82,7 @@ void FunctionFitter::ReadFile(const char* FilePath)
     size_t       Start, End;
     while (getline(Stream, line))
     {
-        if (line.find("#Results") != std::string::npos || line.length() == 0)
+        if (line.find("#Results") != std::string::npos || line.find("#InternalFunction") != std::string::npos || line.length() == 0)
             continue;
 
         else if (line.find("#Function ") != std::string::npos)
@@ -93,20 +90,16 @@ void FunctionFitter::ReadFile(const char* FilePath)
             Start = line.find_first_not_of("#Function ");
 
             m_FormulaStr = line.substr(Start);
-
-            // std::cout << m_FormulaStr << std::endl;
         }
 
         else
         {
             Start = 0;
             End   = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
-            // std::cout << "\n\n" << line << std::endl << "(" << Start << ", " << End << ") : " << line.substr(Start, End - Start) << std::endl;
             m_VariableMap[line.substr(Start, End - Start)] = i;
 
             Start = line.find_first_not_of(" = ", End);
             End   = line.find_first_of(" (\n\r", Start);
-            // std::cout << "(" << Start << ", " << End << ") : " << line.substr(Start, End - Start) << std::endl;
             m_VariableValues.push_back(std::stod(line.substr(Start, End - Start)));
 
             i++;
@@ -138,8 +131,6 @@ TString FunctionFitter::ProcessFormula()
         }
     }
 
-    std::cout << "Formula = " << m_FormulaStr << " | " << tmpFormula << std::endl;
-
     return TString(tmpFormula.c_str());
 }
 
@@ -147,13 +138,7 @@ void FunctionFitter::Fit()
 {
     for (unsigned int i = 0; i < m_VariableValues.size(); i++) m_Function2Fit->SetParameter(i, m_VariableValues[i]);
 
-    std::cout << "In " << __PRETTY_FUNCTION__ << ":\n Function = " << m_Function2Fit->GetExpFormula() << "\n Parameters: " << std::endl;
-    for (int i = 0; i < 6; i++) std::cout << "[" << i << "] = " << m_Function2Fit->GetParameter(i) << std::endl;
-
-    m_Graph->Fit(m_Function2Fit, "E", "", m_DataProperties.xMin, m_DataProperties.xMax);
-
-    std::cout << "In " << __PRETTY_FUNCTION__ << ":\n Function = " << m_Function2Fit->GetExpFormula() << "\n Parameters: " << std::endl;
-    for (int i = 0; i < 6; i++) std::cout << "[" << i << "] = " << m_Function2Fit->GetParameter(i) << std::endl;
+    m_Graph->Fit(m_Function2Fit, "E", "", GetxMin(), GetxMax());
 
     for (unsigned int i = 0; i < m_VariableValues.size(); i++)
     {
@@ -181,6 +166,8 @@ void FunctionFitter::PrintResult(const char* FilePath)
             Stream << FORMATL(10, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << " (+- " << FORMATR(10, 7)
                    << m_VariableErrors[Variable.second] << ")" << std::endl;
         }
+
+    Stream << "\n#InternalFunction " << m_Function2Fit->GetExpFormula() << "\n" << std::endl;
 
     Stream.close();
 }
