@@ -15,7 +15,7 @@ public:
     DataStack(const DataProperties& i_DataProperties);
     virtual ~DataStack();
 
-    void Add(DataSet* i_DataSet, const DrawProperties& i_DrawProperties);
+    void Add(DataSet* i_DataSet);
 
     virtual void Draw(const char* FilePath, const bool MakeLegend = 0) const override;
 

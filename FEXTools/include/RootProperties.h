@@ -31,12 +31,12 @@ struct DrawProperties
     ELineStyle LineStyle;
     Width_t    LineWidth;
 
-    DrawProperties(const Color_t      MarkerColor = kRed,
-                   const EMarkerStyle MarkerStyle = kFullDotLarge,
-                   const Size_t       MarkerSize  = 0.5,
-                   const Color_t      LineColor   = kRed,
+    DrawProperties(const Color_t      MarkerColor = kWhite,
+                   const EMarkerStyle MarkerStyle = kDot,
+                   const Size_t       MarkerSize  = 0,
+                   const Color_t      LineColor   = kWhite,
                    const ELineStyle   LineStyle   = kSolid,
-                   const Width_t      LineWidth   = 1);
+                   const Width_t      LineWidth   = 0);
 };
 
 #endif

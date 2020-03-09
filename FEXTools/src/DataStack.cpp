@@ -9,11 +9,7 @@ DataStack::DataStack(const DataProperties& i_DataProperties) : DataSet(i_DataPro
 
 DataStack::~DataStack() {}
 
-void DataStack::Add(DataSet* i_DataSet, const DrawProperties& i_DrawProperties)
-{
-    i_DataSet->SetDrawProperties(i_DrawProperties);
-    m_DataSets.push_back(i_DataSet);
-}
+void DataStack::Add(DataSet* i_DataSet) { m_DataSets.push_back(i_DataSet); }
 
 void DataStack::Draw(const char* FilePath, const bool MakeLegend) const
 {

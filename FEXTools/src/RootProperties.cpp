@@ -1,5 +1,6 @@
 /* RootProperties */
 
+#include "Core.h"
 #include "RootProperties.h"
 
 DataProperties::DataProperties(const char* Title, const char* xTitle, const double xMin, const double xMax, const char* yTitle, const double yMin, const double yMax)

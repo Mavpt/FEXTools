@@ -23,6 +23,10 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
     m_Graph->SetMarkerColor(i_DrawProperties.MarkerColor);
     m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
     m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
+
+    m_Graph->SetLineColor(kWhite);
+    m_Graph->SetLineStyle(kSolid);
+    m_Graph->SetLineWidth(0);
 }
 
 DataSet::~DataSet() { delete m_Graph; }
@@ -75,4 +79,8 @@ DataSet::DataSet(const DataProperties& i_DataProperties)
     m_Graph->SetMarkerColor(kWhite);
     m_Graph->SetMarkerStyle(kDot);
     m_Graph->SetMarkerSize(0);
+
+    m_Graph->SetLineColor(kWhite);
+    m_Graph->SetLineStyle(kSolid);
+    m_Graph->SetLineWidth(0);
 }
