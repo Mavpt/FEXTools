@@ -82,7 +82,7 @@ void FunctionFitter::ReadFile(const char* FilePath)
     size_t       Start, End;
     while (getline(Stream, line))
     {
-        if (line.find("#Results") != std::string::npos || line.find("#InternalFunction") != std::string::npos || line.length() == 0)
+        if (line.find("#Results") != std::string::npos || line.find("#IFunc") != std::string::npos || line.find("#IVar") != std::string::npos || line.length() == 0)
             continue;
 
         else if (line.find("#Function ") != std::string::npos)
@@ -167,7 +167,10 @@ void FunctionFitter::PrintResult(const char* FilePath)
                    << m_VariableErrors[Variable.second] << ")" << std::endl;
         }
 
-    Stream << "\n#InternalFunction " << m_Function2Fit->GetExpFormula() << "\n" << std::endl;
+    Stream << "\n#IFunc " << m_Function2Fit->GetExpFormula() << std::endl;
+    for (std::pair<std::string, const int> Variable : m_VariableMap)
+        Stream << "#IVar "
+               << "[p" << Variable.second << "] = " << Variable.first << std::endl;
 
     Stream.close();
 }
