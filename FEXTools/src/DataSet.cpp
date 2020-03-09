@@ -65,6 +65,7 @@ void DataSet::Draw(const char* FilePath, const bool Flush) const
     {
         TCanvas* Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
         Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+        Canvas->SetGrid();
 
         m_Graph->Draw("PA");
 

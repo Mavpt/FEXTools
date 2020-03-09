@@ -22,6 +22,7 @@ void DataStack::Draw(const char *FilePath, const bool MakeLegend) const
 {
     TCanvas *Canvas = new TCanvas("MyCanvas", "MyCanvas", 600, 500);
     Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    Canvas->SetGrid();
 
     ((TGraphErrors *)DummySet)->Draw("PA");
     for (DataSet *Set : m_DataSets)
