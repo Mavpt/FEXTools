@@ -10,6 +10,8 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
 {
     m_Graph = new TGraphErrors(FilePath);
 
+    m_Graph->Sort();
+
     m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
 
     m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
