@@ -23,13 +23,13 @@ struct DataProperties
 
 struct DrawProperties
 {
-    Color_t      MarkerColor;
-    EMarkerStyle MarkerStyle;
-    Size_t       MarkerSize;
+    const Color_t      MarkerColor;
+    const EMarkerStyle MarkerStyle;
+    const Size_t       MarkerSize;
 
-    Color_t    LineColor;
-    ELineStyle LineStyle;
-    Width_t    LineWidth;
+    const Color_t    LineColor;
+    const ELineStyle LineStyle;
+    const Width_t    LineWidth;
 
     DrawProperties(const Color_t      MarkerColor = kWhite,
                    const EMarkerStyle MarkerStyle = kDot,

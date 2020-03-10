@@ -36,6 +36,10 @@ void DataSet::SetDrawProperties(const DrawProperties& i_DrawProperties)
     m_Graph->SetMarkerColor(i_DrawProperties.MarkerColor);
     m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
     m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
+
+    m_Graph->SetLineColor(kWhite);
+    m_Graph->SetLineStyle(kSolid);
+    m_Graph->SetLineWidth(0);
 }
 
 void DataSet::Draw(const char* FilePath, const bool Flush) const

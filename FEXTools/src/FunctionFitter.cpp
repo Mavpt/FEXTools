@@ -29,6 +29,10 @@ FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const Dra
     m_Function2Fit->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
     m_Function2Fit->GetYaxis()->SetMaxDigits(3);
 
+    m_Function2Fit->SetMarkerColorAlpha(kWhite, 0);
+    m_Function2Fit->SetMarkerStyle(kDot);
+    m_Function2Fit->SetMarkerSize(0);
+
     m_Function2Fit->SetLineColor(i_DrawProperties.LineColor);
     m_Function2Fit->SetLineStyle(i_DrawProperties.LineStyle);
     m_Function2Fit->SetLineWidth(i_DrawProperties.LineWidth);
@@ -43,6 +47,10 @@ FunctionFitter::~FunctionFitter() { delete m_Function2Fit; }
 void FunctionFitter::SetDrawProperties(const DrawProperties& i_DrawProperties)
 {
     DataSet::SetDrawProperties(i_DrawProperties);
+
+    m_Function2Fit->SetMarkerColorAlpha(kWhite, 0);
+    m_Function2Fit->SetMarkerStyle(kDot);
+    m_Function2Fit->SetMarkerSize(0);
 
     m_Function2Fit->SetLineColor(i_DrawProperties.LineColor);
     m_Function2Fit->SetLineStyle(i_DrawProperties.LineStyle);
