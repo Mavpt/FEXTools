@@ -25,7 +25,11 @@ Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawPro
     PrintResult(ResultPath);
 }
 
-Interpolator::~Interpolator() { delete m_Spline3; }
+Interpolator::~Interpolator()
+{
+    delete m_Spline3;
+    delete m_OverlayFunction;
+}
 
 void Interpolator::SetDrawProperties(const DrawProperties& i_DrawProperties)
 {
