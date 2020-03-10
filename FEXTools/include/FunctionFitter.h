@@ -14,12 +14,15 @@
 class FunctionFitter : public DataSet
 {
 public:
+    FunctionFitter() = delete;
     FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
     virtual ~FunctionFitter();
 
     virtual void SetDrawProperties(const DrawProperties& i_DrawProperties) override;
 
     virtual void Draw(const char* FilePath, const bool Flush = 1) const;
+
+    FunctionFitter operator=(const FunctionFitter& i_DataStack) = delete;
 
 private:
     void    ReadFile(const char* FilePath);

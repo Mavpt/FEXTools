@@ -1,5 +1,6 @@
 /* FEXTools */
 #include "DataSet.h"
-#include "DataStack.h"
-
 #include "FunctionFitter.h"
+#include "Interpolator.h"
+
+#include "DataStack.h"

@@ -12,7 +12,7 @@ class DataSet
 {
 public:
     DataSet() = delete;
-    DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* FilePath);
+    DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath);
 
     virtual ~DataSet();
 
@@ -29,7 +29,8 @@ public:
     inline double      GetyMin() const { return m_Graph->GetYaxis()->GetXmin(); }
     inline double      GetyMax() const { return m_Graph->GetYaxis()->GetXmax(); }
 
-    operator TGraphErrors*() const { return m_Graph; }
+    DataSet operator=(const DataSet& i_DataSet) = delete;
+            operator TGraphErrors*() const { return m_Graph; }
 
 protected:
     DataSet(const DataProperties& i_DataProperties); // Only meant for use in DataStack

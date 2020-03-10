@@ -24,6 +24,12 @@ int main()
 
     FunctionFitterTest.SetDrawProperties({ kBlack, kFullDotLarge, 0.8, kAquamarine, kSolid, 1 });
 
+    // Interpolator
+    Interpolator InterpolatorTest(u_DataProperties, { kRed, kFullDotLarge, 1, kPink, kDotted, 1 }, "../IO/Data.txt");
+    InterpolatorTest.Draw("../IO/InterpolatorTest.eps");
+
+    InterpolatorTest.SetDrawProperties({ kBlack, kFullDotLarge, 0.8, kAquamarine, kSolid, 1 });
+
     // DataStack
     DataStack DataStackTest(u_DataProperties);
     DataStackTest.Add(&DataSetTest);
@@ -31,7 +37,11 @@ int main()
 
     DataStack FunctionDataStackTest(u_DataProperties);
     FunctionDataStackTest.Add(&FunctionFitterTest);
-    FunctionDataStackTest.Draw("../IO/FunctionDataStackTest.eps", 1);
+    FunctionDataStackTest.Draw("../IO/FunctionDataStackTest.eps");
+
+    DataStack InterpolatorDataStackTest(u_DataProperties);
+    InterpolatorDataStackTest.Add(&InterpolatorTest);
+    InterpolatorDataStackTest.Draw("../IO/InterpolatorDataStackTest.eps");
 
     return 0;
 }

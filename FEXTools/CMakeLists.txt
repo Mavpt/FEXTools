@@ -27,6 +27,7 @@ set (SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DataSet.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DataStack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/FunctionFitter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Interpolator.cpp
 )
 
 # Define library
