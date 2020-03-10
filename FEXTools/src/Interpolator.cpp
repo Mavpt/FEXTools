@@ -8,10 +8,11 @@
 #include "Core.h"
 #include "Interpolator.h"
 
-Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath)
+Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath)
     : DataSet(i_DataProperties, i_DrawProperties, DataPath)
 {
-    m_Spline3 = new TSpline5("m_Spline3", m_Graph);
+    m_Spline3         = new TSpline3("m_Spline3", m_Graph);
+    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, i_DataProperties.xMin, i_DataProperties.xMax, 0);
 
     m_Spline3->SetMarkerColorAlpha(kWhite, 0);
     m_Spline3->SetMarkerStyle(kDot);
@@ -20,6 +21,8 @@ Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawPro
     m_Spline3->SetLineColor(i_DrawProperties.LineColor);
     m_Spline3->SetLineStyle(i_DrawProperties.LineStyle);
     m_Spline3->SetLineWidth(i_DrawProperties.LineWidth);
+
+    PrintResult(ResultPath);
 }
 
 Interpolator::~Interpolator() { delete m_Spline3; }
@@ -60,4 +63,15 @@ void Interpolator::Draw(const char* FilePath, const bool Flush) const
         m_Graph->Draw("P");
         m_Spline3->Draw("LSAME");
     }
+}
+
+void Interpolator::PrintResult(const char* ResultPath)
+{
+    std::ofstream Stream(ResultPath);
+    Stream << "#Results of interpolating the dataset \"" << GetTitle() << "\" with cubic splines\n" << std::endl;
+
+    Stream << "#Maximum: x = " << m_OverlayFunction->GetMaximumX() << " , y = " << m_OverlayFunction->GetMaximum() << std::endl;
+    Stream << "#Minimum: x = " << m_OverlayFunction->GetMinimumX() << " , y = " << m_OverlayFunction->GetMinimum() << std::endl;
+
+    Stream.close();
 }

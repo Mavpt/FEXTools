@@ -25,7 +25,7 @@ int main()
     FunctionFitterTest.SetDrawProperties({ kBlack, kFullDotLarge, 0.8, kAquamarine, kSolid, 1 });
 
     // Interpolator
-    Interpolator InterpolatorTest(u_DataProperties, { kRed, kFullDotLarge, 1, kPink, kDotted, 1 }, "../IO/Data.txt");
+    Interpolator InterpolatorTest(u_DataProperties, { kRed, kFullDotLarge, 1, kPink, kDotted, 1 }, "../IO/Data.txt", "../IO/Interpolator.txt");
     InterpolatorTest.Draw("../IO/InterpolatorTest.eps");
 
     InterpolatorTest.SetDrawProperties({ kBlack, kFullDotLarge, 0.8, kAquamarine, kSolid, 1 });

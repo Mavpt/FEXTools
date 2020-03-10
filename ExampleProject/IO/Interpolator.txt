@@ -1,0 +1,4 @@
+#Results of interpolating the dataset "FEXToolsTest" with cubic splines
+
+#Maximum: x = 640.254 , y = 1.38652
+#Minimum: x = 380 , y = 0.346124
