@@ -149,11 +149,12 @@ void FunctionFitter::Fit()
 
     m_Graph->Fit(m_Function2Fit, "E", "", GetxMin(), GetxMax());
 
-    for (unsigned int i = 0; i < m_VariableValues.size(); i++)
-    {
-        m_VariableValues[i] = m_Function2Fit->GetParameter(i);
-        m_VariableErrors[i] = m_Function2Fit->GetParError(i);
-    }
+    for (std::pair<std::string, const int> Variable : m_VariableMap)
+        if (Variable.first.find("Const") == std::string::npos)
+        {
+            m_VariableValues[Variable.second] = m_Function2Fit->GetParameter(Variable.second);
+            m_VariableErrors[Variable.second] = m_Function2Fit->GetParError(Variable.second);
+        }
 }
 
 void FunctionFitter::PrintResult(const char* FilePath)
@@ -167,12 +168,12 @@ void FunctionFitter::PrintResult(const char* FilePath)
     for (std::pair<std::string, const int> Variable : m_VariableMap)
         if (Variable.first.find("Const") != std::string::npos)
         {
-            Stream << FORMATL(10, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << std::endl;
+            Stream << FORMATL(15, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << std::endl;
         }
 
         else
         {
-            Stream << FORMATL(10, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << " (+- " << FORMATR(10, 7)
+            Stream << FORMATL(15, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << " (+- " << FORMATR(10, 7)
                    << m_VariableErrors[Variable.second] << ")" << std::endl;
         }
 
