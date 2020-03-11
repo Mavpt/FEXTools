@@ -61,7 +61,7 @@ void FunctionFitter::Draw(const char* FilePath, const bool Flush) const
 {
     if (Flush)
     {
-        TCanvas* Canvas = new TCanvas("Canvas", "Canvas", 600, 500);
+        TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
         Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
         gStyle->SetGridColor(kGray);
         Canvas->SetGrid();
@@ -85,6 +85,7 @@ void FunctionFitter::Draw(const char* FilePath, const bool Flush) const
 void FunctionFitter::ReadFile(const char* FilePath)
 {
     std::ifstream Stream(FilePath);
+    ASSERT(Stream, "Invalid filepath : %s", FilePath)
 
     unsigned int i = 0;
     std::string  line;
@@ -160,6 +161,8 @@ void FunctionFitter::Fit()
 void FunctionFitter::PrintResult(const char* FilePath)
 {
     std::ofstream Stream(FilePath);
+    ASSERT(Stream, "Invalid filepath : %s", FilePath);
+
     Stream << "#Results of fitting the dataset \"" << GetTitle() << "\" with the function \"" << m_FormulaStr
            << "\" (Chi^2 = " << m_Function2Fit->GetChisquare() << ")" << std::endl;
 

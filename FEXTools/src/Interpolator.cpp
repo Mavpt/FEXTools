@@ -48,7 +48,7 @@ void Interpolator::Draw(const char* FilePath, const bool Flush) const
 {
     if (Flush)
     {
-        TCanvas* Canvas = new TCanvas("Canvas", "Canvas", 600, 500);
+        TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
         Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
         gStyle->SetGridColor(kGray);
         Canvas->SetGrid();
@@ -72,6 +72,8 @@ void Interpolator::Draw(const char* FilePath, const bool Flush) const
 void Interpolator::PrintResult(const char* ResultPath)
 {
     std::ofstream Stream(ResultPath);
+    ASSERT(Stream, "Invalid filepath : %s", ResultPath);
+
     Stream << "#Results of interpolating the dataset \"" << GetTitle() << "\" with cubic splines\n" << std::endl;
 
     Stream << "#Maximum: x = " << m_OverlayFunction->GetMaximumX() << " , y = " << m_OverlayFunction->GetMaximum() << std::endl;

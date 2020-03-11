@@ -9,7 +9,7 @@
 #define ASSERT(x, ...)                                  \
     if (!(x))                                           \
     {                                                   \
-        printf("%s:%d : ERROR : ", __FILE__, __LINE__); \
+        printf("ERROR : %s:%d : ", __FILE__, __LINE__); \
         printf(__VA_ARGS__);                            \
         printf("\n");                                   \
         __builtin_trap();                               \
@@ -18,7 +18,8 @@
 #define FORMATL(width, precision) std::left << std::setw(width) << std::setprecision(precision)
 #define FORMATR(width, precision) std::right << std::setw(width) << std::setprecision(precision)
 
-#define ERRFILE(FilePath) ASSERT(false, "Invalid filepath : %s", FilePath)
-#define ERRMATH(FilePath) ASSERT(false, "Invalid math operation")
+#define CANVASTITLE  "Canvas"
+#define CANVASWIDTH  1000
+#define CANVASHEIGHT 1000
 
 #endif

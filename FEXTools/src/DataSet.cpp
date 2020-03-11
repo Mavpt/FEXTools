@@ -1,9 +1,8 @@
 /* DataSet */
 
-#include <fstream>
-
 #include <TCanvas.h>
 
+#include "Core.h"
 #include "DataSet.h"
 
 DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* FilePath)
@@ -48,7 +47,7 @@ void DataSet::Draw(const char* FilePath, const bool Flush) const
 {
     if (Flush)
     {
-        TCanvas* Canvas = new TCanvas("Canvas", "Canvas", 600, 500);
+        TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
         Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
         gStyle->SetGridColor(kGray);
         Canvas->SetGrid();
