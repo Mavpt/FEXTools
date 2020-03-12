@@ -18,6 +18,8 @@
 #define FORMATL(width, precision) std::left << std::setw(width) << std::setprecision(precision)
 #define FORMATR(width, precision) std::right << std::setw(width) << std::setprecision(precision)
 
+#define FORMATS(width, precision) std::left << std::scientific << std::setw(width) << std::setprecision(precision)
+
 #define CANVASTITLE  "Canvas"
 #define CANVASWIDTH  1000
 #define CANVASHEIGHT 1000
