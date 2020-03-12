@@ -5,9 +5,9 @@
 #include "Core.h"
 #include "DataSet.h"
 
-DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* FilePath)
+DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath) : Type(1)
 {
-    m_Graph = new TGraphErrors(FilePath);
+    m_Graph = new TGraphErrors(DataPath);
 
     m_Graph->Sort();
 
@@ -66,7 +66,7 @@ void DataSet::Draw(const char* FilePath, const bool Flush) const
     }
 }
 
-DataSet::DataSet(const DataProperties& i_DataProperties)
+DataSet::DataSet(const DataProperties& i_DataProperties) : Type(0)
 {
     const double DummyVar = 0;
 
@@ -85,6 +85,32 @@ DataSet::DataSet(const DataProperties& i_DataProperties)
     m_Graph->SetMarkerColor(kWhite);
     m_Graph->SetMarkerStyle(kDot);
     m_Graph->SetMarkerSize(0);
+
+    m_Graph->SetLineColor(kWhite);
+    m_Graph->SetLineStyle(kSolid);
+    m_Graph->SetLineWidth(0);
+}
+
+DataSet::DataSet(const unsigned short DataSetType, const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath)
+    : Type(DataSetType)
+{
+    m_Graph = new TGraphErrors(DataPath);
+
+    m_Graph->Sort();
+
+    m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
+
+    m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
+    m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetMaxDigits(4);
+
+    m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
+    m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
+    m_Graph->GetYaxis()->SetMaxDigits(3);
+
+    m_Graph->SetMarkerColor(i_DrawProperties.MarkerColor);
+    m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
+    m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
 
     m_Graph->SetLineColor(kWhite);
     m_Graph->SetLineStyle(kSolid);

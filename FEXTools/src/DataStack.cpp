@@ -1,7 +1,7 @@
 /* DataStack */
 
 #include <TCanvas.h>
-#include <TStyle.h>
+#include <TLegend.h>
 
 #include "Core.h"
 #include "DataStack.h"
@@ -25,7 +25,13 @@ void DataStack::Draw(const char* FilePath, const bool MakeLegend) const
         Set->Draw("", 0);
     }
 
-    if (MakeLegend) gPad->BuildLegend();
+    if (MakeLegend)
+    {
+        TLegend* Legend = new TLegend(.8, .8, .95, .95);
+        for (DataSet* Set : m_DataSets) Legend->AddEntry(((TGraphErrors*)*Set), Set->GetTitle());
+
+        Legend->Draw();
+    }
 
     Canvas->Update();
     Canvas->SaveAs(FilePath);

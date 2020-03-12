@@ -32,8 +32,12 @@ public:
     DataSet operator=(const DataSet& i_DataSet) = delete;
             operator TGraphErrors*() const { return m_Graph; }
 
+public:
+    const unsigned short Type; // 0 = DataStack, 1 = DataSet, 2 = FunctionFitter, 3 = Interpolator
+
 protected:
-    DataSet(const DataProperties& i_DataProperties); // Only meant for use in DataStack
+    DataSet(const DataProperties& i_DataProperties); // For use in DataStack
+    DataSet(const unsigned short DataSetType, const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath); // For use in other derived classes
 
 protected:
     TGraphErrors* m_Graph;

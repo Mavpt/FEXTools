@@ -13,7 +13,7 @@
 void ReplaceString(std::string& subject, const std::string& search, const std::string& replace);
 
 FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath)
-    : DataSet(i_DataProperties, i_DrawProperties, DataPath)
+    : DataSet(2, i_DataProperties, i_DrawProperties, DataPath)
 {
     ReadFile(FunctionPath);
 

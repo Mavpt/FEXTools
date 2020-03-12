@@ -9,7 +9,7 @@
 #include "Interpolator.h"
 
 Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath)
-    : DataSet(i_DataProperties, i_DrawProperties, DataPath)
+    : DataSet(3, i_DataProperties, i_DrawProperties, DataPath)
 {
     m_Spline3         = new TSpline3("m_Spline3", m_Graph);
     m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, i_DataProperties.xMin, i_DataProperties.xMax, 0);
