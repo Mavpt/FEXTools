@@ -12,7 +12,7 @@ Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawPro
     : DataSet(3, i_DataProperties, i_DrawProperties, DataPath)
 {
     m_Spline3         = new TSpline3("m_Spline3", m_Graph);
-    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, i_DataProperties.xMin, i_DataProperties.xMax, 0);
+    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline3->GetXmin(), m_Spline3->GetXmax(), 0, 1);
 
     m_Spline3->SetMarkerColorAlpha(kWhite, 0);
     m_Spline3->SetMarkerStyle(kDot);
@@ -66,6 +66,7 @@ void Interpolator::Draw(const char* FilePath, const bool Flush) const
     {
         m_Graph->Draw("P");
         m_Spline3->Draw("LSAME");
+        // m_OverlayFunction->Draw("LSAME");
     }
 }
 
