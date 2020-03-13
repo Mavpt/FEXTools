@@ -42,7 +42,7 @@ FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const Dra
     PrintResult(FunctionPath);
 }
 
-FunctionFitter::~FunctionFitter() { m_Function2Fit->Delete(); }
+FunctionFitter::~FunctionFitter() { delete m_Function2Fit; }
 
 void FunctionFitter::Draw(const char* DrawPath) const
 {
@@ -57,7 +57,7 @@ void FunctionFitter::Draw(const char* DrawPath) const
     Canvas->Update();
     Canvas->SaveAs(DrawPath);
 
-    Canvas->Delete();
+    delete Canvas;
 }
 
 void FunctionFitter::FDraw() const

@@ -27,8 +27,8 @@ Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawPro
 
 Interpolator::~Interpolator()
 {
-    m_Spline3->Delete();
-    m_OverlayFunction->Delete();
+    delete m_Spline3;
+    delete m_OverlayFunction;
 }
 
 void Interpolator::Draw(const char* DrawPath) const
@@ -44,7 +44,7 @@ void Interpolator::Draw(const char* DrawPath) const
     Canvas->Update();
     Canvas->SaveAs(DrawPath);
 
-    Canvas->Delete();
+    delete Canvas;
 }
 
 void Interpolator::FDraw() const

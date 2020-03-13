@@ -32,12 +32,8 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
 
     // PrintData(DataPath);
 }
-#include <iostream>
-DataSet::~DataSet()
-{
-    std::cout << "Hello" << std::endl;
-    m_Graph->Delete();
-}
+
+DataSet::~DataSet() { delete m_Graph; }
 
 void DataSet::Draw(const char* DrawPath) const
 {
@@ -51,7 +47,7 @@ void DataSet::Draw(const char* DrawPath) const
     Canvas->Update();
     Canvas->SaveAs(DrawPath);
 
-    Canvas->Delete();
+    delete Canvas;
 }
 
 void DataSet::FDraw() const { m_Graph->Draw("P"); }

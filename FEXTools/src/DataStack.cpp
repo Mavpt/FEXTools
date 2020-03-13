@@ -33,5 +33,5 @@ void DataStack::Draw(const char* DrawPath) const
     Canvas->Update();
     Canvas->SaveAs(DrawPath);
 
-    Canvas->Delete();
+    delete Canvas;
 }
