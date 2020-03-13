@@ -11,34 +11,47 @@
 
 #include "DataSet.h"
 
+struct strsize_less
+{
+    bool operator()(std::string const& l, std::string const& r) const
+    {
+        if (l.size() > r.size()) return true;
+
+        if (l.size() < r.size()) return false;
+
+        return l < r;
+    };
+};
+
 class FunctionFitter : public DataSet
 {
 public:
-    FunctionFitter() = delete;
     FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
     virtual ~FunctionFitter();
 
-    virtual void SetDrawProperties(const DrawProperties& i_DrawProperties) override;
+    virtual void Draw(const char* DrawPath) const override;
 
-    virtual void Draw(const char* FilePath, const bool Flush = 1) const;
+    FunctionFitter()                      = delete;
+    FunctionFitter(const FunctionFitter&) = delete;
+    FunctionFitter operator=(const FunctionFitter&) = delete;
 
-    FunctionFitter operator=(const FunctionFitter& i_DataStack) = delete;
+protected:
+    virtual void FDraw() const override; // For use in DataStack
 
-private:
-    void    ReadFile(const char* FilePath);
+    void    ReadFile(const char* FunctionPath);
     TString ProcessFormula();
 
     void Fit();
 
-    void PrintResult(const char* FilePath);
+    void PrintResult(const char* FunctionPath);
 
 protected:
     TF1*        m_Function2Fit;
     std::string m_FormulaStr;
 
-    std::map<std::string, unsigned int> m_VariableMap;
-    std::vector<double>                 m_VariableValues;
-    std::vector<double>                 m_VariableErrors;
+    std::map<std::string, unsigned int, strsize_less> m_VariableMap;
+    std::vector<double>                               m_VariableValues;
+    std::vector<double>                               m_VariableErrors;
 };
 
 #endif

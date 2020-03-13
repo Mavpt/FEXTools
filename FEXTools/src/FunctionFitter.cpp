@@ -13,7 +13,7 @@
 void ReplaceString(std::string& subject, const std::string& search, const std::string& replace);
 
 FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath)
-    : DataSet(2, i_DataProperties, i_DrawProperties, DataPath)
+    : DataSet(i_DataProperties, i_DrawProperties, DataPath)
 {
     ReadFile(FunctionPath);
 
@@ -29,9 +29,9 @@ FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const Dra
     m_Function2Fit->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
     m_Function2Fit->GetYaxis()->SetMaxDigits(3);
 
-    m_Function2Fit->SetMarkerColorAlpha(kWhite, 0);
-    m_Function2Fit->SetMarkerStyle(kDot);
-    m_Function2Fit->SetMarkerSize(0);
+    m_Function2Fit->SetMarkerColor(i_DrawProperties.MarkerColor);
+    m_Function2Fit->SetMarkerStyle(i_DrawProperties.MarkerStyle);
+    m_Function2Fit->SetMarkerSize(i_DrawProperties.MarkerSize);
 
     m_Function2Fit->SetLineColor(i_DrawProperties.LineColor);
     m_Function2Fit->SetLineStyle(i_DrawProperties.LineStyle);
@@ -42,50 +42,34 @@ FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const Dra
     PrintResult(FunctionPath);
 }
 
-FunctionFitter::~FunctionFitter() { delete m_Function2Fit; }
+FunctionFitter::~FunctionFitter() { m_Function2Fit->Delete(); }
 
-void FunctionFitter::SetDrawProperties(const DrawProperties& i_DrawProperties)
+void FunctionFitter::Draw(const char* DrawPath) const
 {
-    DataSet::SetDrawProperties(i_DrawProperties);
+    TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    gStyle->SetGridColor(kGray);
+    Canvas->SetGrid();
 
-    m_Function2Fit->SetMarkerColorAlpha(kWhite, 0);
-    m_Function2Fit->SetMarkerStyle(kDot);
-    m_Function2Fit->SetMarkerSize(0);
+    m_Graph->Draw("PA");
+    m_Function2Fit->Draw("SAME");
 
-    m_Function2Fit->SetLineColor(i_DrawProperties.LineColor);
-    m_Function2Fit->SetLineStyle(i_DrawProperties.LineStyle);
-    m_Function2Fit->SetLineWidth(i_DrawProperties.LineWidth);
+    Canvas->Update();
+    Canvas->SaveAs(DrawPath);
+
+    Canvas->Delete();
 }
 
-void FunctionFitter::Draw(const char* FilePath, const bool Flush) const
+void FunctionFitter::FDraw() const
 {
-    if (Flush)
-    {
-        TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
-        Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
-        gStyle->SetGridColor(kGray);
-        Canvas->SetGrid();
-
-        m_Graph->Draw("PA");
-        m_Function2Fit->Draw("SAME");
-
-        Canvas->Update();
-        Canvas->SaveAs(FilePath);
-
-        delete Canvas;
-    }
-
-    else
-    {
-        m_Graph->Draw("P");
-        m_Function2Fit->Draw("SAME");
-    }
+    m_Graph->Draw("P");
+    m_Function2Fit->Draw("SAME");
 }
 
-void FunctionFitter::ReadFile(const char* FilePath)
+void FunctionFitter::ReadFile(const char* FunctionPath)
 {
-    std::ifstream Stream(FilePath);
-    ASSERT(Stream, "Invalid filepath : %s", FilePath)
+    std::ifstream Stream(FunctionPath);
+    ASSERT(Stream, "Invalid filepath : %s", FunctionPath)
 
     unsigned int i = 0;
     std::string  line;
@@ -125,7 +109,7 @@ TString FunctionFitter::ProcessFormula()
 {
     std::string tmpFormula(m_FormulaStr);
 
-    for (auto it = m_VariableMap.rbegin(); it != m_VariableMap.rend(); it++)
+    for (auto it = m_VariableMap.begin(); it != m_VariableMap.end(); it++)
     {
         std::stringstream ss;
         if (it->first.find("Const") != std::string::npos)
@@ -148,7 +132,7 @@ void FunctionFitter::Fit()
 {
     for (unsigned int i = 0; i < m_VariableValues.size(); i++) m_Function2Fit->SetParameter(i, m_VariableValues[i]);
 
-    m_Graph->Fit(m_Function2Fit, "E", "", GetxMin(), GetxMax());
+    m_Graph->Fit(m_Function2Fit, "QEM", "", GetxMin(), GetxMax());
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
         if (Variable.first.find("Const") == std::string::npos)
@@ -158,25 +142,27 @@ void FunctionFitter::Fit()
         }
 }
 
-void FunctionFitter::PrintResult(const char* FilePath)
+void FunctionFitter::PrintResult(const char* FunctionPath)
 {
-    std::ofstream Stream(FilePath);
-    ASSERT(Stream, "Invalid filepath : %s", FilePath);
+    std::ofstream Stream(FunctionPath);
+    ASSERT(Stream, "Invalid filepath : %s", FunctionPath);
 
     Stream << "#Results of fitting the dataset \"" << GetTitle() << "\" with the function \"" << m_FormulaStr
            << "\" (Chi^2 = " << m_Function2Fit->GetChisquare() << ")" << std::endl;
 
     Stream << "\n#Function " << m_FormulaStr << "\n" << std::endl;
 
+    const int VS = (*m_VariableMap.begin()).first.size();
+
     for (std::pair<std::string, const int> Variable : m_VariableMap)
         if (Variable.first.find("Const") != std::string::npos)
         {
-            Stream << FORMATL(15, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << std::endl;
+            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << std::endl;
         }
 
         else
         {
-            Stream << FORMATL(15, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << " (+- " << FORMATR(10, 7)
+            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << " (+- " << FORMATR(10, 7)
                    << m_VariableErrors[Variable.second] << ")" << std::endl;
         }
 

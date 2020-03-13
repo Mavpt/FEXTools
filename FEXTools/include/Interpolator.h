@@ -11,17 +11,18 @@
 class Interpolator : public DataSet
 {
 public:
-    Interpolator() = delete;
     Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath);
     virtual ~Interpolator();
 
-    virtual void SetDrawProperties(const DrawProperties& i_DrawProperties) override;
+    virtual void Draw(const char* DrawPath) const override;
 
-    virtual void Draw(const char* FilePath, const bool Flush = 1) const;
-
-    Interpolator operator=(const Interpolator& i_DataStack) = delete;
+    Interpolator()                    = delete;
+    Interpolator(const Interpolator&) = delete;
+    Interpolator operator=(const Interpolator&) = delete;
 
 protected:
+    virtual void FDraw() const override; // For use in DataStack
+
     void   PrintResult(const char* ResultPath);
     double Calculate(double* fx, double*) { return m_Spline3->Eval(fx[0]); }
 

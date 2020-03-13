@@ -12,7 +12,7 @@ DataStack::~DataStack() {}
 
 void DataStack::Add(DataSet* i_DataSet) { m_DataSets.push_back(i_DataSet); }
 
-void DataStack::Draw(const char* FilePath, const bool MakeLegend) const
+void DataStack::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
     Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
@@ -22,19 +22,16 @@ void DataStack::Draw(const char* FilePath, const bool MakeLegend) const
     m_Graph->Draw("PA");
     for (DataSet* Set : m_DataSets)
     {
-        Set->Draw("", 0);
+        Set->FDraw();
     }
 
-    if (MakeLegend)
-    {
-        TLegend* Legend = new TLegend(.8, .8, .95, .95);
-        for (DataSet* Set : m_DataSets) Legend->AddEntry(((TGraphErrors*)*Set), Set->GetTitle());
+    TLegend* Legend = new TLegend(.8, .8, .95, .95);
+    for (DataSet* Set : m_DataSets) Legend->AddEntry(Set->GetGraph(), Set->GetTitle());
 
-        Legend->Draw();
-    }
+    Legend->Draw();
 
     Canvas->Update();
-    Canvas->SaveAs(FilePath);
+    Canvas->SaveAs(DrawPath);
 
-    delete Canvas;
+    Canvas->Delete();
 }

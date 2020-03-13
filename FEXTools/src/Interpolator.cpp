@@ -9,14 +9,14 @@
 #include "Interpolator.h"
 
 Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath)
-    : DataSet(3, i_DataProperties, i_DrawProperties, DataPath)
+    : DataSet(i_DataProperties, i_DrawProperties, DataPath)
 {
     m_Spline3         = new TSpline3("m_Spline3", m_Graph);
     m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline3->GetXmin(), m_Spline3->GetXmax(), 0, 1);
 
-    m_Spline3->SetMarkerColorAlpha(kWhite, 0);
-    m_Spline3->SetMarkerStyle(kDot);
-    m_Spline3->SetMarkerSize(0);
+    m_Spline3->SetMarkerColor(i_DrawProperties.MarkerColor);
+    m_Spline3->SetMarkerStyle(i_DrawProperties.MarkerStyle);
+    m_Spline3->SetMarkerSize(i_DrawProperties.MarkerSize);
 
     m_Spline3->SetLineColor(i_DrawProperties.LineColor);
     m_Spline3->SetLineStyle(i_DrawProperties.LineStyle);
@@ -27,47 +27,30 @@ Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawPro
 
 Interpolator::~Interpolator()
 {
-    delete m_Spline3;
-    delete m_OverlayFunction;
+    m_Spline3->Delete();
+    m_OverlayFunction->Delete();
 }
 
-void Interpolator::SetDrawProperties(const DrawProperties& i_DrawProperties)
+void Interpolator::Draw(const char* DrawPath) const
 {
-    DataSet::SetDrawProperties(i_DrawProperties);
+    TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    gStyle->SetGridColor(kGray);
+    Canvas->SetGrid();
 
-    m_Spline3->SetMarkerColorAlpha(kWhite, 0);
-    m_Spline3->SetMarkerStyle(kDot);
-    m_Spline3->SetMarkerSize(0);
+    m_Graph->Draw("PA");
+    m_Spline3->Draw("LSAME");
 
-    m_Spline3->SetLineColor(i_DrawProperties.LineColor);
-    m_Spline3->SetLineStyle(i_DrawProperties.LineStyle);
-    m_Spline3->SetLineWidth(i_DrawProperties.LineWidth);
+    Canvas->Update();
+    Canvas->SaveAs(DrawPath);
+
+    Canvas->Delete();
 }
 
-void Interpolator::Draw(const char* FilePath, const bool Flush) const
+void Interpolator::FDraw() const
 {
-    if (Flush)
-    {
-        TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
-        Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
-        gStyle->SetGridColor(kGray);
-        Canvas->SetGrid();
-
-        m_Graph->Draw("PA");
-        m_Spline3->Draw("LSAME");
-
-        Canvas->Update();
-        Canvas->SaveAs(FilePath);
-
-        delete Canvas;
-    }
-
-    else
-    {
-        m_Graph->Draw("P");
-        m_Spline3->Draw("LSAME");
-        // m_OverlayFunction->Draw("LSAME");
-    }
+    m_Graph->Draw("P");
+    m_Spline3->Draw("LSAME");
 }
 
 void Interpolator::PrintResult(const char* ResultPath) // Still unsure on how to calculate ex and ey
@@ -78,11 +61,11 @@ void Interpolator::PrintResult(const char* ResultPath) // Still unsure on how to
     Stream << "#Results of interpolating the dataset \"" << GetTitle() << "\" with cubic splines\n" << std::endl;
 
     Stream << "#Maximum (x, y, ex, ey):\n"
-           << FORMATS(10, 7) << GetXMaximum() << "    " << FORMATS(10, 7) << GetYMaximum() << "    " << FORMATS(10, 7) << GetXMaximumError() << "    "
-           << FORMATS(10, 7) << GetYMaximumError() << std::endl;
+           << FORMATD() << GetXMaximum() << "\t" << FORMATD() << GetYMaximum() << "\t" << FORMATD() << GetXMaximumError() << "\t" << FORMATD()
+           << GetYMaximumError() << std::endl;
     Stream << "#Minimum (x, y, ex, ey):\n"
-           << FORMATS(10, 7) << GetXMinimum() << "    " << FORMATS(10, 7) << GetYMinimum() << "    " << FORMATS(10, 7) << GetXMinimumError() << "    "
-           << FORMATS(10, 7) << GetYMinimumError() << std::endl;
+           << FORMATD() << GetXMinimum() << "\t" << FORMATD() << GetYMinimum() << "\t" << FORMATD() << GetXMinimumError() << "\t" << FORMATD()
+           << GetYMinimumError() << std::endl;
 
     Stream.close();
 }

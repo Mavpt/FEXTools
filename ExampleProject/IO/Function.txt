@@ -2,15 +2,15 @@
 
 #Function R*Uk/sqrt((R+Rb)**2+(2*pi*x*L-1/(2*pi*x*C))**2)
 
-Const C    = 4.86e-06  
-Const R    = 10        
-Const Rb   = 7.1       
-Const Uk   = 2.4       
-L          = 0.01266635 (+- 8.114041e-05)
+Const Rb = 7.1       
+Const Uk = 2.4       
+Const C  = 4.86e-06  
+Const R  = 10        
+L        = 0.01266635 (+- 8.114046e-05)
 
 #IFunc (10)*(2.4)/sqrt(pow(((10)+(7.1)),2)+pow((2*pi*x*[p4]-1/(2*pi*x*(4.86e-06))),2))
-#IVar [p0] = Const C
-#IVar [p1] = Const R
-#IVar [p2] = Const Rb
-#IVar [p3] = Const Uk
+#IVar [p0] = Const Rb
+#IVar [p1] = Const Uk
+#IVar [p2] = Const C
+#IVar [p3] = Const R
 #IVar [p4] = L
