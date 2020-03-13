@@ -132,7 +132,7 @@ void FunctionFitter::Fit()
 {
     for (unsigned int i = 0; i < m_VariableValues.size(); i++) m_Function2Fit->SetParameter(i, m_VariableValues[i]);
 
-    m_Graph->Fit(m_Function2Fit, "QEM", "", GetxMin(), GetxMax());
+    m_Graph->Fit(m_Function2Fit, "QE", "", GetxMin(), GetxMax());
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
         if (Variable.first.find("Const") == std::string::npos)
