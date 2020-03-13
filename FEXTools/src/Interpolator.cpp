@@ -119,6 +119,6 @@ double Interpolator::GetXMaximumError() const
     return ClosestDist2;
 }
 
-double Interpolator::GetYMinimumError() const { return fabs(m_Graph->GetMinimum() - GetYMinimum()); }
+double Interpolator::GetYMinimumError() const { return fabs(m_Graph->GetYaxis()->GetXmin() - GetYMinimum()); }
 
-double Interpolator::GetYMaximumError() const { return fabs(m_Graph->GetMaximum() - GetYMaximum()); }
+double Interpolator::GetYMaximumError() const { return fabs(m_Graph->GetYaxis()->GetXmax() - GetYMaximum()); }
