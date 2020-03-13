@@ -26,7 +26,7 @@ void DataStack::Draw(const char* DrawPath) const
     }
 
     TLegend* Legend = new TLegend(.8, .8, .95, .95);
-    for (DataSet* Set : m_DataSets) Legend->AddEntry(Set->GetGraph(), Set->GetTitle());
+    for (DataSet* Set : m_DataSets) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "p");
 
     Legend->Draw();
 

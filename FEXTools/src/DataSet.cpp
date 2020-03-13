@@ -26,10 +26,6 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
     m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
     m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
 
-    m_Graph->SetLineColor(i_DrawProperties.LineColor);
-    m_Graph->SetLineStyle(i_DrawProperties.LineStyle);
-    m_Graph->SetLineWidth(i_DrawProperties.LineWidth);
-
     // PrintData(DataPath);
 }
 
@@ -83,4 +79,8 @@ DataSet::DataSet(const DataProperties& i_DataProperties)
     m_Graph->SetMarkerColor(kWhite);
     m_Graph->SetMarkerStyle(kDot);
     m_Graph->SetMarkerSize(0);
+
+    m_Graph->SetLineColor(kWhite);
+    m_Graph->SetLineStyle(kSolid);
+    m_Graph->SetLineWidth(0);
 }
