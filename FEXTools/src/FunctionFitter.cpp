@@ -157,12 +157,12 @@ void FunctionFitter::PrintResult(const char* FunctionPath)
     for (std::pair<std::string, const int> Variable : m_VariableMap)
         if (Variable.first.find("Const") != std::string::npos)
         {
-            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << std::endl;
+            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << std::endl;
         }
 
         else
         {
-            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATL(10, 7) << m_VariableValues[Variable.second] << " (+- " << FORMATR(10, 7)
+            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << " (+- " << FORMATD()
                    << m_VariableErrors[Variable.second] << ")" << std::endl;
         }
 
