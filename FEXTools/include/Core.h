@@ -30,6 +30,16 @@
 #define CANVASWIDTH  1000
 #define CANVASHEIGHT 1000
 
+#define COLOREDSET(x)                   \
+    {                                   \
+        x, kFullCircle, 1, x, kSolid, 2 \
+    }
+
+#define SINGLESET()                               \
+    {                                             \
+        kBlack, kFullCircle, 1, kBlack, kSolid, 2 \
+    }
+
 struct DataProperties
 {
     const char* Title;
