@@ -26,7 +26,7 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
     m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
     m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
 
-    // PrintData(DataPath);
+    PrintData(DataPath);
 }
 
 DataSet::~DataSet() { delete m_Graph; }
