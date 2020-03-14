@@ -58,67 +58,84 @@ void Interpolator::PrintResult(const char* ResultPath) // Still unsure on how to
     std::ofstream Stream(ResultPath);
     ASSERT(Stream, "Invalid filepath : %s", ResultPath);
 
+    const double* Minimum = GetMinimum();
+    const double* Maximum = GetMaximum();
+
     Stream << "#Results of interpolating the dataset \"" << GetTitle() << "\" with cubic splines\n" << std::endl;
 
     Stream << "#Maximum (x, y, ex, ey):\n"
-           << FORMATD() << GetXMaximum() << "\t" << FORMATD() << GetYMaximum() << "\t" << FORMATD() << GetXMaximumError() << "\t" << FORMATD()
-           << GetYMaximumError() << std::endl;
+           << FORMATD() << Maximum[0] << "\t" << FORMATD() << Maximum[1] << "\t" << FORMATD() << Maximum[2] << "\t" << FORMATD() << Maximum[3] << std::endl;
     Stream << "#Minimum (x, y, ex, ey):\n"
-           << FORMATD() << GetXMinimum() << "\t" << FORMATD() << GetYMinimum() << "\t" << FORMATD() << GetXMinimumError() << "\t" << FORMATD()
-           << GetYMinimumError() << std::endl;
+           << FORMATD() << Minimum[0] << "\t" << FORMATD() << Minimum[1] << "\t" << FORMATD() << Minimum[2] << "\t" << FORMATD() << Minimum[3] << std::endl;
+
+    delete[] Minimum;
+    delete[] Maximum;
 
     Stream.close();
 }
 
-double Interpolator::GetXMinimumError() const
+const double* Interpolator::GetMinimum() const
 {
-    const double XMinimum = GetXMinimum();
+    double* Minimum = new double[4];
+
+    Minimum[0] = m_OverlayFunction->GetMinimumX();
+    Minimum[1] = m_OverlayFunction->GetMinimum();
 
     double ClosestDist1 = std::numeric_limits<double>::max();
-    double ClosestDist2 = std::numeric_limits<double>::max();
+    Minimum[2]          = std::numeric_limits<double>::max();
+
+    Minimum[3] = std::numeric_limits<double>::max();
 
     for (int i = 0; i < m_Graph->GetN(); i++)
     {
-        if (fabs(m_Graph->GetPointX(i) - XMinimum) < ClosestDist1)
+        if (fabs(m_Graph->GetPointX(i) - Minimum[0]) < ClosestDist1)
         {
-            ClosestDist2 = ClosestDist1;
-            ClosestDist1 = fabs(m_Graph->GetPointX(i) - XMinimum);
+            Minimum[2]   = ClosestDist1;
+            ClosestDist1 = fabs(m_Graph->GetPointX(i) - Minimum[0]);
+
+            Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
         }
 
-        else if (fabs(m_Graph->GetPointX(i) - XMinimum) < ClosestDist2)
+        else if (fabs(m_Graph->GetPointX(i) - Minimum[0]) < Minimum[2])
         {
-            ClosestDist2 = fabs(m_Graph->GetPointX(i) - XMinimum);
+            Minimum[2] = fabs(m_Graph->GetPointX(i) - Minimum[0]);
+
+            Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
         }
     }
 
-    return ClosestDist2;
+    return Minimum;
 }
 
-double Interpolator::GetXMaximumError() const
+const double* Interpolator::GetMaximum() const
 {
-    const double XMaximum = GetXMaximum();
+    double* Maximum = new double[4];
+
+    Maximum[0] = m_OverlayFunction->GetMaximumX();
+    Maximum[1] = m_OverlayFunction->GetMaximum();
 
     double ClosestDist1 = std::numeric_limits<double>::max();
-    double ClosestDist2 = std::numeric_limits<double>::max();
+    Maximum[2]          = std::numeric_limits<double>::max();
+
+    Maximum[3] = std::numeric_limits<double>::max();
 
     for (int i = 0; i < m_Graph->GetN(); i++)
     {
-        if (fabs(m_Graph->GetPointX(i) - XMaximum) < ClosestDist1)
+        if (fabs(m_Graph->GetPointX(i) - Maximum[0]) < ClosestDist1)
         {
-            ClosestDist2 = ClosestDist1;
+            Maximum[2]   = ClosestDist1;
+            ClosestDist1 = fabs(m_Graph->GetPointX(i) - Maximum[0]);
 
-            ClosestDist1 = fabs(m_Graph->GetPointX(i) - XMaximum);
+            Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
         }
 
-        else if (fabs(m_Graph->GetPointX(i) - XMaximum) < ClosestDist2)
+        else if (fabs(m_Graph->GetPointX(i) - Maximum[0]) < Maximum[2])
         {
-            ClosestDist2 = fabs(m_Graph->GetPointX(i) - XMaximum);
+            Maximum[2] = fabs(m_Graph->GetPointX(i) - Maximum[0]);
+
+            Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
         }
     }
 
-    return ClosestDist2;
+    return Maximum;
 }
-
-double Interpolator::GetYMinimumError() const { return fabs(m_Graph->GetYaxis()->GetXmin() - GetYMinimum()); }
-
-double Interpolator::GetYMaximumError() const { return fabs(m_Graph->GetYaxis()->GetXmax() - GetYMaximum()); }
