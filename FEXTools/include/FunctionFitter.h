@@ -28,17 +28,20 @@ class FunctionFitter : public DataSet
 public:
     FunctionFitter(const char* ConstructionDataPath);
     FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
-    virtual ~FunctionFitter();
 
     virtual void Draw(const char* DrawPath) const override;
+
+    virtual ~FunctionFitter();
 
     FunctionFitter()                      = delete;
     FunctionFitter(const FunctionFitter&) = delete;
     FunctionFitter operator=(const FunctionFitter&) = delete;
 
 protected:
-    virtual void FDraw() const override; // For use in DataStack
+    FunctionFitter(const std::string& ConstructionData);
+    virtual void Construct(const std::string& ConstructionData) override;
 
+private:
     void    ReadFunction(const char* FunctionPath);
     TString ProcessFormula();
 
@@ -46,10 +49,10 @@ protected:
 
     void PrintResult(const char* FunctionPath);
 
-    FunctionFitter(const std::string& ConstructionData);
-    virtual void Construct(const std::string& ConstructionData) override;
+private: // For use in DataStack
+    virtual void FDraw() const override;
 
-protected:
+private:
     TF1*        m_Function2Fit;
     std::string m_FormulaStr;
 

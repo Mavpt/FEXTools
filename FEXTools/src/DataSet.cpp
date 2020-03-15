@@ -7,6 +7,7 @@
 
 #include "DataSet.h"
 
+/* PUBLIC */
 DataSet::DataSet(const char* ConstructionDataPath)
 {
     std::ifstream InputStream(ConstructionDataPath);
@@ -46,8 +47,6 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
     PrintData(DataPath);
 }
 
-DataSet::~DataSet() { delete m_Graph; }
-
 void DataSet::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
@@ -63,46 +62,10 @@ void DataSet::Draw(const char* DrawPath) const
     delete Canvas;
 }
 
-void DataSet::FDraw() const { m_Graph->Draw("P"); }
+DataSet::~DataSet() { delete m_Graph; }
 
-void DataSet::PrintData(const char* DataPath) const
-{
-    std::ofstream Stream(DataPath);
-    ASSERT(Stream, "Invalid filepath : %s", DataPath);
-
-    for (int i = 0; i < m_Graph->GetN(); i++)
-        Stream << FORMATD() << m_Graph->GetX()[i] << "\t" << FORMATD() << m_Graph->GetY()[i] << "\t" << FORMATD() << m_Graph->GetEX()[i] << "\t"
-               << FORMATD() << m_Graph->GetEY()[i] << std::endl;
-
-    Stream.close();
-}
-
+/* PROTECTED */
 DataSet::DataSet(const std::string& ConstructionData) { Construct(ConstructionData); }
-
-DataSet::DataSet(const DataProperties& i_DataProperties)
-{
-    const double DummyVar = 0;
-
-    m_Graph = new TGraphErrors(1, &DummyVar, &DummyVar);
-
-    m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
-
-    m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
-    m_Graph->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
-    m_Graph->GetXaxis()->SetMaxDigits(4);
-
-    m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
-    m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
-    m_Graph->GetYaxis()->SetMaxDigits(3);
-
-    m_Graph->SetMarkerColor(kWhite);
-    m_Graph->SetMarkerStyle(kDot);
-    m_Graph->SetMarkerSize(0);
-
-    m_Graph->SetLineColor(kWhite);
-    m_Graph->SetLineStyle(kSolid);
-    m_Graph->SetLineWidth(0);
-}
 
 void DataSet::Construct(const std::string& ConstructionData)
 {
@@ -201,3 +164,44 @@ void DataSet::Construct(const std::string& ConstructionData)
         m_Graph->SetMarkerSize(strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL));
     }
 }
+
+/* PRIVATE */
+void DataSet::PrintData(const char* DataPath) const
+{
+    std::ofstream Stream(DataPath);
+    ASSERT(Stream, "Invalid filepath : %s", DataPath);
+
+    for (int i = 0; i < m_Graph->GetN(); i++)
+        Stream << FORMATD() << m_Graph->GetX()[i] << "\t" << FORMATD() << m_Graph->GetY()[i] << "\t" << FORMATD() << m_Graph->GetEX()[i] << "\t"
+               << FORMATD() << m_Graph->GetEY()[i] << std::endl;
+
+    Stream.close();
+}
+
+/* PRIVATE */
+DataSet::DataSet(const DataProperties& i_DataProperties)
+{
+    const double DummyVar = 0;
+
+    m_Graph = new TGraphErrors(1, &DummyVar, &DummyVar);
+
+    m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
+
+    m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
+    m_Graph->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetMaxDigits(4);
+
+    m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
+    m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
+    m_Graph->GetYaxis()->SetMaxDigits(3);
+
+    m_Graph->SetMarkerColor(kWhite);
+    m_Graph->SetMarkerStyle(kDot);
+    m_Graph->SetMarkerSize(0);
+
+    m_Graph->SetLineColor(kWhite);
+    m_Graph->SetLineStyle(kSolid);
+    m_Graph->SetLineWidth(0);
+}
+
+void DataSet::FDraw() const { m_Graph->Draw("P"); }

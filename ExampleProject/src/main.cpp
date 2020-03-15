@@ -19,5 +19,11 @@ int main()
         Yellow.Draw("../IO_Plots/Yellow.png");
     }
 
+    /* Interpolator */
+    {
+        Interpolator Green("../IO_DataSets/Green.txt");
+        Green.Draw("../IO_Plots/Green.png");
+    }
+
     return 0;
 }

@@ -11,19 +11,22 @@
 class Interpolator : public DataSet
 {
 public:
+    Interpolator(const char* ConstructionDataPath);
     Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath);
-    virtual ~Interpolator();
 
     virtual void Draw(const char* DrawPath) const override;
+
+    virtual ~Interpolator();
 
     Interpolator()                    = delete;
     Interpolator(const Interpolator&) = delete;
     Interpolator operator=(const Interpolator&) = delete;
 
 protected:
-    virtual void FDraw() const override; // For use in DataStack
+    Interpolator(const std::string& ConstructionData);
+    virtual void Construct(const std::string& ConstructionData) override;
 
-    void   PrintResult(const char* ResultPath);
+private:
     double Calculate(double* fx, double*) { return m_Spline3->Eval(fx[0]); }
 
     const double* GetMinimum() const;
@@ -35,8 +38,12 @@ protected:
     inline double GetYMinimum() const { return m_OverlayFunction->GetMinimum(); }
     inline double GetYMaximum() const { return m_OverlayFunction->GetMaximum(); }
 
+    void PrintResult(const char* ResultPath);
 
-protected:
+private: // For use in DataStack
+    virtual void FDraw() const override;
+
+private:
     TSpline3* m_Spline3;
     TF1*      m_OverlayFunction;
 };
