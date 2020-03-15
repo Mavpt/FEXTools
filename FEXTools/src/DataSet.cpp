@@ -7,10 +7,10 @@
 
 #include "DataSet.h"
 
-DataSet::DataSet(const char* DataSetInfoPath)
+DataSet::DataSet(const char* ConstructionDataPath)
 {
-    std::ifstream InputStream(DataSetInfoPath);
-    ASSERT(InputStream, "Invalid filepath : %s", DataSetInfoPath);
+    std::ifstream InputStream(ConstructionDataPath);
+    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
 
     std::string FileContent;
 
@@ -20,7 +20,7 @@ DataSet::DataSet(const char* DataSetInfoPath)
 
     InputStream.read(&FileContent[0], FileContent.size());
 
-    MakeDataSet(FileContent);
+    Construct(FileContent);
 }
 
 DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath)
@@ -32,7 +32,7 @@ DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i
     m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
 
     m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
-    m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
     m_Graph->GetXaxis()->SetMaxDigits(4);
 
     m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
@@ -77,7 +77,7 @@ void DataSet::PrintData(const char* DataPath) const
     Stream.close();
 }
 
-DataSet::DataSet(const std::string& DataSetInfo) { MakeDataSet(DataSetInfo); }
+DataSet::DataSet(const std::string& ConstructionData) { Construct(ConstructionData); }
 
 DataSet::DataSet(const DataProperties& i_DataProperties)
 {
@@ -88,7 +88,7 @@ DataSet::DataSet(const DataProperties& i_DataProperties)
     m_Graph->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
 
     m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle);
-    m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
     m_Graph->GetXaxis()->SetMaxDigits(4);
 
     m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle);
@@ -104,34 +104,34 @@ DataSet::DataSet(const DataProperties& i_DataProperties)
     m_Graph->SetLineWidth(0);
 }
 
-void DataSet::MakeDataSet(const std::string& DataSetInfo)
+void DataSet::Construct(const std::string& ConstructionData)
 {
     // Tools
     long BegPos, EndPos;
 
     // DataPath
     {
-        BegPos = DataSetInfo.find("#DataPath");
-        ASSERT(BegPos != -1, "Invalid DataSetInfo (DataPath)");
+        BegPos = ConstructionData.find("#DataPath");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (DataPath)");
 
-        BegPos = DataSetInfo.find_first_not_of("#DataPath ", BegPos);
-        EndPos = DataSetInfo.find("\n", BegPos);
+        BegPos = ConstructionData.find_first_not_of("#DataPath ", BegPos);
+        EndPos = ConstructionData.find("\n", BegPos);
 
-        m_Graph = new TGraphErrors(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str());
+        m_Graph = new TGraphErrors(ConstructionData.substr(BegPos, EndPos - BegPos).c_str());
         m_Graph->Sort();
 
-        PrintData(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str());
+        PrintData(ConstructionData.substr(BegPos, EndPos - BegPos).c_str());
     }
 
     // Title
     {
-        BegPos = DataSetInfo.find("#Title");
-        ASSERT(BegPos != -1, "Invalid DataSetInfo (Title)");
+        BegPos = ConstructionData.find("#Title");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (Title)");
 
-        BegPos = DataSetInfo.find_first_not_of("#Title ", BegPos);
-        EndPos = DataSetInfo.find("\n", BegPos);
+        BegPos = ConstructionData.find_first_not_of("#Title ", BegPos);
+        EndPos = ConstructionData.find("\n", BegPos);
 
-        const char* Title = DataSetInfo.substr(BegPos, EndPos - BegPos).c_str();
+        const char* Title = ConstructionData.substr(BegPos, EndPos - BegPos).c_str();
         m_Graph->SetNameTitle(Title, Title);
     }
 
@@ -139,23 +139,23 @@ void DataSet::MakeDataSet(const std::string& DataSetInfo)
     {
         double xMin = 0, xMax = 0;
 
-        BegPos = DataSetInfo.find("#xAxis");
-        ASSERT(BegPos != -1, "Invalid DataSetInfo (xAxis)");
+        BegPos = ConstructionData.find("#xAxis");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (xAxis)");
 
-        BegPos = DataSetInfo.find_first_not_of("#xAxis ", BegPos);
-        EndPos = DataSetInfo.find(",", BegPos);
+        BegPos = ConstructionData.find_first_not_of("#xAxis ", BegPos);
+        EndPos = ConstructionData.find(",", BegPos);
 
-        m_Graph->GetXaxis()->SetTitle(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str());
-
-        BegPos = EndPos + 1;
-        EndPos = DataSetInfo.find(",", BegPos);
-        xMin   = strtod(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+        m_Graph->GetXaxis()->SetTitle(ConstructionData.substr(BegPos, EndPos - BegPos).c_str());
 
         BegPos = EndPos + 1;
-        EndPos = DataSetInfo.find("\n", BegPos);
-        xMax   = strtod(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+        EndPos = ConstructionData.find(",", BegPos);
+        xMin   = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
 
-        m_Graph->GetXaxis()->SetLimits(xMin, xMax);
+        BegPos = EndPos + 1;
+        EndPos = ConstructionData.find("\n", BegPos);
+        xMax   = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+
+        m_Graph->GetXaxis()->SetRangeUser(xMin, xMax);
         m_Graph->GetXaxis()->SetMaxDigits(4);
     }
 
@@ -163,49 +163,41 @@ void DataSet::MakeDataSet(const std::string& DataSetInfo)
     {
         double yMin = 0, yMax = 0;
 
-        BegPos = DataSetInfo.find("#yAxis");
-        ASSERT(BegPos != -1, "Invalid DataSetInfo (yAxis)");
+        BegPos = ConstructionData.find("#yAxis");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (yAxis)");
 
-        BegPos = DataSetInfo.find_first_not_of("#xAxis ", BegPos);
-        EndPos = DataSetInfo.find(",", BegPos);
+        BegPos = ConstructionData.find_first_not_of("#yAxis ", BegPos);
+        EndPos = ConstructionData.find(",", BegPos);
 
-        m_Graph->GetYaxis()->SetTitle(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str());
-
-        BegPos = EndPos + 1;
-        EndPos = DataSetInfo.find(",", BegPos);
-        yMin   = strtod(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+        m_Graph->GetYaxis()->SetTitle(ConstructionData.substr(BegPos, EndPos - BegPos).c_str());
 
         BegPos = EndPos + 1;
-        EndPos = DataSetInfo.find("\n", BegPos);
-        yMax   = strtod(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+        EndPos = ConstructionData.find(",", BegPos);
+        yMin   = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
 
-        m_Graph->GetYaxis()->SetLimits(yMin, yMax);
+        BegPos = EndPos + 1;
+        EndPos = ConstructionData.find("\n", BegPos);
+        yMax   = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+
+        m_Graph->GetYaxis()->SetRangeUser(yMin, yMax);
         m_Graph->GetYaxis()->SetMaxDigits(3);
     }
 
     // Marker
     {
-        Color_t      Color;
-        EMarkerStyle Style;
-        Size_t       Size;
+        BegPos = ConstructionData.find("#Marker");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (Marker)");
 
-        BegPos = DataSetInfo.find("#Marker");
-        ASSERT(BegPos != -1, "Invalid DataSetInfo (Marker)");
-
-        BegPos = DataSetInfo.find_first_not_of("#Marker ", BegPos);
-        EndPos = DataSetInfo.find(",", BegPos);
-        Color  = strtol(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10);
+        BegPos = ConstructionData.find_first_not_of("#Marker ", BegPos);
+        EndPos = ConstructionData.find(",", BegPos);
+        m_Graph->SetMarkerColor(strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
 
         BegPos = EndPos + 1;
-        EndPos = DataSetInfo.find(",", BegPos);
-        Style  = (EMarkerStyle)strtol(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10);
+        EndPos = ConstructionData.find(",", BegPos);
+        m_Graph->SetMarkerStyle((EMarkerStyle)strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
 
         BegPos = EndPos + 1;
-        EndPos = DataSetInfo.find(",", BegPos);
-        Size   = strtod(DataSetInfo.substr(BegPos, EndPos - BegPos).c_str(), NULL);
-
-        m_Graph->SetMarkerColor(Color);
-        m_Graph->SetMarkerStyle(Style);
-        m_Graph->SetMarkerSize(Size);
+        EndPos = ConstructionData.find(",", BegPos);
+        m_Graph->SetMarkerSize(strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL));
     }
 }

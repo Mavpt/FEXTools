@@ -1,0 +1,9 @@
+#Title Yellow Filter
+#xAxis U (V), 0, 2.5
+#yAxis I (A), 0.0, 2.5E-03
+
+#Marker 5, 20, 1
+#Line 5, 1, 2
+
+#DataPath ../IO_Input/UI_Amarelo.txt
+#FunctionPath ../IO_Functions/UI_Amarelo.txt

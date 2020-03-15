@@ -1,4 +1,4 @@
-#Results of fitting the dataset "Yellow" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 522.074)
+#Results of fitting the dataset "Yellow Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 522.074)
 
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
 

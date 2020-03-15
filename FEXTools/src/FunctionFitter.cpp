@@ -10,28 +10,48 @@
 #include "Core.h"
 #include "FunctionFitter.h"
 
-void ReplaceString(std::string& subject, const std::string& search, const std::string& replace);
+void ReplaceString(std::string& subject, const std::string& search, const std::string& replace)
+{
+    size_t pos = 0;
+    while ((pos = subject.find(search, pos)) != std::string::npos)
+    {
+        subject.replace(pos, search.length(), replace);
+        pos += replace.length();
+    }
+}
+
+FunctionFitter::FunctionFitter(const char* ConstructionDataPath) : DataSet(ConstructionDataPath), m_Function2Fit(NULL)
+{
+    std::ifstream InputStream(ConstructionDataPath);
+    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
+
+    std::string FileContent;
+
+    InputStream.seekg(0, std::ios::end);
+    FileContent.resize(InputStream.tellg());
+    InputStream.seekg(0, std::ios::beg);
+
+    InputStream.read(&FileContent[0], FileContent.size());
+
+    Construct(FileContent);
+}
 
 FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath)
     : DataSet(i_DataProperties, i_DrawProperties, DataPath)
 {
-    ReadFile(FunctionPath);
+    ReadFunction(FunctionPath);
 
     m_Function2Fit = new TF1(i_DataProperties.Title, ProcessFormula(), i_DataProperties.xMin, i_DataProperties.xMax);
 
     m_Function2Fit->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
 
     m_Function2Fit->GetXaxis()->SetTitle(i_DataProperties.xTitle);
-    m_Function2Fit->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Function2Fit->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
     m_Function2Fit->GetXaxis()->SetMaxDigits(4);
 
     m_Function2Fit->GetYaxis()->SetTitle(i_DataProperties.yTitle);
     m_Function2Fit->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
     m_Function2Fit->GetYaxis()->SetMaxDigits(3);
-
-    m_Function2Fit->SetMarkerColor(i_DrawProperties.MarkerColor);
-    m_Function2Fit->SetMarkerStyle(i_DrawProperties.MarkerStyle);
-    m_Function2Fit->SetMarkerSize(i_DrawProperties.MarkerSize);
 
     m_Function2Fit->SetLineColor(i_DrawProperties.LineColor);
     m_Function2Fit->SetLineStyle(i_DrawProperties.LineStyle);
@@ -66,7 +86,7 @@ void FunctionFitter::FDraw() const
     m_Function2Fit->Draw("SAME");
 }
 
-void FunctionFitter::ReadFile(const char* FunctionPath)
+void FunctionFitter::ReadFunction(const char* FunctionPath)
 {
     std::ifstream Stream(FunctionPath);
     ASSERT(Stream, "Invalid filepath : %s", FunctionPath)
@@ -174,12 +194,64 @@ void FunctionFitter::PrintResult(const char* FunctionPath)
     Stream.close();
 }
 
-void ReplaceString(std::string& subject, const std::string& search, const std::string& replace)
+FunctionFitter::FunctionFitter(const std::string& ConstructionData) : DataSet(ConstructionData) { Construct(ConstructionData); }
+
+void FunctionFitter::Construct(const std::string& ConstructionData)
 {
-    size_t pos = 0;
-    while ((pos = subject.find(search, pos)) != std::string::npos)
+    // Tools
+    long BegPos, EndPos;
+
+    std::string FunctionPath;
+
+    // FunctionPath
     {
-        subject.replace(pos, search.length(), replace);
-        pos += replace.length();
+        BegPos = ConstructionData.find("#FunctionPath");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (FunctionPath)");
+
+        BegPos = ConstructionData.find_first_not_of("#FunctionPath ", BegPos);
+        EndPos = ConstructionData.find("\n", BegPos);
+
+        FunctionPath = ConstructionData.substr(BegPos, EndPos - BegPos);
+        ReadFunction(ConstructionData.substr(BegPos, EndPos - BegPos).c_str());
+
+        m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
     }
+
+    // Title
+    {
+        m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
+    }
+
+    // xAxis
+    {
+        m_Function2Fit->GetXaxis()->SetRangeUser(GetxMin(), GetxMax());
+        m_Function2Fit->GetXaxis()->SetMaxDigits(4);
+    }
+
+    // yAxis
+    {
+        m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
+        m_Function2Fit->GetYaxis()->SetMaxDigits(3);
+    }
+
+    // Line
+    {
+        BegPos = ConstructionData.find("#Line");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (Line)");
+
+        BegPos = ConstructionData.find_first_not_of("#Line ", BegPos);
+        EndPos = ConstructionData.find(",", BegPos);
+        m_Function2Fit->SetLineColor(strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
+
+        BegPos = EndPos + 1;
+        EndPos = ConstructionData.find(",", BegPos);
+        m_Function2Fit->SetLineStyle((ELineStyle)strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
+
+        BegPos = EndPos + 1;
+        EndPos = ConstructionData.find(",", BegPos);
+        m_Function2Fit->SetLineWidth(strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
+    }
+
+    Fit();
+    PrintResult(FunctionPath.c_str());
 }

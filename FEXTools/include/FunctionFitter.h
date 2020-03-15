@@ -26,6 +26,7 @@ struct strsize_less
 class FunctionFitter : public DataSet
 {
 public:
+    FunctionFitter(const char* ConstructionDataPath);
     FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
     virtual ~FunctionFitter();
 
@@ -38,12 +39,15 @@ public:
 protected:
     virtual void FDraw() const override; // For use in DataStack
 
-    void    ReadFile(const char* FunctionPath);
+    void    ReadFunction(const char* FunctionPath);
     TString ProcessFormula();
 
     void Fit();
 
     void PrintResult(const char* FunctionPath);
+
+    FunctionFitter(const std::string& ConstructionData);
+    virtual void Construct(const std::string& ConstructionData) override;
 
 protected:
     TF1*        m_Function2Fit;
