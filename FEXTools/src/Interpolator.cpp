@@ -81,27 +81,20 @@ const double* Interpolator::GetMinimum() const
     Minimum[0] = m_OverlayFunction->GetMinimumX();
     Minimum[1] = m_OverlayFunction->GetMinimum();
 
-    double ClosestDist1 = std::numeric_limits<double>::max();
-    Minimum[2]          = std::numeric_limits<double>::max();
-
     Minimum[3] = std::numeric_limits<double>::max();
 
-    for (int i = 0; i < m_Graph->GetN(); i++)
+    int i;
+    for (i = 0; m_Graph->GetPointX(i) < Minimum[0]; i++)
     {
-        if (fabs(m_Graph->GetPointX(i) - Minimum[0]) < ClosestDist1)
-        {
-            Minimum[2]   = ClosestDist1;
-            ClosestDist1 = fabs(m_Graph->GetPointX(i) - Minimum[0]);
+        Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
+    }
 
-            Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
-        }
+    Minimum[2] = (fabs(m_Graph->GetPointX(i - 1) - Minimum[0]) > fabs(m_Graph->GetPointX(i) - Minimum[0])) ? fabs(m_Graph->GetPointX(i - 1) - Minimum[0])
+                                                                                                           : fabs(m_Graph->GetPointX(i) - Minimum[0]);
 
-        else if (fabs(m_Graph->GetPointX(i) - Minimum[0]) < Minimum[2])
-        {
-            Minimum[2] = fabs(m_Graph->GetPointX(i) - Minimum[0]);
-
-            Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
-        }
+    for (; i < m_Graph->GetN(); i++)
+    {
+        Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
     }
 
     return Minimum;
@@ -114,27 +107,20 @@ const double* Interpolator::GetMaximum() const
     Maximum[0] = m_OverlayFunction->GetMaximumX();
     Maximum[1] = m_OverlayFunction->GetMaximum();
 
-    double ClosestDist1 = std::numeric_limits<double>::max();
-    Maximum[2]          = std::numeric_limits<double>::max();
-
     Maximum[3] = std::numeric_limits<double>::max();
 
-    for (int i = 0; i < m_Graph->GetN(); i++)
+    int i;
+    for (i = 0; m_Graph->GetPointX(i) < Maximum[0]; i++)
     {
-        if (fabs(m_Graph->GetPointX(i) - Maximum[0]) < ClosestDist1)
-        {
-            Maximum[2]   = ClosestDist1;
-            ClosestDist1 = fabs(m_Graph->GetPointX(i) - Maximum[0]);
+        Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
+    }
 
-            Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
-        }
+    Maximum[2] = (fabs(m_Graph->GetPointX(i - 1) - Maximum[0]) > fabs(m_Graph->GetPointX(i) - Maximum[0])) ? fabs(m_Graph->GetPointX(i - 1) - Maximum[0])
+                                                                                                           : fabs(m_Graph->GetPointX(i) - Maximum[0]);
 
-        else if (fabs(m_Graph->GetPointX(i) - Maximum[0]) < Maximum[2])
-        {
-            Maximum[2] = fabs(m_Graph->GetPointX(i) - Maximum[0]);
-
-            Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
-        }
+    for (; i < m_Graph->GetN(); i++)
+    {
+        Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
     }
 
     return Maximum;
