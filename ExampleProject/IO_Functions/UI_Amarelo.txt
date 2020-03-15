@@ -1,0 +1,18 @@
+#Results of fitting the dataset "Yellow" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 522.074)
+
+#Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
+
+Const echarge = 1.6021770000e-19
+Const kb      = 1.3806490000e-23
+Imax          = 2.1334657288e-03 (+- 1.0904086026e-06)
+I0            = 4.7686168865e-08 (+- 7.8957698759e-11)
+T             = 2.5919719508e+02 (+- 3.9311015940e-02)
+n             = 8.9094198304e+00 (+- 1.3512649926e-03)
+
+#IFunc [p2]-[p3]*exp((((1.60218e-19)*x)/([p5]*(1.38065e-23)*[p4]))-1)
+#IVar [p0] = Const echarge
+#IVar [p1] = Const kb
+#IVar [p2] = Imax
+#IVar [p3] = I0
+#IVar [p4] = T
+#IVar [p5] = n

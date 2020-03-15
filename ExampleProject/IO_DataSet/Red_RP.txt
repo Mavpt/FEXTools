@@ -1,0 +1,8 @@
+#Title Red Filter
+#xAxis R (#Omega), 0, 3500
+#yAxis P (W), 0.0, 8.E-03
+
+#Marker 2, 20, 1
+#Line 2, 1, 1
+
+#DataPath ../IO_Input/RP_Vermelho.txt

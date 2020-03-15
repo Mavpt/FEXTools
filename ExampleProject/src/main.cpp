@@ -1,74 +1,34 @@
 /* Main */
 
-#include <fstream>
 #include <FEXTools.h>
-#include "Core.h"
 
-#include <iostream>
+#define FDRP_AXIS "R (#Omega)", 0.0, 3.2E3, "P (W)", 0.0, 8.0E-03
+#define FARP_AXIS "R (#Omega)", 0.0, 3.2E3, "P (W)", 0.0, 2.5E-02
+#define CRP_AXIS  "R (#Omega)", 0.0, 3.2E3, "P (W)", 0.0, 4.0E-03
+
+#define FDUI_AXIS "U (V)", 0.0, 2.5, "I (A)", 0.0, 5.0E-03
+#define FAUI_AXIS "U (V)", 0.0, 2.5, "I (A)", 0.0, 1.5E-02
+#define CUI_AXIS  "U (V)", 0.0, 2.5, "I (A)", 0.0, 2.5E-03
+
+#define FRDP_AXIS "d (m)", 0.0, 3.5E-01, "P (W)", 0.0, 8.0E-03
+#define FRAP_AXIS "#theta (deg)", 0.0, 100.0, "P (W)", 0.0, 6.0E-03
+
+#define PmaxRP_AXIS "R (#Omega)", 0.0, 3.5E3, "P (W)", 0.0, 2.5E-02
+#define PmaxDP_AXIS "d (m)", 0.0, 0.4, "P (W)", 0.0, 2.5E-02
+#define PmaxAP_AXIS "cos(#theta)", 0.0, 1.0, "P (W)", 0.0, 8.E-03
+
+#define RoptimGRAPH()                        \
+    {                                        \
+        kBlack, kStar, 2, kBlack, kDotted, 2 \
+    }
 
 using namespace std;
 
-#define __DEBUG__ 0
-#if __DEBUG__
-
-struct AllocationMetrics
-{
-    uint32_t TotalAllocated = 0, TotalFreed = 0;
-
-    void CurrentUsage()
-    {
-        std::cout << "CURRENT ALLOCATED MEMORY = " << TotalAllocated - TotalFreed << " (" << TotalAllocated << " - " << TotalFreed << " )" << std::endl;
-    }
-};
-
-static AllocationMetrics s_AllocationMetrics;
-
-void* operator new(size_t size)
-{
-    s_AllocationMetrics.TotalAllocated++;
-    // s_AllocationMetrics.CurrentUsage();
-
-    return malloc(size);
-}
-
-void operator delete(void* memory)
-{
-    s_AllocationMetrics.TotalFreed++;
-    s_AllocationMetrics.CurrentUsage();
-
-    free(memory);
-}
-
-#endif
-
 int main()
 {
-    DataProperties u_DataProperties("FEXToolsTest", "xAxis", 380.0, 1000.0, "yAxis", 0, 1.5);
-
-    // DataSet
-    DataSet DataSetTest(u_DataProperties, { kRed, kFullDotLarge, 2, kRed, kDotted, 1 }, "../IO/Data.txt");
-    DataSetTest.Draw("../IO/DataSetTest.png");
-
-    // FunctionFitter
-    FunctionFitter FunctionFitterTest(u_DataProperties, { kRed, kFullDotLarge, 2, kRed, kDotted, 1 }, "../IO/Data.txt", "../IO/Function.txt");
-    FunctionFitterTest.Draw("../IO/FunctionFitterTest.png");
-
-    // Interpolator
-    Interpolator InterpolatorTest(u_DataProperties, { kRed, kFullDotLarge, 2, kPink, kDotted, 1 }, "../IO/Data.txt", "../IO/Interpolator.txt");
-    InterpolatorTest.Draw("../IO/InterpolatorTest.png");
-
-    // DataStack
-    DataStack DataStackTest(u_DataProperties);
-    DataStackTest.Add(&DataSetTest);
-    DataStackTest.Draw("../IO/DataStackTest.png");
-
-    DataStack FunctionDataStackTest(u_DataProperties);
-    FunctionDataStackTest.Add(&FunctionFitterTest);
-    FunctionDataStackTest.Draw("../IO/FunctionDataStackTest.png");
-
-    DataStack InterpolatorDataStackTest(u_DataProperties);
-    InterpolatorDataStackTest.Add(&InterpolatorTest);
-    InterpolatorDataStackTest.Draw("../IO/InterpolatorDataStackTest.png");
+    /* DATASET TEST */
+    DataSet Red("../IO_DataSet/Red_RP.txt");
+    Red.Draw("../IO_Plots/Red.eps");
 
     return 0;
 }

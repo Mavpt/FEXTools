@@ -1,0 +1,18 @@
+#Results of fitting the dataset "Red" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 170.225)
+
+#Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
+
+Const echarge = 1.6021770000e-19
+Const kb      = 1.3806490000e-23
+Imax          = 7.3631893647e-04 (+- 2.0877698331e-07)
+I0            = 1.9680196328e-05 (+- 3.5451478051e-08)
+T             = 1.3232410587e+02 (+- 8.2677868939e-02)
+n             = 5.1852512307e+01 (+- 3.2397851451e-02)
+
+#IFunc [p2]-[p3]*exp((((1.60218e-19)*x)/([p5]*(1.38065e-23)*[p4]))-1)
+#IVar [p0] = Const echarge
+#IVar [p1] = Const kb
+#IVar [p2] = Imax
+#IVar [p3] = I0
+#IVar [p4] = T
+#IVar [p5] = n

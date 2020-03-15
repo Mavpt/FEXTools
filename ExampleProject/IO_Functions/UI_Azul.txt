@@ -1,0 +1,18 @@
+#Results of fitting the dataset "Blue" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 400.321)
+
+#Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
+
+Const echarge = 1.6021770000e-19
+Const kb      = 1.3806490000e-23
+Imax          = 5.1599801902e-03 (+- 1.7320454436e-07)
+I0            = 1.3389619491e-02 (+- 4.7035887535e-07)
+T             = 1.9278614234e+03 (+- 6.6992305474e+01)
+n             = 3.3131795199e+03 (+- 1.1513089591e+02)
+
+#IFunc [p2]-[p3]*exp((((1.60218e-19)*x)/([p5]*(1.38065e-23)*[p4]))-1)
+#IVar [p0] = Const echarge
+#IVar [p1] = Const kb
+#IVar [p2] = Imax
+#IVar [p3] = I0
+#IVar [p4] = T
+#IVar [p5] = n

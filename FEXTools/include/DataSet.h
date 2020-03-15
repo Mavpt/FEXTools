@@ -11,6 +11,7 @@
 class DataSet
 {
 public:
+    DataSet(const char* DataSetInfoPath);
     DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath);
     virtual ~DataSet();
 
@@ -34,7 +35,10 @@ protected:
 
     void PrintData(const char* DataPath) const;
 
+    DataSet(const std::string& DataSetInfo);
     DataSet(const DataProperties& i_DataProperties); // For use in DataStack
+
+    void MakeDataSet(const std::string& DataSetInfo);
 
 protected:
     TGraphErrors* m_Graph;

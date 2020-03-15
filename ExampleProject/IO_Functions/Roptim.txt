@@ -1,0 +1,8 @@
+#Results of fitting the dataset "Optimal Resistance" with the function "a/x" (Chi^2 = 117.396)
+
+#Function a/x
+
+a = 3.1035911442e+00 (+- 4.5854381444e-02)
+
+#IFunc [p0]/x
+#IVar [p0] = a

@@ -1,0 +1,6 @@
+#Results of interpolating the dataset "Blue" with cubic splines
+
+#Maximum (x, y, ex, ey):
+3.0380617401e+03	1.6427928990e-04	2.3806174005e+02	1.2792898997e-06
+#Minimum (x, y, ex, ey):
+3.6000000000e+00	1.7800000000e-07	2.0540000000e+02	0.0000000000e+00
