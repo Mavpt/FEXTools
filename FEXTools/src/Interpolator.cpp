@@ -103,12 +103,12 @@ void Interpolator::PrintConstructor(const char* ConstructionDataPath) const
     std::ofstream OutputStream(ConstructionDataPath);
     ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
 
-    OutputStream << "#Interpolator" << GetConstructor();
+    OutputStream << "#Interpolator " << GetConstructor();
 
     OutputStream.close();
 }
 
-void Interpolator::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#Interpolator" << GetConstructor(); }
+void Interpolator::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#Interpolator " << GetConstructor(); }
 
 /* PRIVATE */
 const double* Interpolator::GetMinimum() const

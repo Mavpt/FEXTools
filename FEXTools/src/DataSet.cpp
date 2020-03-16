@@ -104,10 +104,43 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
     {
         // Title
         {
-            BegPos = ConstructionData.find("#Title");
-            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+            switch (Type)
+            {
+                case 0:
+                {
+                    BegPos = ConstructionData.find("#DataStack");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    BegPos = ConstructionData.find_first_not_of("#DataStack ");
+                    break;
+                }
 
-            BegPos = ConstructionData.find_first_not_of("#Title ", BegPos);
+                case 1:
+                {
+                    BegPos = ConstructionData.find("#DataSet");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    BegPos = ConstructionData.find_first_not_of("#DataSet ");
+                    break;
+                }
+
+                case 2:
+                {
+                    BegPos = ConstructionData.find("#Fitter");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    BegPos = ConstructionData.find_first_not_of("#Fitter ");
+                    break;
+                }
+
+                case 3:
+                {
+                    BegPos = ConstructionData.find("#Interpolator");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    BegPos = ConstructionData.find_first_not_of("#Interpolator ");
+                    break;
+                }
+
+                default: ASSERT(false, "No idea how we got here: %d", Type); break;
+            }
+
             EndPos = ConstructionData.find("\n", BegPos);
 
             m_DataProperties.Title = ConstructionData.substr(BegPos, EndPos - BegPos).c_str();
@@ -240,9 +273,9 @@ std::string DataSet::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << "\n#Title " << GetTitle() << "\n#DataPath " << m_DataPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax()
-                  << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << "\n#Marker " << GetMarkerColor() << ", " << GetMarkerStyle()
-                  << ", " << GetMarkerSize() << "\n#Line " << GetLineColor() << ", " << GetLineStyle() << ", " << GetLineWidth() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DataPath " << m_DataPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis "
+                  << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << "\n#Marker " << GetMarkerColor() << ", " << GetMarkerStyle() << ", "
+                  << GetMarkerSize() << "\n#Line " << GetLineColor() << ", " << GetLineStyle() << ", " << GetLineWidth() << std::endl;
 
     return ConstructorSS.str();
 }
@@ -252,12 +285,12 @@ void DataSet::PrintConstructor(const char* ConstructionDataPath) const
     std::ofstream OutputStream(ConstructionDataPath);
     ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
 
-    OutputStream << "#DataSet" << GetConstructor();
+    OutputStream << "#DataSet " << GetConstructor();
 
     OutputStream.close();
 }
 
-void DataSet::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#DataSet" << GetConstructor(); }
+void DataSet::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#DataSet " << GetConstructor(); }
 
 /* PRIVATE */
 void DataSet::PrintData(const char* DataPath) const
@@ -273,20 +306,21 @@ void DataSet::PrintData(const char* DataPath) const
 }
 
 /* PRIVATE */
-DataSet::DataSet(const DataProperties& i_DataProperties) : Type(0), m_DataProperties(i_DataProperties), m_DrawProperties(), m_DataPath(NULL)
+DataSet::DataSet(const DataProperties& i_DataProperties)
+    : Type(0), m_DataProperties(i_DataProperties), m_DrawProperties(), m_DataPath("DataStack contains no DataPath")
 {
     const double DummyVar = 0;
 
     m_Graph = new TGraphErrors(1, &DummyVar, &DummyVar);
 
-    m_Graph->SetNameTitle(i_DataProperties.Title.c_str(), i_DataProperties.Title.c_str());
+    m_Graph->SetNameTitle(GetTitle(), GetTitle());
 
-    m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle.c_str());
-    m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Graph->GetXaxis()->SetTitle(GetxTitle());
+    m_Graph->GetXaxis()->SetLimits(GetxMin(), GetxMax());
     m_Graph->GetXaxis()->SetMaxDigits(4);
 
-    m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle.c_str());
-    m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
+    m_Graph->GetYaxis()->SetTitle(GetyTitle());
+    m_Graph->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
     m_Graph->GetYaxis()->SetMaxDigits(3);
 
     m_Graph->SetMarkerColor(kWhite);

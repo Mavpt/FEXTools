@@ -84,9 +84,6 @@ void DataStack::Construct(const std::string& ConstructionData, const DataPropert
                               ? ConstructionData.find("#Fitter", Position + 1)
                               : ConstructionData.find("#Interpolator", Position + 1));
 
-        std::cout << __FUNCTION__ << " (" << ConstructionData[OldPosition + 1] << "):\n"
-                  << ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition) << std::endl;
-
         switch (ConstructionData[OldPosition + 1])
         {
             case 68: // DataSet
@@ -122,8 +119,8 @@ std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << "\n#Title " << GetTitle() << "\n#DataPath " << m_DataPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax()
-                  << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
+    ConstructorSS << "#DataStack " << GetTitle() << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis " << GetyTitle()
+                  << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
     return ConstructorSS.str();
 }
@@ -133,9 +130,13 @@ void DataStack::PrintConstructor(const char* ConstructionDataPath) const
     std::ofstream OutputStream(ConstructionDataPath);
     ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
 
-    OutputStream << "#DataStack" << GetConstructor();
+    OutputStream << "#DataStack " << GetConstructor();
 
-    for (DataSet* Set : m_DataSets) Set->PrintConstructor(OutputStream);
+    for (DataSet* Set : m_DataSets)
+    {
+        OutputStream << std::endl;
+        Set->PrintConstructor(OutputStream);
+    }
 
     OutputStream.close();
 }

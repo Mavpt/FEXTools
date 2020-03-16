@@ -148,12 +148,12 @@ void Fitter::PrintConstructor(const char* ConstructionDataPath) const
     std::ofstream OutputStream(ConstructionDataPath);
     ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
 
-    OutputStream << "#Fitter" << GetConstructor();
+    OutputStream << "#Fitter " << GetConstructor();
 
     OutputStream.close();
 }
 
-void Fitter::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#Fitter" << GetConstructor(); }
+void Fitter::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#Fitter " << GetConstructor(); }
 
 /* PRIVATE */
 void Fitter::ReadFunctionPath(const char* FunctionPath)

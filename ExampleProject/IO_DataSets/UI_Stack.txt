@@ -1,11 +1,9 @@
-#DataStack
-#Title Filters
-#DataPath 
+#DataStack #DataStack Filters
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
 
-#Fitter
-#Title Blue Filter
+
+#Fitter Blue Filter
 #DataPath ../IO_Input/UI_Blue.txt
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
@@ -22,8 +20,8 @@ I0            = 3.9391595045e+09 (+- 9.2927581272e+09)
 T             = -1.2130912195e+02 (+- 0.0000000000e+00)
 n             = -9.8760016597e-02 (+- 0.0000000000e+00)
 
-#Fitter
-#Title Green Filter
+
+#Fitter Green Filter
 #DataPath ../IO_Input/UI_Green.txt
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
@@ -40,8 +38,8 @@ I0            = 6.3666562969e-09 (+- 1.4142135624e+00)
 T             = 2.0453076420e+02 (+- 1.4142135624e+00)
 n             = 7.0303612050e+00 (+- 1.4142135624e+00)
 
-#Fitter
-#Title Red Filter
+
+#Fitter Red Filter
 #DataPath ../IO_Input/UI_Red.txt
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
@@ -58,8 +56,8 @@ I0            = 9.1961789724e-08 (+- 5.3611329582e-07)
 T             = -6.7956158160e+05 (+- 1.4685235064e+08)
 n             = -1.9777669481e+07 (+- 1.4142135624e+00)
 
-#Fitter
-#Title Yellow Filter
+
+#Fitter Yellow Filter
 #DataPath ../IO_Input/UI_Yellow.txt
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025

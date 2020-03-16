@@ -1,5 +1,4 @@
-#Fitter
-#Title Yellow Filter
+#Fitter Yellow Filter
 #DataPath ../IO_Input/UI_Yellow.txt
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
