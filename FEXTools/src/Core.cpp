@@ -7,6 +7,17 @@ DataProperties::DataProperties(const char* Title, const char* xTitle, const doub
 {
 }
 
+DataProperties::DataProperties(const DataProperties& i_DataProperties)
+    : Title(i_DataProperties.Title),
+      xTitle(i_DataProperties.xTitle),
+      xMin(i_DataProperties.xMin),
+      xMax(i_DataProperties.xMax),
+      yTitle(i_DataProperties.yTitle),
+      yMin(i_DataProperties.yMin),
+      yMax(i_DataProperties.yMax)
+{
+}
+
 DataProperties3D::DataProperties3D(const char*  Title,
                                    const char*  xTitle,
                                    const double xMin,
@@ -23,5 +34,15 @@ DataProperties3D::DataProperties3D(const char*  Title,
 
 DrawProperties::DrawProperties(const Color_t MarkerColor, const EMarkerStyle MarkerStyle, const Size_t MarkerSize, const Color_t LineColor, const ELineStyle LineStyle, const Width_t LineWidth)
     : MarkerColor(MarkerColor), MarkerStyle(MarkerStyle), MarkerSize(MarkerSize), LineColor(LineColor), LineStyle(LineStyle), LineWidth(LineWidth)
+{
+}
+
+DrawProperties::DrawProperties(const DrawProperties& i_DrawProperties)
+    : MarkerColor(i_DrawProperties.MarkerColor),
+      MarkerStyle(i_DrawProperties.MarkerStyle),
+      MarkerSize(i_DrawProperties.MarkerSize),
+      LineColor(i_DrawProperties.LineColor),
+      LineStyle(i_DrawProperties.LineStyle),
+      LineWidth(i_DrawProperties.LineWidth)
 {
 }

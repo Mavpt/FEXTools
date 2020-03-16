@@ -1,9 +1,17 @@
+#Fitter
 #Title Yellow Filter
+#DataPath ../IO_Input/UI_Amarelo.txt
 #xAxis U (V), 0, 2.5
-#yAxis I (A), 0.0, 2.5E-03
-
+#yAxis I (A), 0, 0.0025
 #Marker 5, 20, 1
 #Line 5, 1, 2
 
-#DataPath ../IO_Input/UI_Amarelo.txt
-#FunctionPath ../IO_Functions/UI_Amarelo.txt
+#Results of fitting the dataset "Yellow Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 522.074)
+#Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
+
+Const echarge = 1.6021770000e-19
+Const kb      = 1.3806490000e-23
+Imax          = 2.1334657288e-03 (+- 1.0904086026e-06)
+I0            = 4.7686168865e-08 (+- 7.8957698759e-11)
+T             = 2.5919719508e+02 (+- 3.9310959418e-02)
+n             = 8.9094198304e+00 (+- 1.3512442880e-03)

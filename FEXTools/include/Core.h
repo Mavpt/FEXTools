@@ -42,15 +42,23 @@
 
 struct DataProperties
 {
-    const char* Title;
+    std::string Title;
 
-    const char*  xTitle;
-    const double xMin, xMax;
+    std::string xTitle;
+    double      xMin, xMax;
 
-    const char*  yTitle;
-    const double yMin, yMax;
+    std::string yTitle;
+    double      yMin, yMax;
 
-    DataProperties(const char* Title, const char* xTitle, const double xMin, const double xMax, const char* yTitle, const double yMin, const double yMax);
+    DataProperties(const char*  Title  = "Title",
+                   const char*  xTitle = "xTitle",
+                   const double xMin   = 0,
+                   const double xMax   = 1,
+                   const char*  yTitle = "yTitle",
+                   const double yMin   = 0,
+                   const double yMax   = 1);
+
+    DataProperties(const DataProperties& i_DataProperties);
 };
 
 struct DataProperties3D
@@ -80,13 +88,13 @@ struct DataProperties3D
 
 struct DrawProperties
 {
-    const Color_t      MarkerColor;
-    const EMarkerStyle MarkerStyle;
-    const Size_t       MarkerSize;
+    Color_t      MarkerColor;
+    EMarkerStyle MarkerStyle;
+    Size_t       MarkerSize;
 
-    const Color_t    LineColor;
-    const ELineStyle LineStyle;
-    const Width_t    LineWidth;
+    Color_t    LineColor;
+    ELineStyle LineStyle;
+    Width_t    LineWidth;
 
     DrawProperties(const Color_t      MarkerColor = kWhite,
                    const EMarkerStyle MarkerStyle = kDot,
@@ -94,6 +102,8 @@ struct DrawProperties
                    const Color_t      LineColor   = kWhite,
                    const ELineStyle   LineStyle   = kSolid,
                    const Width_t      LineWidth   = 0);
+
+    DrawProperties(const DrawProperties& i_DrawProperties);
 };
 
 #endif

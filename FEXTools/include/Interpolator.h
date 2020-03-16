@@ -26,6 +26,9 @@ protected:
     Interpolator(const std::string& ConstructionData);
     virtual void Construct(const std::string& ConstructionData) override;
 
+    virtual std::string GetConstructor() const override;
+    virtual void        PrintConstructor(const char* ConstructionDataPath) const override;
+
 private:
     double Calculate(double* fx, double*) { return m_Spline3->Eval(fx[0]); }
 

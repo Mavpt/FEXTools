@@ -1,9 +1,13 @@
+#Interpolator
 #Title Green Filter
-#xAxis R (#Omega), 0.0, 3200.0
-#yAxis P (W), 0.0, 8.0E-3
-
+#DataPath ../IO_Input/RP_Verde.txt
+#xAxis R (#Omega), 0, 3200
+#yAxis P (W), 0, 0.008
 #Marker 3, 20, 1
 #Line 3, 1, 2
 
-#DataPath ../IO_Input/RP_Verde.txt
-#ResultPath ../IO_Interpolations/RP_Verde.txt
+#Results of interpolating the dataset "Green Filter" with cubic splines
+#Maximum (x, y, ex, ey):
+2.1633062177e+03	1.4002196697e-03	1.6330621774e+02	2.1966965826e-07
+#Minimum (x, y, ex, ey):
+3.8000000000e+00	4.2100000000e-06	4.8000000000e+00	

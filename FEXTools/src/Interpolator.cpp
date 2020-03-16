@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include <TCanvas.h>
 
@@ -9,7 +10,7 @@
 #include "Interpolator.h"
 
 /* PUBLIC */
-Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(ConstructionDataPath)
+Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 3)
 {
     std::ifstream InputStream(ConstructionDataPath);
     ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
@@ -23,10 +24,11 @@ Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(Construct
     InputStream.read(&FileContent[0], FileContent.size());
 
     Construct(FileContent);
+    if (Type == 3) PrintConstructor(ConstructionDataPath);
 }
 
 Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath)
-    : DataSet(i_DataProperties, i_DrawProperties, DataPath)
+    : DataSet(i_DataProperties, i_DrawProperties, DataPath, 3)
 {
     m_Spline3         = new TSpline3("m_Spline3", m_Graph);
     m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline3->GetXmin(), m_Spline3->GetXmax(), 0, 1);
@@ -61,13 +63,10 @@ Interpolator::~Interpolator()
 }
 
 /* PROTECTED */
-Interpolator::Interpolator(const std::string& ConstructionData) : DataSet(ConstructionData) { Construct(ConstructionData); }
+Interpolator::Interpolator(const std::string& ConstructionData) : DataSet(ConstructionData, 3) { Construct(ConstructionData); }
 
-void Interpolator::Construct(const std::string& ConstructionData)
+void Interpolator::Construct(const std::string&)
 {
-    // Tools
-    long BegPos, EndPos;
-
     // Spline3 & OverlayFunction
     {
         m_Spline3         = new TSpline3("m_Spline3", m_Graph);
@@ -81,32 +80,38 @@ void Interpolator::Construct(const std::string& ConstructionData)
 
     // Line
     {
-        BegPos = ConstructionData.find("#Line");
-        ASSERT(BegPos != -1, "Invalid ConstructionData (Line)");
-
-        BegPos = ConstructionData.find_first_not_of("#Line ", BegPos);
-        EndPos = ConstructionData.find(",", BegPos);
-        m_Spline3->SetLineColor(strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
-
-        BegPos = EndPos + 1;
-        EndPos = ConstructionData.find(",", BegPos);
-        m_Spline3->SetLineStyle((ELineStyle)strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
-
-        BegPos = EndPos + 1;
-        EndPos = ConstructionData.find(",", BegPos);
-        m_Spline3->SetLineWidth(strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
+        m_Spline3->SetLineColor(GetLineColor());
+        m_Spline3->SetLineStyle(GetLineStyle());
+        m_Spline3->SetLineWidth(GetLineWidth());
     }
+}
 
-    // ResultPath
-    {
-        BegPos = ConstructionData.find("#ResultPath");
-        ASSERT(BegPos != -1, "Invalid ConstructionData (ResultPath)");
+std::string Interpolator::GetConstructor() const
+{
+    const double* Minimum = GetMinimum();
+    const double* Maximum = GetMaximum();
 
-        BegPos = ConstructionData.find_first_not_of("#ResultPath ", BegPos);
-        EndPos = ConstructionData.find("\n", BegPos);
+    std::stringstream ConstructorSS;
 
-        PrintResult(ConstructionData.substr(BegPos, EndPos - BegPos).c_str());
-    }
+    ConstructorSS << DataSet::GetConstructor() << "\n#Results of interpolating the dataset \"" << GetTitle() << "\" with cubic splines\n#Maximum (x, y, ex, ey):\n"
+                  << FORMATD() << Maximum[0] << "\t" << FORMATD() << Maximum[1] << "\t" << FORMATD() << Maximum[2] << "\t" << FORMATD() << Maximum[3]
+                  << "\n#Minimum (x, y, ex, ey):\n"
+                  << FORMATD() << Minimum[0] << "\t" << FORMATD() << Minimum[1] << "\t" << FORMATD() << Minimum[2] << "\t" << FORMATD() << std::endl;
+
+    delete[] Minimum;
+    delete[] Maximum;
+
+    return ConstructorSS.str();
+}
+
+void Interpolator::PrintConstructor(const char* ConstructionDataPath) const
+{
+    std::ofstream OutputStream(ConstructionDataPath);
+    ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
+
+    OutputStream << "#Interpolator" << GetConstructor();
+
+    OutputStream.close();
 }
 
 /* PRIVATE */

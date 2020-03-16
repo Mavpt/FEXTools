@@ -1,4 +1,4 @@
-/* FunctionFitter */
+/* Fitter */
 
 #ifndef __FUNCTION_FITTER_H__
 #define __FUNCTION_FITTER_H__
@@ -23,26 +23,30 @@ struct strsize_less
     };
 };
 
-class FunctionFitter : public DataSet
+class Fitter : public DataSet
 {
 public:
-    FunctionFitter(const char* ConstructionDataPath);
-    FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
+    Fitter(const char* ConstructionDataPath);
+    Fitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
 
     virtual void Draw(const char* DrawPath) const override;
 
-    virtual ~FunctionFitter();
+    virtual ~Fitter();
 
-    FunctionFitter()                      = delete;
-    FunctionFitter(const FunctionFitter&) = delete;
-    FunctionFitter operator=(const FunctionFitter&) = delete;
+    Fitter()              = delete;
+    Fitter(const Fitter&) = delete;
+    Fitter operator=(const Fitter&) = delete;
 
 protected:
-    FunctionFitter(const std::string& ConstructionData);
+    Fitter(const std::string& ConstructionData);
     virtual void Construct(const std::string& ConstructionData) override;
 
+    virtual std::string GetConstructor() const override;
+    virtual void        PrintConstructor(const char* ConstructionDataPath) const override;
+
 private:
-    void    ReadFunction(const char* FunctionPath);
+    void    ReadFunctionPath(const char* FunctionPath);
+    void    ReadFunction(const std::string& Function);
     TString ProcessFormula();
 
     void Fit();

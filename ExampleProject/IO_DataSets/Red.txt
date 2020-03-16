@@ -1,8 +1,7 @@
+#DataSet
 #Title Red Filter
-#xAxis U (V), 0, 2.5
-#yAxis I (A), 0.0, 2.5E-03
-
-#Marker 2, 20, 1
-#Line 2, 1, 1
-
 #DataPath ../IO_Input/UI_Vermelho.txt
+#xAxis U (V), 0, 2.5
+#yAxis I (A), 0, 0.0025
+#Marker 2, 20, 1
+#Line 2, 1, 2

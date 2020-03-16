@@ -8,7 +8,7 @@
 #include <TStyle.h>
 
 #include "Core.h"
-#include "FunctionFitter.h"
+#include "Fitter.h"
 
 void ReplaceString(std::string& subject, const std::string& search, const std::string& replace)
 {
@@ -21,37 +21,37 @@ void ReplaceString(std::string& subject, const std::string& search, const std::s
 }
 
 /* PUBLIC */
-FunctionFitter::FunctionFitter(const char* ConstructionDataPath) : DataSet(ConstructionDataPath)
+Fitter::Fitter(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 2)
 {
-    std::ifstream InputStream(ConstructionDataPath);
-    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
-
     std::string FileContent;
 
+    std::ifstream InputStream(ConstructionDataPath);
+    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
     InputStream.seekg(0, std::ios::end);
     FileContent.resize(InputStream.tellg());
     InputStream.seekg(0, std::ios::beg);
-
     InputStream.read(&FileContent[0], FileContent.size());
+    InputStream.close();
 
     Construct(FileContent);
+    if (Type == 2) PrintConstructor(ConstructionDataPath);
 }
 
-FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath)
-    : DataSet(i_DataProperties, i_DrawProperties, DataPath)
+Fitter::Fitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath)
+    : DataSet(i_DataProperties, i_DrawProperties, DataPath, 2)
 {
-    ReadFunction(FunctionPath);
+    ReadFunctionPath(FunctionPath);
 
-    m_Function2Fit = new TF1(i_DataProperties.Title, ProcessFormula(), i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
 
-    m_Function2Fit->SetNameTitle(i_DataProperties.Title, i_DataProperties.Title);
+    m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
 
-    m_Function2Fit->GetXaxis()->SetTitle(i_DataProperties.xTitle);
-    m_Function2Fit->GetXaxis()->SetRangeUser(i_DataProperties.xMin, i_DataProperties.xMax);
+    m_Function2Fit->GetXaxis()->SetTitle(GetxTitle());
+    m_Function2Fit->GetXaxis()->SetRangeUser(GetxMin(), GetxMax());
     m_Function2Fit->GetXaxis()->SetMaxDigits(4);
 
-    m_Function2Fit->GetYaxis()->SetTitle(i_DataProperties.yTitle);
-    m_Function2Fit->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
+    m_Function2Fit->GetYaxis()->SetTitle(GetyTitle());
+    m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
     m_Function2Fit->GetYaxis()->SetMaxDigits(3);
 
     m_Function2Fit->SetLineColor(i_DrawProperties.LineColor);
@@ -63,7 +63,7 @@ FunctionFitter::FunctionFitter(const DataProperties& i_DataProperties, const Dra
     PrintResult(FunctionPath);
 }
 
-void FunctionFitter::Draw(const char* DrawPath) const
+void Fitter::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
     Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
@@ -79,28 +79,22 @@ void FunctionFitter::Draw(const char* DrawPath) const
     delete Canvas;
 }
 
-FunctionFitter::~FunctionFitter() { delete m_Function2Fit; }
+Fitter::~Fitter() { delete m_Function2Fit; }
 
 /* PROTECTED */
-FunctionFitter::FunctionFitter(const std::string& ConstructionData) : DataSet(ConstructionData) { Construct(ConstructionData); }
+Fitter::Fitter(const std::string& ConstructionData) : DataSet(ConstructionData, 2) { Construct(ConstructionData); }
 
-void FunctionFitter::Construct(const std::string& ConstructionData)
+void Fitter::Construct(const std::string& ConstructionData)
 {
     // Tools
-    long BegPos, EndPos;
+    long BegPos;
 
-    std::string FunctionPath;
-
-    // FunctionPath
+    // Function
     {
-        BegPos = ConstructionData.find("#FunctionPath");
-        ASSERT(BegPos != -1, "Invalid ConstructionData (FunctionPath)");
+        BegPos = ConstructionData.find("#Function");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (Function)");
 
-        BegPos = ConstructionData.find_first_not_of("#FunctionPath ", BegPos);
-        EndPos = ConstructionData.find("\n", BegPos);
-
-        FunctionPath = ConstructionData.substr(BegPos, EndPos - BegPos);
-        ReadFunction(ConstructionData.substr(BegPos, EndPos - BegPos).c_str());
+        ReadFunction(ConstructionData.substr(BegPos, ConstructionData.size() - BegPos).c_str());
 
         m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
     }
@@ -124,28 +118,52 @@ void FunctionFitter::Construct(const std::string& ConstructionData)
 
     // Line
     {
-        BegPos = ConstructionData.find("#Line");
-        ASSERT(BegPos != -1, "Invalid ConstructionData (Line)");
-
-        BegPos = ConstructionData.find_first_not_of("#Line ", BegPos);
-        EndPos = ConstructionData.find(",", BegPos);
-        m_Function2Fit->SetLineColor(strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
-
-        BegPos = EndPos + 1;
-        EndPos = ConstructionData.find(",", BegPos);
-        m_Function2Fit->SetLineStyle((ELineStyle)strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
-
-        BegPos = EndPos + 1;
-        EndPos = ConstructionData.find(",", BegPos);
-        m_Function2Fit->SetLineWidth(strtol(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL, 10));
+        m_Function2Fit->SetLineColor(GetLineColor());
+        m_Function2Fit->SetLineStyle(GetLineStyle());
+        m_Function2Fit->SetLineWidth(GetLineWidth());
     }
 
     Fit();
-    PrintResult(FunctionPath.c_str());
+}
+
+std::string Fitter::GetConstructor() const
+{
+    const int VS = (*m_VariableMap.begin()).first.size();
+
+    std::stringstream ConstructorSS;
+
+    ConstructorSS << DataSet::GetConstructor() << "\n#Results of fitting the dataset \"" << GetTitle() << "\" with the function \"" << m_FormulaStr
+                  << "\" (Chi^2 = " << m_Function2Fit->GetChisquare() << ")"
+                  << "\n#Function " << m_FormulaStr << "\n"
+                  << std::endl;
+
+    for (std::pair<std::string, const int> Variable : m_VariableMap)
+        if (Variable.first.find("Const") != std::string::npos)
+        {
+            ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << std::endl;
+        }
+
+        else
+        {
+            ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << " (+- " << FORMATD()
+                          << m_VariableErrors[Variable.second] << ")" << std::endl;
+        }
+
+    return ConstructorSS.str();
+}
+
+void Fitter::PrintConstructor(const char* ConstructionDataPath) const
+{
+    std::ofstream OutputStream(ConstructionDataPath);
+    ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
+
+    OutputStream << "#Fitter" << GetConstructor();
+
+    OutputStream.close();
 }
 
 /* PRIVATE */
-void FunctionFitter::ReadFunction(const char* FunctionPath)
+void Fitter::ReadFunctionPath(const char* FunctionPath)
 {
     std::ifstream Stream(FunctionPath);
     ASSERT(Stream, "Invalid filepath : %s", FunctionPath)
@@ -184,7 +202,44 @@ void FunctionFitter::ReadFunction(const char* FunctionPath)
     Stream.close();
 }
 
-TString FunctionFitter::ProcessFormula()
+void Fitter::ReadFunction(const std::string& Function)
+{
+    unsigned int i = 0;
+    std::string  line;
+    size_t       Start, End;
+
+    std::stringstream FunctionSS(Function);
+
+    while (getline(FunctionSS, line))
+    {
+        if (line.find("#Results") != std::string::npos || line.find("#IFunc") != std::string::npos || line.find("#IVar") != std::string::npos || line.length() == 0)
+            continue;
+
+        else if (line.find("#Function ") != std::string::npos)
+        {
+            Start = line.find_first_not_of("#Function ");
+
+            m_FormulaStr = line.substr(Start);
+        }
+
+        else
+        {
+            Start = 0;
+            End   = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
+            m_VariableMap[line.substr(Start, End - Start)] = i;
+
+            Start = line.find_first_not_of(" = ", End);
+            End   = line.find_first_of(" (\n\r", Start);
+            m_VariableValues.push_back(std::stod(line.substr(Start, End - Start)));
+
+            i++;
+        }
+    }
+
+    m_VariableErrors.reserve(i);
+}
+
+TString Fitter::ProcessFormula()
 {
     std::string tmpFormula(m_FormulaStr);
 
@@ -207,7 +262,7 @@ TString FunctionFitter::ProcessFormula()
     return TString(tmpFormula.c_str());
 }
 
-void FunctionFitter::Fit()
+void Fitter::Fit()
 {
     for (unsigned int i = 0; i < m_VariableValues.size(); i++) m_Function2Fit->SetParameter(i, m_VariableValues[i]);
 
@@ -221,7 +276,7 @@ void FunctionFitter::Fit()
         }
 }
 
-void FunctionFitter::PrintResult(const char* FunctionPath)
+void Fitter::PrintResult(const char* FunctionPath)
 {
     std::ofstream Stream(FunctionPath);
     ASSERT(Stream, "Invalid filepath : %s", FunctionPath);
@@ -254,7 +309,7 @@ void FunctionFitter::PrintResult(const char* FunctionPath)
 }
 
 /* PRIVATE */
-void FunctionFitter::FDraw() const
+void Fitter::FDraw() const
 {
     m_Graph->Draw("P");
     m_Function2Fit->Draw("SAME");
