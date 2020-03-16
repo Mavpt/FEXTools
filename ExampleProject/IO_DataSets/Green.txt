@@ -1,6 +1,6 @@
 #Interpolator
 #Title Green Filter
-#DataPath ../IO_Input/RP_Verde.txt
+#DataPath ../IO_Input/RP_Green.txt
 #xAxis R (#Omega), 0, 3200
 #yAxis P (W), 0, 0.008
 #Marker 3, 20, 1

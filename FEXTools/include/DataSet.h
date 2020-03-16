@@ -39,11 +39,12 @@ public:
     DataSet operator=(const DataSet&) = delete;
 
 protected:
-    DataSet(const std::string& ConstructionData, const int Type = 1);
-    virtual void Construct(const std::string& ConstructionData);
+    DataSet(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL, const int Type = 1);
+    virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
     virtual std::string GetConstructor() const;
     virtual void        PrintConstructor(const char* ConstructionDataPath) const;
+    virtual void        PrintConstructor(std::ofstream& OutputStream) const;
 
 private:
     void PrintData(const char* DataPath) const;

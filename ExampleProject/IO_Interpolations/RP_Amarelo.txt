@@ -1,6 +1,0 @@
-#Results of interpolating the dataset "Yellow" with cubic splines
-
-#Maximum (x, y, ex, ey):
-9.7969398591e+02	3.5701029006e-03	7.6693985905e+01	1.0290063325e-07
-#Minimum (x, y, ex, ey):
-3.2000000000e+00	1.4500000000e-05	1.9980000000e+02	0.0000000000e+00

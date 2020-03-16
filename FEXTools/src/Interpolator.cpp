@@ -12,16 +12,15 @@
 /* PUBLIC */
 Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 3)
 {
-    std::ifstream InputStream(ConstructionDataPath);
-    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
-
     std::string FileContent;
 
+    std::ifstream InputStream(ConstructionDataPath);
+    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
     InputStream.seekg(0, std::ios::end);
     FileContent.resize(InputStream.tellg());
     InputStream.seekg(0, std::ios::beg);
-
     InputStream.read(&FileContent[0], FileContent.size());
+    InputStream.close();
 
     Construct(FileContent);
     if (Type == 3) PrintConstructor(ConstructionDataPath);
@@ -63,27 +62,22 @@ Interpolator::~Interpolator()
 }
 
 /* PROTECTED */
-Interpolator::Interpolator(const std::string& ConstructionData) : DataSet(ConstructionData, 3) { Construct(ConstructionData); }
-
-void Interpolator::Construct(const std::string&)
+Interpolator::Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : DataSet(ConstructionData, i_DataProperties, 3)
 {
-    // Spline3 & OverlayFunction
-    {
-        m_Spline3         = new TSpline3("m_Spline3", m_Graph);
-        m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline3->GetXmin(), m_Spline3->GetXmax(), 0, 1);
-    }
+    Construct(ConstructionData, i_DataProperties);
+}
 
-    // Title
-    {
-        m_Spline3->SetNameTitle(GetTitle(), GetTitle());
-    }
+void Interpolator::Construct(const std::string&, const DataProperties*)
+{
+    m_Spline3         = new TSpline3("m_Spline3", m_Graph);
+    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline3->GetXmin(), m_Spline3->GetXmax(), 0, 1);
 
-    // Line
-    {
-        m_Spline3->SetLineColor(GetLineColor());
-        m_Spline3->SetLineStyle(GetLineStyle());
-        m_Spline3->SetLineWidth(GetLineWidth());
-    }
+    m_Spline3->SetNameTitle(GetTitle(), GetTitle());
+
+    m_Spline3->SetLineColor(GetLineColor());
+    m_Spline3->SetLineStyle(GetLineStyle());
+    m_Spline3->SetLineWidth(GetLineWidth());
 }
 
 std::string Interpolator::GetConstructor() const
@@ -113,6 +107,8 @@ void Interpolator::PrintConstructor(const char* ConstructionDataPath) const
 
     OutputStream.close();
 }
+
+void Interpolator::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#Interpolator" << GetConstructor(); }
 
 /* PRIVATE */
 const double* Interpolator::GetMinimum() const

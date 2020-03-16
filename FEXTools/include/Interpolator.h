@@ -23,11 +23,12 @@ public:
     Interpolator operator=(const Interpolator&) = delete;
 
 protected:
-    Interpolator(const std::string& ConstructionData);
-    virtual void Construct(const std::string& ConstructionData) override;
+    Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
+    virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
 
     virtual std::string GetConstructor() const override;
     virtual void        PrintConstructor(const char* ConstructionDataPath) const override;
+    virtual void        PrintConstructor(std::ofstream& OutputStream) const override;
 
 private:
     double Calculate(double* fx, double*) { return m_Spline3->Eval(fx[0]); }
@@ -44,6 +45,8 @@ private:
     void PrintResult(const char* ResultPath);
 
 private: // For use in DataStack
+    friend class DataStack;
+
     virtual void FDraw() const override;
 
 private:

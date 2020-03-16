@@ -38,11 +38,12 @@ public:
     Fitter operator=(const Fitter&) = delete;
 
 protected:
-    Fitter(const std::string& ConstructionData);
-    virtual void Construct(const std::string& ConstructionData) override;
+    Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
+    virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
 
     virtual std::string GetConstructor() const override;
     virtual void        PrintConstructor(const char* ConstructionDataPath) const override;
+    virtual void        PrintConstructor(std::ofstream& OutputStream) const override;
 
 private:
     void    ReadFunctionPath(const char* FunctionPath);
@@ -54,6 +55,8 @@ private:
     void PrintResult(const char* FunctionPath);
 
 private: // For use in DataStack
+    friend class DataStack;
+
     virtual void FDraw() const override;
 
 private:

@@ -47,7 +47,7 @@ Fitter::Fitter(const DataProperties& i_DataProperties, const DrawProperties& i_D
     m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
 
     m_Function2Fit->GetXaxis()->SetTitle(GetxTitle());
-    m_Function2Fit->GetXaxis()->SetRangeUser(GetxMin(), GetxMax());
+    m_Function2Fit->GetXaxis()->SetLimits(GetxMin(), GetxMax());
     m_Function2Fit->GetXaxis()->SetMaxDigits(4);
 
     m_Function2Fit->GetYaxis()->SetTitle(GetyTitle());
@@ -82,9 +82,12 @@ void Fitter::Draw(const char* DrawPath) const
 Fitter::~Fitter() { delete m_Function2Fit; }
 
 /* PROTECTED */
-Fitter::Fitter(const std::string& ConstructionData) : DataSet(ConstructionData, 2) { Construct(ConstructionData); }
+Fitter::Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(ConstructionData, i_DataProperties, 2)
+{
+    Construct(ConstructionData, i_DataProperties);
+}
 
-void Fitter::Construct(const std::string& ConstructionData)
+void Fitter::Construct(const std::string& ConstructionData, const DataProperties*)
 {
     // Tools
     long BegPos;
@@ -99,29 +102,17 @@ void Fitter::Construct(const std::string& ConstructionData)
         m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
     }
 
-    // Title
-    {
-        m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
-    }
+    m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
 
-    // xAxis
-    {
-        m_Function2Fit->GetXaxis()->SetRangeUser(GetxMin(), GetxMax());
-        m_Function2Fit->GetXaxis()->SetMaxDigits(4);
-    }
+    m_Function2Fit->GetXaxis()->SetLimits(GetxMin(), GetxMax());
+    m_Function2Fit->GetXaxis()->SetMaxDigits(4);
 
-    // yAxis
-    {
-        m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
-        m_Function2Fit->GetYaxis()->SetMaxDigits(3);
-    }
+    m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
+    m_Function2Fit->GetYaxis()->SetMaxDigits(3);
 
-    // Line
-    {
-        m_Function2Fit->SetLineColor(GetLineColor());
-        m_Function2Fit->SetLineStyle(GetLineStyle());
-        m_Function2Fit->SetLineWidth(GetLineWidth());
-    }
+    m_Function2Fit->SetLineColor(GetLineColor());
+    m_Function2Fit->SetLineStyle(GetLineStyle());
+    m_Function2Fit->SetLineWidth(GetLineWidth());
 
     Fit();
 }
@@ -161,6 +152,8 @@ void Fitter::PrintConstructor(const char* ConstructionDataPath) const
 
     OutputStream.close();
 }
+
+void Fitter::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#Fitter" << GetConstructor(); }
 
 /* PRIVATE */
 void Fitter::ReadFunctionPath(const char* FunctionPath)

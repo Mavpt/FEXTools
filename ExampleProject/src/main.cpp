@@ -24,5 +24,14 @@ int main()
         Green.Draw("../IO_Plots/Green.png");
     }
 
+    /* DataStack */
+    {
+        DataStack UI("../IO_DataSets/UI_Stack.txt");
+        UI.Draw("../IO_Plots/UI.png");
+
+        DataStack RP("../IO_DataSets/RP_Stack.txt");
+        RP.Draw("../IO_Plots/RP.png");
+    }
+
     return 0;
 }
