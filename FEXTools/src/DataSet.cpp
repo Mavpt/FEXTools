@@ -88,7 +88,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
     if (!i_DataProperties)
     {
         BegPos = ConstructionData.find("#DrawPath");
-        ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (DrawPath) in %s:\n", ConstructionData.c_str());
+        ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (DrawPath) in :\n%s", ConstructionData.c_str());
 
         BegPos = ConstructionData.find_first_not_of("#DrawPath ", BegPos);
         EndPos = ConstructionData.find("\n", BegPos);
@@ -105,32 +105,32 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
                 case 0:
                 {
                     BegPos = ConstructionData.find("#DataStack");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
-                    BegPos = ConstructionData.find_first_not_of("#DataStack ");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (DataStack Title) in :\n%s", ConstructionData.c_str());
+                    BegPos = ConstructionData.find_first_not_of(" ", BegPos + 10);
                     break;
                 }
 
                 case 1:
                 {
                     BegPos = ConstructionData.find("#DataSet");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
-                    BegPos = ConstructionData.find_first_not_of("#DataSet ");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (DataSet Title) in :\n%s", ConstructionData.c_str());
+                    BegPos = ConstructionData.find_first_not_of("# ", BegPos + 8);
                     break;
                 }
 
                 case 2:
                 {
                     BegPos = ConstructionData.find("#Fitter");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
-                    BegPos = ConstructionData.find_first_not_of("#Fitter ");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Fitter Title) in :\n%s", ConstructionData.c_str());
+                    BegPos = ConstructionData.find_first_not_of(" ", BegPos + 7);
                     break;
                 }
 
                 case 3:
                 {
                     BegPos = ConstructionData.find("#Interpolator");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
-                    BegPos = ConstructionData.find_first_not_of("#Interpolator ");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Interpolator Title) in :\n%s", ConstructionData.c_str());
+                    BegPos = ConstructionData.find_first_not_of(" ", BegPos + 13);
                     break;
                 }
 
@@ -150,7 +150,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
             // xAxis
             {
                 BegPos = ConstructionData.find("#xAxis");
-                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (xAxis) in %s:\n", ConstructionData.c_str());
+                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (xAxis) in :\n%s", ConstructionData.c_str());
 
                 BegPos = ConstructionData.find_first_not_of("#xAxis ", BegPos);
                 EndPos = ConstructionData.find(",", BegPos);
@@ -173,7 +173,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
             // yAxis
             {
                 BegPos = ConstructionData.find("#yAxis");
-                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (yAxis) in %s:\n", ConstructionData.c_str());
+                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (yAxis) in :\n%s", ConstructionData.c_str());
 
                 BegPos = ConstructionData.find_first_not_of("#yAxis ", BegPos);
                 EndPos = ConstructionData.find(",", BegPos);
@@ -226,7 +226,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
         // Marker
         {
             BegPos = ConstructionData.find("#Marker");
-            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Marker) in %s:\n", ConstructionData.c_str());
+            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Marker) in :\n%s", ConstructionData.c_str());
 
             BegPos                       = ConstructionData.find_first_not_of("#Marker ", BegPos);
             EndPos                       = ConstructionData.find(",", BegPos);
@@ -248,7 +248,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
         // Line
         {
             BegPos = ConstructionData.find("#Line");
-            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Line) in %s:\n", ConstructionData.c_str());
+            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Line) in :\n%s", ConstructionData.c_str());
 
             BegPos                     = ConstructionData.find_first_not_of("#Line ", BegPos);
             EndPos                     = ConstructionData.find(",", BegPos);

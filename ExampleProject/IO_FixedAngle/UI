@@ -1,4 +1,4 @@
-#DataStack #DataStack Fixed Angle (0 deg)
+#DataStack Fixed Angle (0 deg)
 #DrawPath ../IO_Plots/FA_UI.png
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.015

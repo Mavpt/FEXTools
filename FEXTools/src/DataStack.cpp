@@ -118,8 +118,8 @@ std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << "#DataStack " << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", "
-                  << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis "
+                  << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
     return ConstructorSS.str();
 }

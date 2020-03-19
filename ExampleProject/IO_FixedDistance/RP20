@@ -1,4 +1,4 @@
-#DataStack #DataStack Fixed Distance (20 cm)
+#DataStack Fixed Distance (20 cm)
 #DrawPath ../IO_Plots/FD20_PR.png
 #xAxis R (#Omega), 0, 3200
 #yAxis P (W), 0, 0.008
@@ -16,7 +16,7 @@
 #Maximum (x, y, ex, ey):
 4.3076599788e+02	7.9671275825e-03	3.4765997882e+01	4.7127582493e-05
 #Minimum (x, y, ex, ey):
-4.4000000000e+00	8.8200000000e-05	5.4000000000e+00	
+4.4000000000e+00	8.8200000000e-05	4.4000000000e+00	
 
 
 #Interpolator 20 cm, -20 deg
@@ -31,4 +31,4 @@
 #Maximum (x, y, ex, ey):
 5.0797337731e+02	7.3232429592e-03	3.7026622694e+01	3.2429592122e-06
 #Minimum (x, y, ex, ey):
-4.7000000000e+00	8.5100000000e-05	5.7000000000e+00	
+4.7000000000e+00	8.5100000000e-05	4.7000000000e+00	

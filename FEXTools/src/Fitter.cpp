@@ -68,7 +68,7 @@ void Fitter::Construct(const std::string& ConstructionData, const DataProperties
     // Function
     {
         BegPos = ConstructionData.find("#Function");
-        ASSERT(BegPos != -1, "Invalid ConstructionData (Function)");
+        ASSERT(BegPos != -1, "Invalid ConstructionData (Function) in :\n%s", ConstructionData.c_str());
 
         ReadFunction(ConstructionData.substr(BegPos, ConstructionData.size() - BegPos).c_str());
 
