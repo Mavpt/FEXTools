@@ -6,7 +6,6 @@
 #Marker 1, 2, 1
 #Line 1, 1, 2
 
-#Results of fitting the dataset "Optimal Resistance" with the function "a/x**2" (Chi^2 = 772.973)
-#Function a/x**2
+#Function a/x**2 | Chi^2 = 772.973
 
 a = 3.0910239967e-04 (+- 5.5199828190e-07)

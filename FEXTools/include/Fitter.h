@@ -45,13 +45,10 @@ protected:
 
 private:
     // For own use
-    void    ReadFunctionPath(const char* FunctionPath);
     void    ReadFunction(const std::string& Function);
     TString ProcessFormula();
 
     void Fit();
-
-    void PrintResult(const char* FunctionPath);
 
     // For use in DataStack
     friend class DataStack;

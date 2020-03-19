@@ -6,7 +6,6 @@
 #Marker 1, 2, 1
 #Line 1, 1, 2
 
-#Results of fitting the dataset "Optimal Resistance" with the function "a/x" (Chi^2 = 172.149)
-#Function a/x
+#Function a/x | Chi^2 = 172.149
 
 a = 3.3719631565e+00 (+- 2.9771882126e-02)

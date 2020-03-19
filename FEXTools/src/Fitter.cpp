@@ -96,9 +96,7 @@ std::string Fitter::GetConstructor() const
 
     std::stringstream ConstructorSS;
 
-    ConstructorSS << DataSet::GetConstructor() << "\n#Results of fitting the dataset \"" << GetTitle() << "\" with the function \"" << m_FormulaStr
-                  << "\" (Chi^2 = " << m_Function2Fit->GetChisquare() << ")"
-                  << "\n#Function " << m_FormulaStr << "\n"
+    ConstructorSS << DataSet::GetConstructor() << "\n#Function " << m_FormulaStr << " | Chi^2 = " << m_Function2Fit->GetChisquare() << "\n"
                   << std::endl;
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
@@ -129,45 +127,6 @@ void Fitter::PrintConstructor(const char* ConstructionDataPath) const
 void Fitter::PrintConstructor(std::ofstream& OutputStream) const { OutputStream << "\n#Fitter " << GetConstructor(); }
 
 /* PRIVATE */
-void Fitter::ReadFunctionPath(const char* FunctionPath)
-{
-    std::ifstream Stream(FunctionPath);
-    ASSERT(Stream, "Invalid filepath : %s", FunctionPath)
-
-    unsigned int i = 0;
-    std::string  line;
-    size_t       Start, End;
-    while (getline(Stream, line))
-    {
-        if (line.find("#Results") != std::string::npos || line.find("#IFunc") != std::string::npos || line.find("#IVar") != std::string::npos || line.length() == 0)
-            continue;
-
-        else if (line.find("#Function ") != std::string::npos)
-        {
-            Start = line.find_first_not_of("#Function ");
-
-            m_FormulaStr = line.substr(Start);
-        }
-
-        else
-        {
-            Start = 0;
-            End   = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
-            m_VariableMap[line.substr(Start, End - Start)] = i;
-
-            Start = line.find_first_not_of(" = ", End);
-            End   = line.find_first_of(" (\n\r", Start);
-            m_VariableValues.push_back(std::stod(line.substr(Start, End - Start)));
-
-            i++;
-        }
-    }
-
-    m_VariableErrors.reserve(i);
-
-    Stream.close();
-}
-
 void Fitter::ReadFunction(const std::string& Function)
 {
     unsigned int i = 0;
@@ -178,14 +137,15 @@ void Fitter::ReadFunction(const std::string& Function)
 
     while (getline(FunctionSS, line))
     {
-        if (line.find("#Results") != std::string::npos || line.find("#IFunc") != std::string::npos || line.find("#IVar") != std::string::npos || line.length() == 0)
+        if (line.length() == 0)
             continue;
 
         else if (line.find("#Function ") != std::string::npos)
         {
             Start = line.find_first_not_of("#Function ");
+            End   = (line.find(" | Chi^2") != std::string::npos) ? line.find(" | Chi^2") : line.size();
 
-            m_FormulaStr = line.substr(Start);
+            m_FormulaStr = line.substr(Start, End - Start);
         }
 
         else
@@ -240,38 +200,6 @@ void Fitter::Fit()
             m_VariableValues[Variable.second] = m_Function2Fit->GetParameter(Variable.second);
             m_VariableErrors[Variable.second] = m_Function2Fit->GetParError(Variable.second);
         }
-}
-
-void Fitter::PrintResult(const char* FunctionPath)
-{
-    std::ofstream Stream(FunctionPath);
-    ASSERT(Stream, "Invalid filepath : %s", FunctionPath);
-
-    Stream << "#Results of fitting the dataset \"" << GetTitle() << "\" with the function \"" << m_FormulaStr
-           << "\" (Chi^2 = " << m_Function2Fit->GetChisquare() << ")" << std::endl;
-
-    Stream << "\n#Function " << m_FormulaStr << "\n" << std::endl;
-
-    const int VS = (*m_VariableMap.begin()).first.size();
-
-    for (std::pair<std::string, const int> Variable : m_VariableMap)
-        if (Variable.first.find("Const") != std::string::npos)
-        {
-            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << std::endl;
-        }
-
-        else
-        {
-            Stream << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << " (+- " << FORMATD()
-                   << m_VariableErrors[Variable.second] << ")" << std::endl;
-        }
-
-    Stream << "\n#IFunc " << m_Function2Fit->GetExpFormula() << std::endl;
-    for (std::pair<std::string, const int> Variable : m_VariableMap)
-        Stream << "#IVar "
-               << "[p" << Variable.second << "] = " << Variable.first << std::endl;
-
-    Stream.close();
 }
 
 Fitter::Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(ConstructionData, i_DataProperties, 2)

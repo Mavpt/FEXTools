@@ -12,15 +12,14 @@
 #Marker 2, 20, 1
 #Line 2, 1, 2
 
-#Results of fitting the dataset "20 cm, 0 deg" with the function "Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 393.1)
-#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)
+#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 393.1
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
 Imax          = 4.7692339733e-03 (+- 1.9906212740e-06)
-I0            = 1.0788794999e-07 (+- 1.3684667121e-10)
-T             = 2.5058530072e+02 (+- 3.0987586673e-02)
-n             = 1.0312517329e+01 (+- 1.2752398805e-03)
+I0            = 1.0788794999e-07 (+- 1.3684670223e-10)
+T             = 2.5058530072e+02 (+- 3.0986185667e-02)
+n             = 1.0312517329e+01 (+- 1.2752067369e-03)
 
 
 #Fitter 20 cm, 20 deg
@@ -31,15 +30,14 @@ n             = 1.0312517329e+01 (+- 1.2752398805e-03)
 #Marker 3, 20, 1
 #Line 3, 1, 2
 
-#Results of fitting the dataset "20 cm, 20 deg" with the function "Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 534.759)
-#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)
+#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 534.759
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
 Imax          = 4.3904786180e-03 (+- 1.6076686309e-06)
-I0            = 1.0311840150e-07 (+- 1.3030890116e-10)
-T             = 2.5057857485e+02 (+- 3.1211595771e-02)
-n             = 1.0312139528e+01 (+- 1.2844660579e-03)
+I0            = 1.0311840150e-07 (+- 1.3030869569e-10)
+T             = 2.5057857485e+02 (+- 3.1212012010e-02)
+n             = 1.0312139528e+01 (+- 1.2844590446e-03)
 
 
 #Fitter 20 cm, 40 deg
@@ -50,15 +48,14 @@ n             = 1.0312139528e+01 (+- 1.2844660579e-03)
 #Marker 4, 20, 1
 #Line 4, 1, 2
 
-#Results of fitting the dataset "20 cm, 40 deg" with the function "Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 687.195)
-#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)
+#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 687.195
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
-Imax          = 3.6178953597e-03 (+- 1.4467573537e-06)
-I0            = 4.8185823925e-08 (+- 6.6658814595e-11)
-T             = 2.4352673172e+02 (+- 3.1504460639e-02)
-n             = 1.0021897741e+01 (+- 1.2964966394e-03)
+Imax          = 3.6178953597e-03 (+- 1.4467573519e-06)
+I0            = 4.8185823925e-08 (+- 6.6658646150e-11)
+T             = 2.4352673172e+02 (+- 3.1504551422e-02)
+n             = 1.0021897741e+01 (+- 1.2965245600e-03)
 
 
 #Fitter 20 cm, 60 deg
@@ -69,12 +66,11 @@ n             = 1.0021897741e+01 (+- 1.2964966394e-03)
 #Marker 5, 20, 1
 #Line 5, 1, 2
 
-#Results of fitting the dataset "20 cm, 60 deg" with the function "Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 2055.38)
-#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1)
+#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 2055.38
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
-Imax          = 2.4803509243e-03 (+- 1.0524994116e-06)
-I0            = 1.0362250656e-07 (+- 1.3770245249e-10)
-T             = 2.5590460889e+02 (+- 3.6222213670e-02)
-n             = 1.0531407159e+01 (+- 1.4906881552e-03)
+Imax          = 2.4803509243e-03 (+- 1.0524994188e-06)
+I0            = 1.0362250656e-07 (+- 1.3770284991e-10)
+T             = 2.5590460889e+02 (+- 3.6222028750e-02)
+n             = 1.0531407159e+01 (+- 1.4906664889e-03)
