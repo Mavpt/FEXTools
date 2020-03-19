@@ -30,7 +30,7 @@ protected:
 
 private:
     // For own use
-    double Calculate(double* fx, double*) { return m_Spline3->Eval(fx[0]); }
+    double Calculate(double* fx, double*) { return m_Spline5->Eval(fx[0]); }
 
     const double* GetMinimum() const;
     const double* GetMaximum() const;
@@ -41,8 +41,6 @@ private:
     inline double GetYMinimum() const { return m_OverlayFunction->GetMinimum(); }
     inline double GetYMaximum() const { return m_OverlayFunction->GetMaximum(); }
 
-    void PrintResult(const char* ResultPath);
-
     // For use in DataStack
     friend class DataStack;
 
@@ -50,7 +48,7 @@ private:
     virtual void FDraw() const override;
 
 private:
-    TSpline3* m_Spline3;
+    TSpline5* m_Spline5;
     TF1*      m_OverlayFunction;
 };
 

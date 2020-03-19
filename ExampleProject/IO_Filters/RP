@@ -14,7 +14,7 @@
 
 #Function a/x | Chi^2 = 117.396
 
-a = 3.1035911257e+00 (+- 4.5833561500e-02)
+a = 3.1035911442e+00 (+- 4.5854381444e-02)
 
 
 #Interpolator Blue Filter
@@ -25,11 +25,11 @@ a = 3.1035911257e+00 (+- 4.5833561500e-02)
 #Marker 4, 20, 1
 #Line 4, 1, 2
 
-#Results of interpolating the dataset "Blue Filter" with cubic splines
+#Results of interpolating the dataset "Blue Filter" with Spline5
 #Maximum (x, y, ex, ey):
-3.0380617401e+03	1.6427928990e-04	2.3806174005e+02	1.2792898997e-06
+3.0601678875e+03	1.6330653714e-04	2.6016788753e+02	3.0653714067e-07
 #Minimum (x, y, ex, ey):
-3.6000000000e+00	1.7800000000e-07	3.6000000000e+00	
+3.6000000000e+00	1.7800000000e-07	3.6000000000e+00	0.0000000000e+00
 
 
 #Interpolator Green Filter
@@ -40,11 +40,11 @@ a = 3.1035911257e+00 (+- 4.5833561500e-02)
 #Marker 3, 20, 1
 #Line 3, 1, 2
 
-#Results of interpolating the dataset "Green Filter" with cubic splines
+#Results of interpolating the dataset "Green Filter" with Spline5
 #Maximum (x, y, ex, ey):
-2.1633062177e+03	1.4002196697e-03	1.6330621774e+02	2.1966965826e-07
+2.1646505888e+03	1.4002151739e-03	1.6465058881e+02	2.1517392293e-07
 #Minimum (x, y, ex, ey):
-3.8000000000e+00	4.2100000000e-06	3.8000000000e+00	
+3.8000000000e+00	4.2100000000e-06	3.8000000000e+00	0.0000000000e+00
 
 
 #Interpolator Red Filter
@@ -55,11 +55,11 @@ a = 3.1035911257e+00 (+- 4.5833561500e-02)
 #Marker 2, 20, 1
 #Line 2, 1, 2
 
-#Results of interpolating the dataset "Red Filter" with cubic splines
+#Results of interpolating the dataset "Red Filter" with Spline5
 #Maximum (x, y, ex, ey):
-2.9545302041e+03	1.0511428191e-03	4.5469795914e+01	1.1428191258e-06
+2.9546877224e+03	1.0511200266e-03	4.5312277588e+01	1.1200265956e-06
 #Minimum (x, y, ex, ey):
-3.4000000000e+00	1.6900000000e-06	3.4000000000e+00	
+3.4000000000e+00	1.6900000000e-06	3.4000000000e+00	0.0000000000e+00
 
 
 #Interpolator Yellow Filter
@@ -70,8 +70,8 @@ a = 3.1035911257e+00 (+- 4.5833561500e-02)
 #Marker 5, 20, 1
 #Line 5, 1, 2
 
-#Results of interpolating the dataset "Yellow Filter" with cubic splines
+#Results of interpolating the dataset "Yellow Filter" with Spline5
 #Maximum (x, y, ex, ey):
-9.7969398591e+02	3.5701029006e-03	1.3030601409e+02	1.0290063325e-07
+9.7604048703e+02	3.5700165037e-03	1.3395951297e+02	1.6503690755e-08
 #Minimum (x, y, ex, ey):
-3.2000000000e+00	1.4500000000e-05	3.2000000000e+00	
+3.2000000000e+00	1.4500000000e-05	3.2000000000e+00	0.0000000000e+00

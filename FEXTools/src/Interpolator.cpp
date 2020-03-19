@@ -32,7 +32,7 @@ Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(Construct
 
 Interpolator::~Interpolator()
 {
-    delete m_Spline3;
+    delete m_Spline5;
     delete m_OverlayFunction;
 }
 
@@ -45,7 +45,7 @@ void Interpolator::Draw(const char* DrawPath) const
     Canvas->SetGrid();
 
     m_Graph->Draw("PA");
-    m_Spline3->Draw("LSAME");
+    m_Spline5->Draw("LSAME");
 
     Canvas->Update();
     Canvas->SaveAs(DrawPath);
@@ -55,14 +55,14 @@ void Interpolator::Draw(const char* DrawPath) const
 
 void Interpolator::Construct(const std::string&, const DataProperties*)
 {
-    m_Spline3         = new TSpline3("m_Spline3", m_Graph);
-    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline3->GetXmin(), m_Spline3->GetXmax(), 0, 1);
+    m_Spline5         = new TSpline5("m_Spline5", m_Graph);
+    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline5->GetXmin(), m_Spline5->GetXmax(), 0, 1);
 
-    m_Spline3->SetNameTitle(GetTitle(), GetTitle());
+    m_Spline5->SetNameTitle(GetTitle(), GetTitle());
 
-    m_Spline3->SetLineColor(GetLineColor());
-    m_Spline3->SetLineStyle(GetLineStyle());
-    m_Spline3->SetLineWidth(GetLineWidth());
+    m_Spline5->SetLineColor(GetLineColor());
+    m_Spline5->SetLineStyle(GetLineStyle());
+    m_Spline5->SetLineWidth(GetLineWidth());
 }
 
 std::string Interpolator::GetConstructor() const
@@ -72,10 +72,11 @@ std::string Interpolator::GetConstructor() const
 
     std::stringstream ConstructorSS;
 
-    ConstructorSS << DataSet::GetConstructor() << "\n#Results of interpolating the dataset \"" << GetTitle() << "\" with cubic splines\n#Maximum (x, y, ex, ey):\n"
+    ConstructorSS << DataSet::GetConstructor() << "\n#Results of interpolating the dataset \"" << GetTitle() << "\" with Spline5\n#Maximum (x, y, ex, ey):\n"
                   << FORMATD() << Maximum[0] << "\t" << FORMATD() << Maximum[1] << "\t" << FORMATD() << Maximum[2] << "\t" << FORMATD() << Maximum[3]
                   << "\n#Minimum (x, y, ex, ey):\n"
-                  << FORMATD() << Minimum[0] << "\t" << FORMATD() << Minimum[1] << "\t" << FORMATD() << Minimum[2] << "\t" << FORMATD() << std::endl;
+                  << FORMATD() << Minimum[0] << "\t" << FORMATD() << Minimum[1] << "\t" << FORMATD() << Minimum[2] << "\t" << FORMATD() << Minimum[3]
+                  << std::endl;
 
     delete[] Minimum;
     delete[] Maximum;
@@ -148,27 +149,6 @@ const double* Interpolator::GetMaximum() const
     return Maximum;
 }
 
-void Interpolator::PrintResult(const char* ResultPath)
-{
-    std::ofstream Stream(ResultPath);
-    ASSERT(Stream, "Invalid filepath : %s", ResultPath);
-
-    const double* Minimum = GetMinimum();
-    const double* Maximum = GetMaximum();
-
-    Stream << "#Results of interpolating the dataset \"" << GetTitle() << "\" with cubic splines\n" << std::endl;
-
-    Stream << "#Maximum (x, y, ex, ey):\n"
-           << FORMATD() << Maximum[0] << "\t" << FORMATD() << Maximum[1] << "\t" << FORMATD() << Maximum[2] << "\t" << FORMATD() << Maximum[3] << std::endl;
-    Stream << "#Minimum (x, y, ex, ey):\n"
-           << FORMATD() << Minimum[0] << "\t" << FORMATD() << Minimum[1] << "\t" << FORMATD() << Minimum[2] << "\t" << FORMATD() << Minimum[3] << std::endl;
-
-    delete[] Minimum;
-    delete[] Maximum;
-
-    Stream.close();
-}
-
 Interpolator::Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties)
     : DataSet(ConstructionData, i_DataProperties, 3)
 {
@@ -178,5 +158,5 @@ Interpolator::Interpolator(const std::string& ConstructionData, const DataProper
 void Interpolator::FDraw() const
 {
     m_Graph->Draw("P");
-    m_Spline3->Draw("LSAME");
+    m_Spline5->Draw("LSAME");
 }

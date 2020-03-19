@@ -12,11 +12,11 @@
 #Marker 3, 20, 1
 #Line 3, 1, 2
 
-#Results of interpolating the dataset "20 cm, 20 deg" with cubic splines
+#Results of interpolating the dataset "20 cm, 20 deg" with Spline5
 #Maximum (x, y, ex, ey):
-4.3076599788e+02	7.9671275825e-03	3.4765997882e+01	4.7127582493e-05
+4.3010375776e+02	7.9713781650e-03	3.4103757755e+01	5.1378164954e-05
 #Minimum (x, y, ex, ey):
-4.4000000000e+00	8.8200000000e-05	4.4000000000e+00	
+4.4000000000e+00	8.8200000000e-05	4.4000000000e+00	0.0000000000e+00
 
 
 #Interpolator 20 cm, -20 deg
@@ -27,8 +27,8 @@
 #Marker 30, 20, 1
 #Line 30, 1, 2
 
-#Results of interpolating the dataset "20 cm, -20 deg" with cubic splines
+#Results of interpolating the dataset "20 cm, -20 deg" with Spline5
 #Maximum (x, y, ex, ey):
-5.0797337731e+02	7.3232429592e-03	3.7026622694e+01	3.2429592122e-06
+5.0853066240e+02	7.3238401837e-03	3.6469337600e+01	3.8401836702e-06
 #Minimum (x, y, ex, ey):
-4.7000000000e+00	8.5100000000e-05	4.7000000000e+00	
+4.7000000000e+00	8.5100000000e-05	4.7000000000e+00	0.0000000000e+00

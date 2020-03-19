@@ -25,11 +25,11 @@ a = 3.4795947082e+00 (+- 4.1182285327e-02)
 #Marker 2, 20, 1
 #Line 2, 1, 2
 
-#Results of interpolating the dataset "10 cm, 0 deg" with cubic splines
+#Results of interpolating the dataset "10 cm, 0 deg" with Spline5
 #Maximum (x, y, ex, ey):
-1.5230521416e+02	2.3329583318e-02	9.6947858394e+00	2.9583317609e-05
+1.5253096048e+02	2.3332939108e-02	9.4690395176e+00	3.2939107882e-05
 #Minimum (x, y, ex, ey):
-7.0000000000e+01	1.4700000000e-02	7.0000000000e+01	
+7.0000000000e+01	1.4700000000e-02	7.0000000000e+01	0.0000000000e+00
 
 
 #Interpolator 15 cm, 0 deg
@@ -40,11 +40,11 @@ a = 3.4795947082e+00 (+- 4.1182285327e-02)
 #Marker 3, 20, 1
 #Line 3, 1, 2
 
-#Results of interpolating the dataset "15 cm, 0 deg" with cubic splines
+#Results of interpolating the dataset "15 cm, 0 deg" with Spline5
 #Maximum (x, y, ex, ey):
-3.0324503122e+02	1.2706377644e-02	1.2754968785e+01	6.3776437530e-06
+3.0319690089e+02	1.2705688741e-02	1.2803099114e+01	5.6887406226e-06
 #Minimum (x, y, ex, ey):
-4.4400000000e+02	1.0200000000e-02	4.9000000000e+01	
+4.4400000000e+02	1.0200000000e-02	4.9000000000e+01	0.0000000000e+00
 
 
 #Interpolator 20 cm, 0 deg
@@ -55,11 +55,11 @@ a = 3.4795947082e+00 (+- 4.1182285327e-02)
 #Marker 4, 20, 1
 #Line 4, 1, 2
 
-#Results of interpolating the dataset "20 cm, 0 deg" with cubic splines
+#Results of interpolating the dataset "20 cm, 0 deg" with Spline5
 #Maximum (x, y, ex, ey):
-4.3076599788e+02	7.9671275825e-03	3.4765997882e+01	4.7127582493e-05
+4.3010375776e+02	7.9713781650e-03	3.4103757755e+01	5.1378164954e-05
 #Minimum (x, y, ex, ey):
-4.4000000000e+00	8.8200000000e-05	4.4000000000e+00	
+4.4000000000e+00	8.8200000000e-05	4.4000000000e+00	0.0000000000e+00
 
 
 #Interpolator 25 cm, 0 deg
@@ -70,11 +70,11 @@ a = 3.4795947082e+00 (+- 4.1182285327e-02)
 #Marker 5, 20, 1
 #Line 5, 1, 2
 
-#Results of interpolating the dataset "25 cm, 0 deg" with cubic splines
+#Results of interpolating the dataset "25 cm, 0 deg" with Spline5
 #Maximum (x, y, ex, ey):
-6.9224264896e+02	5.0325046247e-03	1.0757351040e+01	2.5046247346e-06
+6.9255257544e+02	5.0328923229e-03	1.0447424558e+01	2.8923228929e-06
 #Minimum (x, y, ex, ey):
-4.1600000000e+02	4.0100000000e-03	4.1600000000e+02	
+4.1600000000e+02	4.0100000000e-03	4.1600000000e+02	0.0000000000e+00
 
 
 #Interpolator 30 cm, 0 deg
@@ -85,11 +85,11 @@ a = 3.4795947082e+00 (+- 4.1182285327e-02)
 #Marker 6, 20, 1
 #Line 6, 1, 2
 
-#Results of interpolating the dataset "30 cm, 0 deg" with cubic splines
+#Results of interpolating the dataset "30 cm, 0 deg" with Spline5
 #Maximum (x, y, ex, ey):
-9.4545641256e+02	3.4731053147e-03	4.4456412560e+01	3.1053147365e-06
+9.3504099236e+02	3.4879817168e-03	3.4040992358e+01	1.7981716776e-05
 #Minimum (x, y, ex, ey):
-6.1800000000e+02	2.7800000000e-03	6.1800000000e+02	
+6.1800000000e+02	2.7800000000e-03	6.1800000000e+02	0.0000000000e+00
 
 
 #Interpolator 35 cm, 0 deg
@@ -100,8 +100,8 @@ a = 3.4795947082e+00 (+- 4.1182285327e-02)
 #Marker 7, 20, 1
 #Line 7, 1, 2
 
-#Results of interpolating the dataset "35 cm, 0 deg" with cubic splines
+#Results of interpolating the dataset "35 cm, 0 deg" with Spline5
 #Maximum (x, y, ex, ey):
-1.3445753990e+03	2.5405352114e-03	4.3575399017e+01	5.3521141699e-07
+1.3423797034e+03	2.5408558984e-03	4.1379703367e+01	8.5589841330e-07
 #Minimum (x, y, ex, ey):
-9.0400000000e+02	2.2100000000e-03	9.0400000000e+02	
+9.0400000000e+02	2.2100000000e-03	9.0400000000e+02	0.0000000000e+00
