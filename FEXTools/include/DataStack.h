@@ -5,8 +5,6 @@
 
 #include <vector>
 
-#include <TMultiGraph.h>
-
 #include "DataSet.h"
 
 class DataStack : public DataSet

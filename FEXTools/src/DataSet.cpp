@@ -305,7 +305,6 @@ void DataSet::PrintData(const char* DataPath) const
     Stream.close();
 }
 
-/* PRIVATE */
 DataSet::DataSet(const DataProperties& i_DataProperties)
     : Type(0), m_DataProperties(i_DataProperties), m_DrawProperties(), m_DataPath("DataStack contains no DataPath")
 {

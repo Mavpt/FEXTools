@@ -62,12 +62,6 @@ Interpolator::~Interpolator()
 }
 
 /* PROTECTED */
-Interpolator::Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties)
-    : DataSet(ConstructionData, i_DataProperties, 3)
-{
-    Construct(ConstructionData, i_DataProperties);
-}
-
 void Interpolator::Construct(const std::string&, const DataProperties*)
 {
     m_Spline3         = new TSpline3("m_Spline3", m_Graph);
@@ -163,7 +157,7 @@ const double* Interpolator::GetMaximum() const
     return Maximum;
 }
 
-void Interpolator::PrintResult(const char* ResultPath) // Still unsure on how to calculate ex and ey
+void Interpolator::PrintResult(const char* ResultPath)
 {
     std::ofstream Stream(ResultPath);
     ASSERT(Stream, "Invalid filepath : %s", ResultPath);
@@ -184,7 +178,12 @@ void Interpolator::PrintResult(const char* ResultPath) // Still unsure on how to
     Stream.close();
 }
 
-/* PRIVATE */
+Interpolator::Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : DataSet(ConstructionData, i_DataProperties, 3)
+{
+    Construct(ConstructionData, i_DataProperties);
+}
+
 void Interpolator::FDraw() const
 {
     m_Graph->Draw("P");

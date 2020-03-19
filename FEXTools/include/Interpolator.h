@@ -23,7 +23,6 @@ public:
     Interpolator operator=(const Interpolator&) = delete;
 
 protected:
-    Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
     virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
 
     virtual std::string GetConstructor() const override;
@@ -31,6 +30,7 @@ protected:
     virtual void        PrintConstructor(std::ofstream& OutputStream) const override;
 
 private:
+    // For own use
     double Calculate(double* fx, double*) { return m_Spline3->Eval(fx[0]); }
 
     const double* GetMinimum() const;
@@ -44,9 +44,10 @@ private:
 
     void PrintResult(const char* ResultPath);
 
-private: // For use in DataStack
+    // For use in DataStack
     friend class DataStack;
 
+    Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
     virtual void FDraw() const override;
 
 private:

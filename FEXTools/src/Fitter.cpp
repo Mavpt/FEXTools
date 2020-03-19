@@ -301,7 +301,6 @@ void Fitter::PrintResult(const char* FunctionPath)
     Stream.close();
 }
 
-/* PRIVATE */
 void Fitter::FDraw() const
 {
     m_Graph->Draw("P");

@@ -16,6 +16,16 @@ public:
 
     virtual void Draw(const char* DrawPath) const;
 
+    virtual ~DataSet();
+
+    DataSet()               = delete;
+    DataSet(const DataSet&) = delete;
+    DataSet operator=(const DataSet&) = delete;
+
+protected:
+    // Non-virtual
+    DataSet(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL, const int Type = 1);
+
     inline const TGraphErrors* GetGraph() const { return m_Graph; }
     inline const char*         GetTitle() const { return m_DataProperties.Title.c_str(); }
     inline const char*         GetxTitle() const { return m_DataProperties.xTitle.c_str(); }
@@ -32,14 +42,7 @@ public:
     inline Color_t GetLineColor() const { return m_DrawProperties.LineColor; }
     inline Size_t  GetLineWidth() const { return m_DrawProperties.LineWidth; }
 
-    virtual ~DataSet();
-
-    DataSet()               = delete;
-    DataSet(const DataSet&) = delete;
-    DataSet operator=(const DataSet&) = delete;
-
-protected:
-    DataSet(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL, const int Type = 1);
+    // Virtual
     virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
     virtual std::string GetConstructor() const;
@@ -47,13 +50,14 @@ protected:
     virtual void        PrintConstructor(std::ofstream& OutputStream) const;
 
 private:
+    // For own use
     void PrintData(const char* DataPath) const;
 
-private:
+    // For use in DataStack
     friend class DataStack;
 
     DataSet(const DataProperties& i_DataProperties);
-    virtual void FDraw() const; // For use in DataStack
+    virtual void FDraw() const;
 
 protected:
     const int Type; // 0 = DataStack, 1 = DataSet, 2 = Fitter, 3 = Interpolator

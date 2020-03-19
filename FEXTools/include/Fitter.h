@@ -1,7 +1,7 @@
 /* Fitter */
 
-#ifndef __FUNCTION_FITTER_H__
-#define __FUNCTION_FITTER_H__
+#ifndef __FITTER_H__
+#define __FITTER_H__
 
 #include <string>
 #include <vector>
@@ -38,7 +38,6 @@ public:
     Fitter operator=(const Fitter&) = delete;
 
 protected:
-    Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
     virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
 
     virtual std::string GetConstructor() const override;
@@ -46,6 +45,7 @@ protected:
     virtual void        PrintConstructor(std::ofstream& OutputStream) const override;
 
 private:
+    // For own use
     void    ReadFunctionPath(const char* FunctionPath);
     void    ReadFunction(const std::string& Function);
     TString ProcessFormula();
@@ -54,9 +54,10 @@ private:
 
     void PrintResult(const char* FunctionPath);
 
-private: // For use in DataStack
+    // For use in DataStack
     friend class DataStack;
 
+    Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
     virtual void FDraw() const override;
 
 private:
