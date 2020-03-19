@@ -106,17 +106,17 @@ const double* Interpolator::GetMinimum() const
     Minimum[3] = std::numeric_limits<double>::max();
 
     int i;
-    for (i = 0; m_Graph->GetPointX(i) < Minimum[0]; i++)
+    for (i = 0; m_Graph->GetX()[i] < Minimum[0]; i++)
     {
-        Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
+        Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetY()[i])) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetY()[i]);
     }
 
-    Minimum[2] = (fabs(m_Graph->GetPointX(i - 1) - Minimum[0]) > fabs(m_Graph->GetPointX(i) - Minimum[0])) ? fabs(m_Graph->GetPointX(i - 1) - Minimum[0])
-                                                                                                           : fabs(m_Graph->GetPointX(i) - Minimum[0]);
+    Minimum[2] = (fabs(m_Graph->GetX()[i - 1] - Minimum[0]) > fabs(m_Graph->GetX()[i] - Minimum[0])) ? fabs(m_Graph->GetX()[i - 1] - Minimum[0])
+                                                                                                     : fabs(m_Graph->GetX()[i] - Minimum[0]);
 
     for (; i < m_Graph->GetN(); i++)
     {
-        Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetPointY(i))) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetPointY(i));
+        Minimum[3] = (Minimum[3] < fabs(Minimum[1] - m_Graph->GetY()[i])) ? Minimum[3] : fabs(Minimum[1] - m_Graph->GetY()[i]);
     }
 
     return Minimum;
@@ -132,17 +132,17 @@ const double* Interpolator::GetMaximum() const
     Maximum[3] = std::numeric_limits<double>::max();
 
     int i;
-    for (i = 0; m_Graph->GetPointX(i) < Maximum[0]; i++)
+    for (i = 0; m_Graph->GetX()[i] < Maximum[0]; i++)
     {
-        Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
+        Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetY()[i])) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetY()[i]);
     }
 
-    Maximum[2] = (fabs(m_Graph->GetPointX(i - 1) - Maximum[0]) > fabs(m_Graph->GetPointX(i) - Maximum[0])) ? fabs(m_Graph->GetPointX(i - 1) - Maximum[0])
-                                                                                                           : fabs(m_Graph->GetPointX(i) - Maximum[0]);
+    Maximum[2] = (fabs(m_Graph->GetX()[i - 1] - Maximum[0]) > fabs(m_Graph->GetX()[i] - Maximum[0])) ? fabs(m_Graph->GetX()[i - 1] - Maximum[0])
+                                                                                                     : fabs(m_Graph->GetX()[i] - Maximum[0]);
 
     for (; i < m_Graph->GetN(); i++)
     {
-        Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetPointY(i))) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetPointY(i));
+        Maximum[3] = (Maximum[3] < fabs(Maximum[1] - m_Graph->GetY()[i])) ? Maximum[3] : fabs(Maximum[1] - m_Graph->GetY()[i]);
     }
 
     return Maximum;
