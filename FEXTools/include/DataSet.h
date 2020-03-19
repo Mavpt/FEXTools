@@ -12,9 +12,6 @@ class DataSet
 {
 public:
     DataSet(const char* ConstructionDataPath, const int Type = 1);
-    DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const int Type = 1);
-
-    virtual void Draw(const char* DrawPath) const;
 
     virtual ~DataSet();
 
@@ -43,6 +40,8 @@ protected:
     inline Size_t  GetLineWidth() const { return m_DrawProperties.LineWidth; }
 
     // Virtual
+    virtual void Draw(const char* DrawPath) const;
+
     virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
     virtual std::string GetConstructor() const;
@@ -56,7 +55,6 @@ private:
     // For use in DataStack
     friend class DataStack;
 
-    DataSet(const DataProperties& i_DataProperties);
     virtual void FDraw() const;
 
 protected:
@@ -65,7 +63,9 @@ protected:
     DataProperties m_DataProperties;
     DrawProperties m_DrawProperties;
 
-    std::string   m_DataPath;
+    std::string m_DataPath;
+    std::string m_DrawPath;
+
     TGraphErrors* m_Graph;
 };
 

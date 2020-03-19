@@ -34,35 +34,16 @@ Fitter::Fitter(const char* ConstructionDataPath) : DataSet(ConstructionDataPath,
     InputStream.close();
 
     Construct(FileContent);
-    if (Type == 2) PrintConstructor(ConstructionDataPath);
+    if (Type == 2)
+    {
+        Draw(m_DrawPath.c_str());
+        PrintConstructor(ConstructionDataPath);
+    }
 }
 
-Fitter::Fitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath)
-    : DataSet(i_DataProperties, i_DrawProperties, DataPath, 2)
-{
-    ReadFunctionPath(FunctionPath);
+Fitter::~Fitter() { delete m_Function2Fit; }
 
-    m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
-
-    m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
-
-    m_Function2Fit->GetXaxis()->SetTitle(GetxTitle());
-    m_Function2Fit->GetXaxis()->SetLimits(GetxMin(), GetxMax());
-    m_Function2Fit->GetXaxis()->SetMaxDigits(4);
-
-    m_Function2Fit->GetYaxis()->SetTitle(GetyTitle());
-    m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
-    m_Function2Fit->GetYaxis()->SetMaxDigits(3);
-
-    m_Function2Fit->SetLineColor(i_DrawProperties.LineColor);
-    m_Function2Fit->SetLineStyle(i_DrawProperties.LineStyle);
-    m_Function2Fit->SetLineWidth(i_DrawProperties.LineWidth);
-
-    Fit();
-
-    PrintResult(FunctionPath);
-}
-
+/* PROTECTED */
 void Fitter::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
@@ -77,14 +58,6 @@ void Fitter::Draw(const char* DrawPath) const
     Canvas->SaveAs(DrawPath);
 
     delete Canvas;
-}
-
-Fitter::~Fitter() { delete m_Function2Fit; }
-
-/* PROTECTED */
-Fitter::Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(ConstructionData, i_DataProperties, 2)
-{
-    Construct(ConstructionData, i_DataProperties);
 }
 
 void Fitter::Construct(const std::string& ConstructionData, const DataProperties*)
@@ -299,6 +272,11 @@ void Fitter::PrintResult(const char* FunctionPath)
                << "[p" << Variable.second << "] = " << Variable.first << std::endl;
 
     Stream.close();
+}
+
+Fitter::Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(ConstructionData, i_DataProperties, 2)
+{
+    Construct(ConstructionData, i_DataProperties);
 }
 
 void Fitter::FDraw() const

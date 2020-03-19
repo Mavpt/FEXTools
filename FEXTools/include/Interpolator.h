@@ -12,9 +12,6 @@ class Interpolator : public DataSet
 {
 public:
     Interpolator(const char* ConstructionDataPath);
-    Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath);
-
-    virtual void Draw(const char* DrawPath) const override;
 
     virtual ~Interpolator();
 
@@ -23,6 +20,8 @@ public:
     Interpolator operator=(const Interpolator&) = delete;
 
 protected:
+    virtual void Draw(const char* DrawPath) const override;
+
     virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
 
     virtual std::string GetConstructor() const override;

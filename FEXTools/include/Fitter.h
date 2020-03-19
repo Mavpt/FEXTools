@@ -27,9 +27,6 @@ class Fitter : public DataSet
 {
 public:
     Fitter(const char* ConstructionDataPath);
-    Fitter(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* FunctionPath);
-
-    virtual void Draw(const char* DrawPath) const override;
 
     virtual ~Fitter();
 
@@ -38,6 +35,8 @@ public:
     Fitter operator=(const Fitter&) = delete;
 
 protected:
+    virtual void Draw(const char* DrawPath) const override;
+
     virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
 
     virtual std::string GetConstructor() const override;

@@ -22,29 +22,24 @@ DataSet::DataSet(const char* ConstructionDataPath, const int Type) : Type(Type)
     InputStream.close();
 
     Construct(FileContent);
-    if (Type == 1) PrintConstructor(ConstructionDataPath);
+    if (Type == 1)
+    {
+        Draw(m_DrawPath.c_str());
+        PrintConstructor(ConstructionDataPath);
+    }
 }
 
-DataSet::DataSet(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const int Type)
-    : Type(Type), m_DataProperties(i_DataProperties), m_DrawProperties(i_DrawProperties), m_DataPath(DataPath)
+DataSet::~DataSet()
 {
-    m_Graph = new TGraphErrors(DataPath);
+    if (Type) PrintData(m_DataPath.c_str());
 
-    m_Graph->Sort();
+    delete m_Graph;
+}
 
-    m_Graph->SetNameTitle(i_DataProperties.Title.c_str(), i_DataProperties.Title.c_str());
-
-    m_Graph->GetXaxis()->SetTitle(i_DataProperties.xTitle.c_str());
-    m_Graph->GetXaxis()->SetLimits(i_DataProperties.xMin, i_DataProperties.xMax);
-    m_Graph->GetXaxis()->SetMaxDigits(4);
-
-    m_Graph->GetYaxis()->SetTitle(i_DataProperties.yTitle.c_str());
-    m_Graph->GetYaxis()->SetRangeUser(i_DataProperties.yMin, i_DataProperties.yMax);
-    m_Graph->GetYaxis()->SetMaxDigits(3);
-
-    m_Graph->SetMarkerColor(i_DrawProperties.MarkerColor);
-    m_Graph->SetMarkerStyle(i_DrawProperties.MarkerStyle);
-    m_Graph->SetMarkerSize(i_DrawProperties.MarkerSize);
+/* PROTECTED */
+DataSet::DataSet(const std::string& ConstructionData, const DataProperties* i_DataProperties, const int Type) : Type(Type)
+{
+    Construct(ConstructionData, i_DataProperties);
 }
 
 void DataSet::Draw(const char* DrawPath) const
@@ -62,42 +57,43 @@ void DataSet::Draw(const char* DrawPath) const
     delete Canvas;
 }
 
-DataSet::~DataSet()
-{
-    if (Type) PrintData(m_DataPath.c_str());
-
-    delete m_Graph;
-}
-
-/* PROTECTED */
-DataSet::DataSet(const std::string& ConstructionData, const DataProperties* i_DataProperties, const int Type) : Type(Type)
-{
-    Construct(ConstructionData, i_DataProperties);
-}
-
 void DataSet::Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties)
 {
     size_t BegPos = std::string::npos, EndPos = std::string::npos;
 
     /* DATAPATH */ // May be ignored by DataStack
-    if (Type)
     {
-        BegPos = ConstructionData.find("#DataPath");
-        ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (DataPath)");
+        if (Type)
+        {
+            BegPos = ConstructionData.find("#DataPath");
+            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (DataPath)");
 
-        BegPos = ConstructionData.find_first_not_of("#DataPath ", BegPos);
-        EndPos = ConstructionData.find("\n", BegPos);
+            BegPos = ConstructionData.find_first_not_of("#DataPath ", BegPos);
+            EndPos = ConstructionData.find("\n", BegPos);
 
-        m_DataPath = ConstructionData.substr(BegPos, EndPos - BegPos);
+            m_DataPath = ConstructionData.substr(BegPos, EndPos - BegPos);
 
-        m_Graph = new TGraphErrors(m_DataPath.c_str());
-        m_Graph->Sort();
+            m_Graph = new TGraphErrors(m_DataPath.c_str());
+            m_Graph->Sort();
+        }
+
+        else
+        {
+            const double DummyVar = 0;
+            m_Graph               = new TGraphErrors(1, &DummyVar, &DummyVar);
+        }
     }
 
-    else
+    /* DRAWPATH */
+    if (!i_DataProperties)
     {
-        const double DummyVar = 0;
-        m_Graph               = new TGraphErrors(1, &DummyVar, &DummyVar);
+        BegPos = ConstructionData.find("#DrawPath");
+        ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (DrawPath) in %s:\n", ConstructionData.c_str());
+
+        BegPos = ConstructionData.find_first_not_of("#DrawPath ", BegPos);
+        EndPos = ConstructionData.find("\n", BegPos);
+
+        m_DrawPath = ConstructionData.substr(BegPos, EndPos - BegPos);
     }
 
     /* DATAPROPERTIES */
@@ -109,7 +105,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
                 case 0:
                 {
                     BegPos = ConstructionData.find("#DataStack");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
                     BegPos = ConstructionData.find_first_not_of("#DataStack ");
                     break;
                 }
@@ -117,7 +113,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
                 case 1:
                 {
                     BegPos = ConstructionData.find("#DataSet");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
                     BegPos = ConstructionData.find_first_not_of("#DataSet ");
                     break;
                 }
@@ -125,7 +121,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
                 case 2:
                 {
                     BegPos = ConstructionData.find("#Fitter");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
                     BegPos = ConstructionData.find_first_not_of("#Fitter ");
                     break;
                 }
@@ -133,7 +129,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
                 case 3:
                 {
                     BegPos = ConstructionData.find("#Interpolator");
-                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title)");
+                    ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Title) in %s:\n", ConstructionData.c_str());
                     BegPos = ConstructionData.find_first_not_of("#Interpolator ");
                     break;
                 }
@@ -154,7 +150,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
             // xAxis
             {
                 BegPos = ConstructionData.find("#xAxis");
-                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (xAxis)");
+                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (xAxis) in %s:\n", ConstructionData.c_str());
 
                 BegPos = ConstructionData.find_first_not_of("#xAxis ", BegPos);
                 EndPos = ConstructionData.find(",", BegPos);
@@ -177,7 +173,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
             // yAxis
             {
                 BegPos = ConstructionData.find("#yAxis");
-                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (yAxis)");
+                ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (yAxis) in %s:\n", ConstructionData.c_str());
 
                 BegPos = ConstructionData.find_first_not_of("#yAxis ", BegPos);
                 EndPos = ConstructionData.find(",", BegPos);
@@ -230,7 +226,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
         // Marker
         {
             BegPos = ConstructionData.find("#Marker");
-            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Marker)");
+            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Marker) in %s:\n", ConstructionData.c_str());
 
             BegPos                       = ConstructionData.find_first_not_of("#Marker ", BegPos);
             EndPos                       = ConstructionData.find(",", BegPos);
@@ -252,7 +248,7 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
         // Line
         {
             BegPos = ConstructionData.find("#Line");
-            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Line)");
+            ASSERT(BegPos != std::string::npos, "Invalid ConstructionData (Line) in %s:\n", ConstructionData.c_str());
 
             BegPos                     = ConstructionData.find_first_not_of("#Line ", BegPos);
             EndPos                     = ConstructionData.find(",", BegPos);
@@ -273,9 +269,10 @@ std::string DataSet::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << GetTitle() << "\n#DataPath " << m_DataPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis "
-                  << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << "\n#Marker " << GetMarkerColor() << ", " << GetMarkerStyle() << ", "
-                  << GetMarkerSize() << "\n#Line " << GetLineColor() << ", " << GetLineStyle() << ", " << GetLineWidth() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DataPath " << m_DataPath << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin()
+                  << ", " << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << "\n#Marker " << GetMarkerColor()
+                  << ", " << GetMarkerStyle() << ", " << GetMarkerSize() << "\n#Line " << GetLineColor() << ", " << GetLineStyle() << ", "
+                  << GetLineWidth() << std::endl;
 
     return ConstructorSS.str();
 }
@@ -303,32 +300,6 @@ void DataSet::PrintData(const char* DataPath) const
                << FORMATD() << m_Graph->GetEY()[i] << std::endl;
 
     Stream.close();
-}
-
-DataSet::DataSet(const DataProperties& i_DataProperties)
-    : Type(0), m_DataProperties(i_DataProperties), m_DrawProperties(), m_DataPath("DataStack contains no DataPath")
-{
-    const double DummyVar = 0;
-
-    m_Graph = new TGraphErrors(1, &DummyVar, &DummyVar);
-
-    m_Graph->SetNameTitle(GetTitle(), GetTitle());
-
-    m_Graph->GetXaxis()->SetTitle(GetxTitle());
-    m_Graph->GetXaxis()->SetLimits(GetxMin(), GetxMax());
-    m_Graph->GetXaxis()->SetMaxDigits(4);
-
-    m_Graph->GetYaxis()->SetTitle(GetyTitle());
-    m_Graph->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
-    m_Graph->GetYaxis()->SetMaxDigits(3);
-
-    m_Graph->SetMarkerColor(kWhite);
-    m_Graph->SetMarkerStyle(kDot);
-    m_Graph->SetMarkerSize(0);
-
-    m_Graph->SetLineColor(kWhite);
-    m_Graph->SetLineStyle(kSolid);
-    m_Graph->SetLineWidth(0);
 }
 
 void DataSet::FDraw() const { m_Graph->Draw("P"); }

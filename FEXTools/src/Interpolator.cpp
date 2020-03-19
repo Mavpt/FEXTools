@@ -23,22 +23,20 @@ Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(Construct
     InputStream.close();
 
     Construct(FileContent);
-    if (Type == 3) PrintConstructor(ConstructionDataPath);
+    if (Type == 3)
+    {
+        Draw(m_DrawPath.c_str());
+        PrintConstructor(ConstructionDataPath);
+    }
 }
 
-Interpolator::Interpolator(const DataProperties& i_DataProperties, const DrawProperties& i_DrawProperties, const char* DataPath, const char* ResultPath)
-    : DataSet(i_DataProperties, i_DrawProperties, DataPath, 3)
+Interpolator::~Interpolator()
 {
-    m_Spline3         = new TSpline3("m_Spline3", m_Graph);
-    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline3->GetXmin(), m_Spline3->GetXmax(), 0, 1);
-
-    m_Spline3->SetLineColor(i_DrawProperties.LineColor);
-    m_Spline3->SetLineStyle(i_DrawProperties.LineStyle);
-    m_Spline3->SetLineWidth(i_DrawProperties.LineWidth);
-
-    PrintResult(ResultPath);
+    delete m_Spline3;
+    delete m_OverlayFunction;
 }
 
+/* PROTECTED */
 void Interpolator::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
@@ -55,13 +53,6 @@ void Interpolator::Draw(const char* DrawPath) const
     delete Canvas;
 }
 
-Interpolator::~Interpolator()
-{
-    delete m_Spline3;
-    delete m_OverlayFunction;
-}
-
-/* PROTECTED */
 void Interpolator::Construct(const std::string&, const DataProperties*)
 {
     m_Spline3         = new TSpline3("m_Spline3", m_Graph);

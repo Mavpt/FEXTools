@@ -1,0 +1,7 @@
+#DataSet Fixed Resistance
+#DataPath ../IO_Input/FR_DP.txt
+#DrawPath ../IO_Plots/FR_DP.png
+#xAxis d (m), 0, 0.35
+#yAxis P (W), 0, 0.008
+#Marker 1, 2, 1
+#Line 1, 1, 2

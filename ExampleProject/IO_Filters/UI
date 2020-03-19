@@ -1,64 +1,69 @@
 #DataStack #DataStack Filters
+#DrawPath ../IO_Plots/Filt_UI.png
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
 
 
 #Fitter Blue Filter
 #DataPath ../IO_Input/UI_Blue.txt
+#DrawPath 
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
 #Marker 4, 20, 1
 #Line 4, 1, 2
 
-#Results of fitting the dataset "Blue Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 8.52676)
+#Results of fitting the dataset "Blue Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 400.321)
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
-Imax          = 4.1779115129e+01 (+- 1.4142135624e+00)
-I0            = 3.9391595045e+09 (+- 9.2927581272e+09)
-T             = -1.2130912195e+02 (+- 0.0000000000e+00)
-n             = -9.8760016597e-02 (+- 0.0000000000e+00)
+Imax          = 5.1599801902e-03 (+- 1.7320454436e-07)
+I0            = 1.3389619491e-02 (+- 4.7035887535e-07)
+T             = 1.9278614234e+03 (+- 6.6992305474e+01)
+n             = 3.3131795199e+03 (+- 1.1513089591e+02)
 
 
 #Fitter Green Filter
 #DataPath ../IO_Input/UI_Green.txt
+#DrawPath 
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
 #Marker 3, 20, 1
 #Line 3, 1, 2
 
-#Results of fitting the dataset "Green Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 103382)
+#Results of fitting the dataset "Green Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 639.654)
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
-Imax          = 1.0488516539e-03 (+- 7.6794819454e-07)
-I0            = 6.3666562969e-09 (+- 1.4142135624e+00)
-T             = 2.0453076420e+02 (+- 1.4142135624e+00)
-n             = 7.0303612050e+00 (+- 1.4142135624e+00)
+Imax          = 9.4491049379e-04 (+- 3.3081340625e-07)
+I0            = 1.4766199355e-06 (+- 2.7853077225e-09)
+T             = 9.6075620823e+01 (+- 3.0026077681e-02)
+n             = 3.7645740323e+01 (+- 1.1765303087e-02)
 
 
 #Fitter Red Filter
 #DataPath ../IO_Input/UI_Red.txt
+#DrawPath 
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
 #Marker 2, 20, 1
 #Line 2, 1, 2
 
-#Results of fitting the dataset "Red Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 39226.6)
+#Results of fitting the dataset "Red Filter" with the function "Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)" (Chi^2 = 170.225)
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1)
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
-Imax          = 6.2448723970e-04 (+- 1.9722505997e-07)
-I0            = 9.1961789724e-08 (+- 5.3611329582e-07)
-T             = -6.7956158160e+05 (+- 1.4685235064e+08)
-n             = -1.9777669481e+07 (+- 1.4142135624e+00)
+Imax          = 7.3631893647e-04 (+- 2.0877698331e-07)
+I0            = 1.9680196328e-05 (+- 3.5451478051e-08)
+T             = 1.3232410587e+02 (+- 8.2677868939e-02)
+n             = 5.1852512307e+01 (+- 3.2397851451e-02)
 
 
 #Fitter Yellow Filter
 #DataPath ../IO_Input/UI_Yellow.txt
+#DrawPath 
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
 #Marker 5, 20, 1
@@ -71,5 +76,5 @@ Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
 Imax          = 2.1334657288e-03 (+- 1.0904086026e-06)
 I0            = 4.7686168865e-08 (+- 7.8957698759e-11)
-T             = 2.5919719508e+02 (+- 3.9311015940e-02)
-n             = 8.9094198304e+00 (+- 1.3512649926e-03)
+T             = 2.5919719508e+02 (+- 3.9310959418e-02)
+n             = 8.9094198304e+00 (+- 1.3512442880e-03)

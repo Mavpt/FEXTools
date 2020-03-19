@@ -6,31 +6,58 @@ using namespace std;
 
 int main()
 {
-    /* DataSet*/
+    /* FIXED DISTANCE */
     {
-        DataSet Red("../IO_DataSets/Red.txt");
-        Red.Draw("../IO_Plots/Red.png");
+        /* P(R) */
+        DataStack RPStack("../IO_FixedDistance/RP");
+        DataStack RPStack20("../IO_FixedDistance/RP20");
+
+        /* I(U) */
+        DataStack UIStack("../IO_FixedDistance/UI");
+        DataStack UIStack20("../IO_FixedDistance/UI20");
     }
 
-    /* Fitter */
+    /* FIXED RESISTANCE */
     {
-        Fitter Yellow("../IO_DataSets/Yellow.txt");
-        Yellow.Draw("../IO_Plots/Yellow.png");
+        /* P(D) */
+        DataSet DP("../IO_FixedResistance/DP");
+
+        /* P(A) */
+        DataSet AP("../IO_FixedResistance/AP");
+
+        /* P(cos(theta)) */
+        DataSet AP2("../IO_FixedResistance/AP2");
     }
 
-    /* Interpolator */
+    /* FIXED ANGLE */
     {
-        Interpolator Green("../IO_DataSets/Green.txt");
-        Green.Draw("../IO_Plots/Green.png");
+        /* P(R) */
+        DataStack RPStack("../IO_FixedAngle/RP");
+
+        /* I(U) */
+        DataStack UIStack("../IO_FixedAngle/UI");
     }
 
-    /* DataStack */
+    /* FILTERS */
     {
-        DataStack UI("../IO_DataSets/UI_Stack.txt");
-        UI.Draw("../IO_Plots/UI.png");
+        /* P(R) */
+        DataStack RPStack("../IO_Filters/RP");
 
-        DataStack RP("../IO_DataSets/RP_Stack.txt");
-        RP.Draw("../IO_Plots/RP.png");
+        /* I(U) */
+        DataStack UIStack("../IO_Filters/UI");
+    }
+
+    /* ROPTIM */
+    {
+        /* P(R) */
+        Fitter RP("../IO_Pmax/RP");
+
+        /* P(D) */
+        Fitter DP("../IO_Pmax/DP");
+        Fitter DP2("../IO_Pmax/DP2");
+
+        /* P(cos(theta)) */
+        Fitter AP("../IO_Pmax/AP");
     }
 
     return 0;

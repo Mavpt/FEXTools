@@ -13,7 +13,7 @@
 #include "Interpolator.h"
 
 /* PUBLIC */
-DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 0), OwnsSets(1)
+DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 0)
 {
     std::string FileContent;
 
@@ -26,18 +26,17 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDat
     InputStream.close();
 
     Construct(FileContent, NULL);
-    if (Type == 0) PrintConstructor(ConstructionDataPath);
+    if (Type == 0)
+    {
+        Draw(m_DrawPath.c_str());
+        PrintConstructor(ConstructionDataPath);
+    }
 }
-
-DataStack::DataStack(const DataProperties& i_DataProperties) : DataSet(i_DataProperties), OwnsSets(0) {}
 
 DataStack::~DataStack()
 {
-    if (OwnsSets)
-        for (DataSet* Set : m_DataSets) delete Set;
+    for (DataSet* Set : m_DataSets) delete Set;
 }
-
-void DataStack::Add(DataSet* i_DataSet) { m_DataSets.push_back(i_DataSet); }
 
 void DataStack::Draw(const char* DrawPath) const
 {
@@ -119,8 +118,8 @@ std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << "#DataStack " << GetTitle() << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis " << GetyTitle()
-                  << ", " << GetyMin() << ", " << GetyMax() << std::endl;
+    ConstructorSS << "#DataStack " << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", "
+                  << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
     return ConstructorSS.str();
 }

@@ -1,6 +1,0 @@
-#DataSet Red Filter
-#DataPath ../IO_Input/UI_Red.txt
-#xAxis U (V), 0, 2.5
-#yAxis I (A), 0, 0.0025
-#Marker 2, 20, 1
-#Line 2, 1, 2
