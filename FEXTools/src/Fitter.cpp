@@ -96,7 +96,10 @@ std::string Fitter::GetConstructor() const
 
     std::stringstream ConstructorSS;
 
-    ConstructorSS << DataSet::GetConstructor() << "\n#Function " << m_FormulaStr << " | Chi^2 = " << m_Function2Fit->GetChisquare() << "\n"
+    ConstructorSS << DataSet::GetConstructor() << "\n#Function " << m_FormulaStr << " | Chi^2 = " << m_Function2Fit->GetChisquare()
+                  << "\n#Integral (of the fitted function) = " << FORMATD()
+                  << m_Function2Fit->Integral(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]) << " (+-" << FORMATD()
+                  << m_Function2Fit->IntegralError(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]) << ")\n"
                   << std::endl;
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
@@ -137,7 +140,7 @@ void Fitter::ReadFunction(const std::string& Function)
 
     while (getline(FunctionSS, line))
     {
-        if (line.length() == 0)
+        if (line.length() == 0 || line.find("#Integral") != std::string::npos)
             continue;
 
         else if (line.find("#Function ") != std::string::npos)
