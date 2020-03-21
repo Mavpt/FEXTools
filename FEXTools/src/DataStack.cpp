@@ -13,7 +13,7 @@
 #include "Interpolator.h"
 
 /* PUBLIC */
-DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 0)
+DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 0), LegendPos{ .8, .8, .95, .95 }
 {
     std::string FileContent;
 
@@ -51,7 +51,7 @@ void DataStack::Draw(const char* DrawPath) const
         Set->FDraw();
     }
 
-    TLegend* Legend = new TLegend(.8, .8, .95, .95);
+    TLegend* Legend = new TLegend(LegendPos[0], LegendPos[1], LegendPos[2], LegendPos[3]);
     for (DataSet* Set : m_DataSets) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "p");
 
     Legend->Draw();
@@ -65,51 +65,79 @@ void DataStack::Draw(const char* DrawPath) const
 /* PROTECTED */
 void DataStack::Construct(const std::string& ConstructionData, const DataProperties*)
 {
-    long OldPosition;
-    long Position = (ConstructionData.find("#DataSet") < ConstructionData.find("#Fitter"))
-                        ? ((ConstructionData.find("#DataSet") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#DataSet")
-                                                                                                        : ConstructionData.find("#Interpolator"))
-                        : ((ConstructionData.find("#Fitter") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#Fitter")
-                                                                                                       : ConstructionData.find("#Interpolator"));
-
-    while (Position != -1)
+    // LegendPosition
     {
-        OldPosition = Position;
-        Position    = (ConstructionData.find("#DataSet", Position + 1) < ConstructionData.find("#Fitter", Position + 1))
-                       ? ((ConstructionData.find("#DataSet", Position + 1) < ConstructionData.find("#Interpolator", Position + 1))
-                              ? ConstructionData.find("#DataSet", Position + 1)
-                              : ConstructionData.find("#Interpolator", Position + 1))
-                       : ((ConstructionData.find("#Fitter", Position + 1) < ConstructionData.find("#Interpolator", Position + 1))
-                              ? ConstructionData.find("#Fitter", Position + 1)
-                              : ConstructionData.find("#Interpolator", Position + 1));
-
-        switch (ConstructionData[OldPosition + 1])
+        size_t BegPos = ConstructionData.find("#Legend");
+        if (BegPos != std::string::npos)
         {
-            case 68: // DataSet
-            {
-                DataSet* Set = new DataSet(
-                    ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
-                m_DataSets.push_back(Set);
-                break;
-            }
+            BegPos = ConstructionData.find_first_not_of(" ", BegPos + 7);
 
-            case 70: // Fitter
-            {
-                DataSet* Set = new Fitter(
-                    ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
-                m_DataSets.push_back(Set);
-                break;
-            }
+            size_t EndPos = ConstructionData.find("\n", BegPos);
+            EndPos        = ConstructionData.find(",", BegPos);
+            LegendPos[0]  = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
 
-            case 73: // Interpolator
-            {
-                DataSet* Set = new Interpolator(
-                    ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
-                m_DataSets.push_back(Set);
-                break;
-            }
+            BegPos       = EndPos + 1;
+            EndPos       = ConstructionData.find(",", BegPos);
+            LegendPos[1] = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
 
-            default: ASSERT(false, "No idea how we got here: %d", ConstructionData[OldPosition + 1]) break;
+            BegPos       = EndPos + 1;
+            EndPos       = ConstructionData.find(",", BegPos);
+            LegendPos[2] = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+
+            BegPos       = EndPos + 1;
+            EndPos       = ConstructionData.find("\n", BegPos);
+            LegendPos[3] = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+        }
+    }
+
+    // DataSets, Fitters and Interpolators
+    {
+        long OldPosition;
+        long Position = (ConstructionData.find("#DataSet") < ConstructionData.find("#Fitter"))
+                            ? ((ConstructionData.find("#DataSet") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#DataSet")
+                                                                                                            : ConstructionData.find("#Interpolator"))
+                            : ((ConstructionData.find("#Fitter") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#Fitter")
+                                                                                                           : ConstructionData.find("#Interpolator"));
+
+        while (Position != -1)
+        {
+            OldPosition = Position;
+            Position    = (ConstructionData.find("#DataSet", Position + 1) < ConstructionData.find("#Fitter", Position + 1))
+                           ? ((ConstructionData.find("#DataSet", Position + 1) < ConstructionData.find("#Interpolator", Position + 1))
+                                  ? ConstructionData.find("#DataSet", Position + 1)
+                                  : ConstructionData.find("#Interpolator", Position + 1))
+                           : ((ConstructionData.find("#Fitter", Position + 1) < ConstructionData.find("#Interpolator", Position + 1))
+                                  ? ConstructionData.find("#Fitter", Position + 1)
+                                  : ConstructionData.find("#Interpolator", Position + 1));
+
+            switch (ConstructionData[OldPosition + 1])
+            {
+                case 68: // DataSet
+                {
+                    DataSet* Set = new DataSet(
+                        ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
+                    m_DataSets.push_back(Set);
+                    break;
+                }
+
+                case 70: // Fitter
+                {
+                    DataSet* Set = new Fitter(
+                        ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
+                    m_DataSets.push_back(Set);
+                    break;
+                }
+
+                case 73: // Interpolator
+                {
+                    DataSet* Set = new Interpolator(
+                        ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
+                    m_DataSets.push_back(Set);
+                    break;
+                }
+
+                default: ASSERT(false, "No idea how we got here: %d", ConstructionData[OldPosition + 1]) break;
+            }
         }
     }
 }
@@ -118,8 +146,9 @@ std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis "
-                  << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#Legend " << LegendPos[0] << ", " << LegendPos[1] << ", " << LegendPos[2]
+                  << ", " << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis " << GetyTitle()
+                  << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
     return ConstructorSS.str();
 }

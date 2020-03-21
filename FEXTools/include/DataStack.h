@@ -26,8 +26,10 @@ protected:
     virtual std::string GetConstructor() const override;
     virtual void        PrintConstructor(const char* ConstructionDataPath) const override;
 
-protected:
+private:
     std::vector<DataSet*> m_DataSets;
+
+    double LegendPos[4]; // xmin, ymin, xmax, ymax
 };
 
 #endif
