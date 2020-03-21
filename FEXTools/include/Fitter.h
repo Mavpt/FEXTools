@@ -63,6 +63,8 @@ private:
     std::map<std::string, unsigned int, strsize_less> m_VariableMap;
     std::vector<double>                               m_VariableValues;
     std::vector<double>                               m_VariableErrors;
+
+    double m_Integral[2];
 };
 
 #endif
