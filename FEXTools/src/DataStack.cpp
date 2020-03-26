@@ -101,8 +101,6 @@ void DataStack::Construct(const std::string& ConstructionData, const DataPropert
             BegPos       = EndPos + 1;
             EndPos       = ConstructionData.find("\n", BegPos);
             LegendPos[3] = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
-            std::cout << "HELLO" << LegendPos[0] << " " << LegendPos[1] << " " << LegendPos[2] << " "
-                      << " " << LegendPos[3] << std::endl;
         }
     }
 
