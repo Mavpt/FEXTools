@@ -29,6 +29,7 @@ protected:
 private:
     std::vector<DataSet*> m_DataSets;
 
+    double LegendSize;
     double LegendPos[4]; // xmin, ymin, xmax, ymax
 };
 

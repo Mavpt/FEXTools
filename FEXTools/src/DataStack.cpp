@@ -13,7 +13,7 @@
 #include "Interpolator.h"
 
 /* PUBLIC */
-DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 0), LegendPos{ .8, .8, .95, .95 }
+DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 0), LegendSize(0.015), LegendPos{ .8, .8, .95, .95 }
 {
     std::string FileContent;
 
@@ -52,7 +52,7 @@ void DataStack::Draw(const char* DrawPath) const
     }
 
     TLegend* Legend = new TLegend(LegendPos[0], LegendPos[1], LegendPos[2], LegendPos[3]);
-    gStyle->SetLegendTextSize(0.015);
+    gStyle->SetLegendTextSize(LegendSize);
 
     for (DataSet* Set : m_DataSets) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "p");
 
@@ -67,12 +67,24 @@ void DataStack::Draw(const char* DrawPath) const
 /* PROTECTED */
 void DataStack::Construct(const std::string& ConstructionData, const DataProperties*)
 {
-    // LegendPosition
+    // LegendSize
     {
-        size_t BegPos = ConstructionData.find("#Legend");
+        size_t BegPos = ConstructionData.find("#LegendSize");
         if (BegPos != std::string::npos)
         {
-            BegPos = ConstructionData.find_first_not_of(" ", BegPos + 7);
+            BegPos = ConstructionData.find_first_not_of(" ", BegPos + 11);
+
+            size_t EndPos = ConstructionData.find("\n", BegPos);
+            LegendSize    = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+        }
+    }
+
+    // LegendPosition
+    {
+        size_t BegPos = ConstructionData.find("#LegendPosition");
+        if (BegPos != std::string::npos)
+        {
+            BegPos = ConstructionData.find_first_not_of(" ", BegPos + 15);
 
             size_t EndPos = ConstructionData.find("\n", BegPos);
             EndPos        = ConstructionData.find(",", BegPos);
@@ -89,6 +101,8 @@ void DataStack::Construct(const std::string& ConstructionData, const DataPropert
             BegPos       = EndPos + 1;
             EndPos       = ConstructionData.find("\n", BegPos);
             LegendPos[3] = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+            std::cout << "HELLO" << LegendPos[0] << " " << LegendPos[1] << " " << LegendPos[2] << " "
+                      << " " << LegendPos[3] << std::endl;
         }
     }
 
@@ -148,9 +162,9 @@ std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#Legend " << LegendPos[0] << ", " << LegendPos[1] << ", " << LegendPos[2]
-                  << ", " << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis " << GetyTitle()
-                  << ", " << GetyMin() << ", " << GetyMax() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#LegendSize " << LegendSize << "\n#LegendPosition " << LegendPos[0] << ", "
+                  << LegendPos[1] << ", " << LegendPos[2] << ", " << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", "
+                  << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
     return ConstructorSS.str();
 }
