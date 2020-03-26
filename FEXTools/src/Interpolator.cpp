@@ -39,8 +39,8 @@ Interpolator::~Interpolator()
 /* PROTECTED */
 void Interpolator::Draw(const char* DrawPath) const
 {
-    TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
-    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();
 

@@ -40,8 +40,8 @@ DataStack::~DataStack()
 
 void DataStack::Draw(const char* DrawPath) const
 {
-    TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
-    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();
 
@@ -52,6 +52,8 @@ void DataStack::Draw(const char* DrawPath) const
     }
 
     TLegend* Legend = new TLegend(LegendPos[0], LegendPos[1], LegendPos[2], LegendPos[3]);
+    gStyle->SetLegendTextSize(0.015);
+
     for (DataSet* Set : m_DataSets) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "p");
 
     Legend->Draw();

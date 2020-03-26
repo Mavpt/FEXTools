@@ -44,8 +44,8 @@ DataSet::DataSet(const std::string& ConstructionData, const DataProperties* i_Da
 
 void DataSet::Draw(const char* DrawPath) const
 {
-    TCanvas* Canvas = new TCanvas(CANVASTITLE, CANVASTITLE, CANVASWIDTH, CANVASHEIGHT);
-    Canvas->SetMargin(0.12, 0.1, 0.1, 0.1);
+    TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();
 
@@ -167,7 +167,10 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
 
                 m_Graph->GetXaxis()->SetTitle(GetxTitle());
                 m_Graph->GetXaxis()->SetLimits(GetxMin(), GetxMax());
-                m_Graph->GetXaxis()->SetMaxDigits(4);
+
+                m_Graph->GetXaxis()->SetTitleSize(0.04);
+                m_Graph->GetXaxis()->SetLabelSize(0.04);
+                m_Graph->GetXaxis()->SetMaxDigits(3);
             }
 
             // yAxis
@@ -190,6 +193,10 @@ void DataSet::Construct(const std::string& ConstructionData, const DataPropertie
 
                 m_Graph->GetYaxis()->SetTitle(GetyTitle());
                 m_Graph->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
+                m_Graph->GetYaxis()->SetMaxDigits(3);
+
+                m_Graph->GetYaxis()->SetTitleSize(0.04);
+                m_Graph->GetYaxis()->SetLabelSize(0.04);
                 m_Graph->GetYaxis()->SetMaxDigits(3);
             }
         }
@@ -269,11 +276,16 @@ std::string DataSet::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
+    TGraph* TempGraph = new TGraph(*m_Graph);
+    TempGraph->InsertPointBefore(0, m_Graph->GetX()[0], 0);
+    TempGraph->SetPoint(m_Graph->GetN(), m_Graph->GetX()[m_Graph->GetN() - 1], 0);
+
     ConstructorSS << GetTitle() << "\n#DataPath " << m_DataPath << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin()
                   << ", " << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << "\n#Marker " << GetMarkerColor()
                   << ", " << GetMarkerStyle() << ", " << GetMarkerSize() << "\n#Line " << GetLineColor() << ", " << GetLineStyle() << ", "
-                  << GetLineWidth() << std::endl;
+                  << GetLineWidth() << "\n#Integral (of the DataSet) = " << FORMATD() << TempGraph->Integral() << std::endl;
 
+    delete TempGraph;
     return ConstructorSS.str();
 }
 

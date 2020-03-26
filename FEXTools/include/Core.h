@@ -29,6 +29,7 @@
 #define CANVASTITLE  "Canvas"
 #define CANVASWIDTH  1000
 #define CANVASHEIGHT 1000
+#define CANVASMARGIN 0.13, 0.07, 0.1, 0.1
 
 #define COLOREDSET(x)                   \
     {                                   \
