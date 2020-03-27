@@ -7,6 +7,7 @@
 #include <TCanvas.h>
 
 #include "Core.h"
+#include "Log.h"
 #include "Interpolator.h"
 
 /* PUBLIC */
@@ -15,7 +16,8 @@ Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(Construct
     std::string FileContent;
 
     std::ifstream InputStream(ConstructionDataPath);
-    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
+    FSTREAMTEST(InputStream, ConstructionDataPath);
+
     InputStream.seekg(0, std::ios::end);
     FileContent.resize(InputStream.tellg());
     InputStream.seekg(0, std::ios::beg);
@@ -87,7 +89,7 @@ std::string Interpolator::GetConstructor() const
 void Interpolator::PrintConstructor(const char* ConstructionDataPath) const
 {
     std::ofstream OutputStream(ConstructionDataPath);
-    ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
+    FSTREAMTEST(OutputStream, ConstructionDataPath);
 
     OutputStream << "#Interpolator " << GetConstructor();
 

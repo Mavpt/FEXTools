@@ -7,6 +7,7 @@
 #include <TLegend.h>
 
 #include "Core.h"
+#include "Log.h"
 #include "DataStack.h"
 #include "DataSet.h"
 #include "Fitter.h"
@@ -18,7 +19,8 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDat
     std::string FileContent;
 
     std::ifstream InputStream(ConstructionDataPath);
-    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
+    FSTREAMTEST(InputStream, ConstructionDataPath);
+
     InputStream.seekg(0, std::ios::end);
     FileContent.resize(InputStream.tellg());
     InputStream.seekg(0, std::ios::beg);
@@ -150,7 +152,7 @@ void DataStack::Construct(const std::string& ConstructionData, const DataPropert
                     break;
                 }
 
-                default: ASSERT(false, "No idea how we got here: %d", ConstructionData[OldPosition + 1]) break;
+                default: CLIENT_ASSERT(false, "No idea how we got here: %d", ConstructionData[OldPosition + 1]) break;
             }
         }
     }
@@ -170,7 +172,7 @@ std::string DataStack::GetConstructor() const
 void DataStack::PrintConstructor(const char* ConstructionDataPath) const
 {
     std::ofstream OutputStream(ConstructionDataPath);
-    ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
+    FSTREAMTEST(OutputStream, ConstructionDataPath);
 
     OutputStream << "#DataStack " << GetConstructor();
 

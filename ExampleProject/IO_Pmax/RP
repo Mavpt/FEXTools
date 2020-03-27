@@ -5,7 +5,9 @@
 #yAxis P (W), 0, 0.025
 #Marker 1, 2, 1
 #Line 1, 1, 2
+#Integral (of the DataSet) = 1.0722288483e+01
 
 #Function a/x | Chi^2 = 172.149
+#Integral (of the fitted function) = 1.0092584180e+01 (+-8.9146271831e-02)
 
-a = 3.3719631565e+00 (+- 2.9771882126e-02)
+a = 3.3719631565e+00 (+- 2.9784041309e-02)

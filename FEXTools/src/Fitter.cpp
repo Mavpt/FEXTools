@@ -8,6 +8,7 @@
 #include <TStyle.h>
 
 #include "Core.h"
+#include "Log.h"
 #include "Fitter.h"
 
 void ReplaceString(std::string& subject, const std::string& search, const std::string& replace)
@@ -26,7 +27,8 @@ Fitter::Fitter(const char* ConstructionDataPath) : DataSet(ConstructionDataPath,
     std::string FileContent;
 
     std::ifstream InputStream(ConstructionDataPath);
-    ASSERT(InputStream, "Invalid filepath : %s", ConstructionDataPath);
+    FSTREAMTEST(InputStream, ConstructionDataPath);
+
     InputStream.seekg(0, std::ios::end);
     FileContent.resize(InputStream.tellg());
     InputStream.seekg(0, std::ios::beg);
@@ -63,12 +65,12 @@ void Fitter::Draw(const char* DrawPath) const
 void Fitter::Construct(const std::string& ConstructionData, const DataProperties*)
 {
     // Tools
-    long BegPos;
+    size_t BegPos;
 
     // Function
     {
         BegPos = ConstructionData.find("#Function");
-        ASSERT(BegPos != -1, "Invalid ConstructionData (Function) in :\n%s", ConstructionData.c_str());
+        PROPERTYTEST(BegPos, "Function", ConstructionData);
 
         ReadFunction(ConstructionData.substr(BegPos, ConstructionData.size() - BegPos).c_str());
 
@@ -121,7 +123,7 @@ std::string Fitter::GetConstructor() const
 void Fitter::PrintConstructor(const char* ConstructionDataPath) const
 {
     std::ofstream OutputStream(ConstructionDataPath);
-    ASSERT(OutputStream, "Invalid filepath : %s", ConstructionDataPath);
+    FSTREAMTEST(OutputStream, ConstructionDataPath);
 
     OutputStream << "#Fitter " << GetConstructor();
 

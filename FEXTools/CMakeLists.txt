@@ -12,7 +12,7 @@ endif()
 
 # Cache
 if (NOT CONFIGURED_ONCE)
-    set(CMAKE_CXX_FLAGS "${warnings}"
+    set(CMAKE_CXX_FLAGS "${warnings} -pedantic"
         CACHE STRING "Flags used by the compiler during all build types." FORCE)
     set(CMAKE_C_FLAGS   "${warnings}"
         CACHE STRING "Flags used by the compiler during all build types." FORCE)
