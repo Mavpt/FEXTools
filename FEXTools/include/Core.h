@@ -10,15 +10,6 @@
 #include <TMarker.h>
 #include <TLine.h>
 
-#define ASSERT(x, ...)                                  \
-    if (!(x))                                           \
-    {                                                   \
-        printf("ERROR : %s:%d : ", __FILE__, __LINE__); \
-        printf(__VA_ARGS__);                            \
-        printf("\n");                                   \
-        __builtin_trap();                               \
-    }
-
 #define FORMATL(width, precision) std::left << std::setw(width) << std::setprecision(precision)
 #define FORMATR(width, precision) std::right << std::setw(width) << std::setprecision(precision)
 
@@ -50,7 +41,13 @@ struct DataProperties
     std::string yTitle;
     double      yMin, yMax;
 
-    DataProperties(const char* Title = "Title", const char* xTitle = "xTitle", const double xMin = 0, const double xMax = 1, const char* yTitle = "yTitle", const double yMin = 0, const double yMax = 1);
+    DataProperties(const char*  Title  = "Title",
+                   const char*  xTitle = "xTitle",
+                   const double xMin   = 0,
+                   const double xMax   = 1,
+                   const char*  yTitle = "yTitle",
+                   const double yMin   = 0,
+                   const double yMax   = 1);
 
     DataProperties(const DataProperties& i_DataProperties);
 };
@@ -68,7 +65,16 @@ struct DataProperties3D
     const char*  zTitle;
     const double zMin, zMax;
 
-    DataProperties3D(const char* Title, const char* xTitle, const double xMin, const double xMax, const char* yTitle, const double yMin, const double yMax, const char* zTitle, const double zMin, const double zMax);
+    DataProperties3D(const char*  Title,
+                     const char*  xTitle,
+                     const double xMin,
+                     const double xMax,
+                     const char*  yTitle,
+                     const double yMin,
+                     const double yMax,
+                     const char*  zTitle,
+                     const double zMin,
+                     const double zMax);
 };
 
 struct DrawProperties
@@ -81,7 +87,12 @@ struct DrawProperties
     ELineStyle LineStyle;
     Width_t    LineWidth;
 
-    DrawProperties(const Color_t MarkerColor = kWhite, const EMarkerStyle MarkerStyle = kDot, const Size_t MarkerSize = 0, const Color_t LineColor = kWhite, const ELineStyle LineStyle = kSolid, const Width_t LineWidth = 0);
+    DrawProperties(const Color_t      MarkerColor = kWhite,
+                   const EMarkerStyle MarkerStyle = kDot,
+                   const Size_t       MarkerSize  = 0,
+                   const Color_t      LineColor   = kWhite,
+                   const ELineStyle   LineStyle   = kSolid,
+                   const Width_t      LineWidth   = 0);
 
     DrawProperties(const DrawProperties& i_DrawProperties);
 };
