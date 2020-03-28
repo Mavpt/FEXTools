@@ -1,7 +1,7 @@
 #DataStack Fixed Angle (0 deg)
 #DrawPath ../IO_Plots/FA_UI.png
 #LegendSize 0.015
-#LegendPosition 0.8, 0.8, 0.95, 0.95
+#LegendPos 0.8, 0.8, 0.95, 0.95
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.015
 
@@ -13,6 +13,7 @@
 #yAxis I (A), 0, 0.015
 #Marker 2, 20, 1
 #Line 2, 1, 2
+
 #Integral (of the DataSet) = 1.5772600000e-02
 
 #Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 60.9918
@@ -33,6 +34,7 @@ n             = 1.2509169238e+01 (+- 3.8582546996e-03)
 #yAxis I (A), 0, 0.015
 #Marker 3, 20, 1
 #Line 3, 1, 2
+
 #Integral (of the DataSet) = 3.0756500000e-03
 
 #Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 123.852
@@ -53,17 +55,18 @@ n             = 6.6120021436e+00 (+- 2.2337282238e-03)
 #yAxis I (A), 0, 0.015
 #Marker 4, 20, 1
 #Line 4, 1, 2
-#Integral (of the DataSet) = 1.0089524500e-02
+
+#Integral (of the DataSet) = 1.0089899500e-02
 
 #Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 393.1
-#Integral (of the fitted function) = 1.0186769587e-02 (+-4.9715709717e-06)
+#Integral (of the fitted function) = 1.0186769587e-02 (+-4.9715677045e-06)
 
 Const echarge = 1.6021770000e-19
 Const kb      = 1.3806490000e-23
 Imax          = 4.7692339733e-03 (+- 1.9906212748e-06)
-I0            = 1.0788794999e-07 (+- 1.3684706036e-10)
-T             = 2.5058530072e+02 (+- 3.0987199479e-02)
-n             = 1.0312517329e+01 (+- 1.2752343811e-03)
+I0            = 1.0788794999e-07 (+- 1.3684684974e-10)
+T             = 2.5058530072e+02 (+- 3.0987199489e-02)
+n             = 1.0312517329e+01 (+- 1.2752172948e-03)
 
 
 #Fitter 25 cm, 0 deg
@@ -73,6 +76,7 @@ n             = 1.0312517329e+01 (+- 1.2752343811e-03)
 #yAxis I (A), 0, 0.015
 #Marker 5, 20, 1
 #Line 5, 1, 2
+
 #Integral (of the DataSet) = 1.9136000000e-03
 
 #Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 86.9087
@@ -93,6 +97,7 @@ n             = 1.0669559452e+01 (+- 5.8403304887e-03)
 #yAxis I (A), 0, 0.015
 #Marker 6, 20, 1
 #Line 6, 1, 2
+
 #Integral (of the DataSet) = 1.3991000000e-03
 
 #Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 107.015
@@ -113,6 +118,7 @@ n             = 1.8744517212e+01 (+- 6.4849368232e-03)
 #yAxis I (A), 0, 0.015
 #Marker 7, 20, 1
 #Line 7, 1, 2
+
 #Integral (of the DataSet) = 7.4140000000e-04
 
 #Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 131.513

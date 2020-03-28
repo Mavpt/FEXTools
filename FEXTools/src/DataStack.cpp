@@ -14,83 +14,35 @@
 #include "Interpolator.h"
 
 /* PUBLIC */
-DataStack::DataStack(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 0), LegendSize(0.015), LegendPos{ .8, .8, .95, .95 }
+DataStack::DataStack(const char* ConstructionDataPath)
+    : DataSet(0, GetFileContents(ConstructionDataPath)), LegendSize(0.015), LegendPos{ .8, .8, .95, .95 }
 {
-    std::string FileContent;
+    size_t BegPos = std::string::npos, EndPos = std::string::npos;
 
-    std::ifstream InputStream(ConstructionDataPath);
-    FSTREAMTEST(InputStream, ConstructionDataPath);
+    std::string ConstructionData(GetFileContents(ConstructionDataPath));
 
-    InputStream.seekg(0, std::ios::end);
-    FileContent.resize(InputStream.tellg());
-    InputStream.seekg(0, std::ios::beg);
-    InputStream.read(&FileContent[0], FileContent.size());
-    InputStream.close();
-
-    Construct(FileContent, NULL);
-    if (Type == 0)
-    {
-        Draw(m_DrawPath.c_str());
-        PrintConstructor(ConstructionDataPath);
-    }
-}
-
-DataStack::~DataStack()
-{
-    for (DataSet* Set : m_DataSets) delete Set;
-}
-
-void DataStack::Draw(const char* DrawPath) const
-{
-    TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
-    Canvas->SetMargin(CANVASMARGIN);
-    gStyle->SetGridColor(kGray);
-    Canvas->SetGrid();
-
-    m_Graph->Draw("PA");
-    for (DataSet* Set : m_DataSets)
-    {
-        Set->FDraw();
-    }
-
-    TLegend* Legend = new TLegend(LegendPos[0], LegendPos[1], LegendPos[2], LegendPos[3]);
-    gStyle->SetLegendTextSize(LegendSize);
-
-    for (DataSet* Set : m_DataSets) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "p");
-
-    Legend->Draw();
-
-    Canvas->Update();
-    Canvas->SaveAs(DrawPath);
-
-    delete Canvas;
-}
-
-/* PROTECTED */
-void DataStack::Construct(const std::string& ConstructionData, const DataProperties*)
-{
     // LegendSize
     {
-        size_t BegPos = ConstructionData.find("#LegendSize");
+        BegPos = ConstructionData.find("#LegendSize");
         if (BegPos != std::string::npos)
         {
             BegPos = ConstructionData.find_first_not_of(" ", BegPos + 11);
 
-            size_t EndPos = ConstructionData.find("\n", BegPos);
-            LegendSize    = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+            EndPos     = ConstructionData.find("\n", BegPos);
+            LegendSize = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
         }
     }
 
-    // LegendPosition
+    // LegendEndPos
     {
-        size_t BegPos = ConstructionData.find("#LegendPosition");
+        BegPos = ConstructionData.find("#LegendPos");
         if (BegPos != std::string::npos)
         {
-            BegPos = ConstructionData.find_first_not_of(" ", BegPos + 15);
+            BegPos = ConstructionData.find_first_not_of(" ", BegPos + 10);
 
-            size_t EndPos = ConstructionData.find("\n", BegPos);
-            EndPos        = ConstructionData.find(",", BegPos);
-            LegendPos[0]  = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
+            EndPos       = ConstructionData.find("\n", BegPos);
+            EndPos       = ConstructionData.find(",", BegPos);
+            LegendPos[0] = strtod(ConstructionData.substr(BegPos, EndPos - BegPos).c_str(), NULL);
 
             BegPos       = EndPos + 1;
             EndPos       = ConstructionData.find(",", BegPos);
@@ -108,61 +60,96 @@ void DataStack::Construct(const std::string& ConstructionData, const DataPropert
 
     // DataSets, Fitters and Interpolators
     {
-        long OldPosition;
-        long Position = (ConstructionData.find("#DataSet") < ConstructionData.find("#Fitter"))
-                            ? ((ConstructionData.find("#DataSet") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#DataSet")
-                                                                                                            : ConstructionData.find("#Interpolator"))
-                            : ((ConstructionData.find("#Fitter") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#Fitter")
-                                                                                                           : ConstructionData.find("#Interpolator"));
+        EndPos = (ConstructionData.find("#DataSet") < ConstructionData.find("#Fitter"))
+                     ? ((ConstructionData.find("#DataSet") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#DataSet")
+                                                                                                     : ConstructionData.find("#Interpolator"))
+                     : ((ConstructionData.find("#Fitter") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#Fitter")
+                                                                                                    : ConstructionData.find("#Interpolator"));
 
-        while (Position != -1)
+        while (EndPos != std::string::npos)
         {
-            OldPosition = Position;
-            Position    = (ConstructionData.find("#DataSet", Position + 1) < ConstructionData.find("#Fitter", Position + 1))
-                           ? ((ConstructionData.find("#DataSet", Position + 1) < ConstructionData.find("#Interpolator", Position + 1))
-                                  ? ConstructionData.find("#DataSet", Position + 1)
-                                  : ConstructionData.find("#Interpolator", Position + 1))
-                           : ((ConstructionData.find("#Fitter", Position + 1) < ConstructionData.find("#Interpolator", Position + 1))
-                                  ? ConstructionData.find("#Fitter", Position + 1)
-                                  : ConstructionData.find("#Interpolator", Position + 1));
+            BegPos = EndPos;
+            EndPos = (ConstructionData.find("#DataSet", EndPos + 1) < ConstructionData.find("#Fitter", EndPos + 1))
+                         ? ((ConstructionData.find("#DataSet", EndPos + 1) < ConstructionData.find("#Interpolator", EndPos + 1))
+                                ? ConstructionData.find("#DataSet", EndPos + 1)
+                                : ConstructionData.find("#Interpolator", EndPos + 1))
+                         : ((ConstructionData.find("#Fitter", EndPos + 1) < ConstructionData.find("#Interpolator", EndPos + 1))
+                                ? ConstructionData.find("#Fitter", EndPos + 1)
+                                : ConstructionData.find("#Interpolator", EndPos + 1));
 
-            switch (ConstructionData[OldPosition + 1])
+            switch (ConstructionData[BegPos + 1])
             {
                 case 68: // DataSet
                 {
-                    DataSet* Set = new DataSet(
-                        ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
-                    m_DataSets.push_back(Set);
+                    FToolsObject* Set = new DataSet(
+                        1, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
+                    m_Objects.push_back(Set);
                     break;
                 }
 
                 case 70: // Fitter
                 {
-                    DataSet* Set = new Fitter(
-                        ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
-                    m_DataSets.push_back(Set);
+                    FToolsObject* Set = new Fitter(
+                        2, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
+                    m_Objects.push_back(Set);
                     break;
                 }
 
                 case 73: // Interpolator
                 {
-                    DataSet* Set = new Interpolator(
-                        ConstructionData.substr(OldPosition, (Position != -1) ? Position - OldPosition : ConstructionData.size() - OldPosition), &m_DataProperties);
-                    m_DataSets.push_back(Set);
+                    FToolsObject* Set = new Interpolator(
+                        3, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
+                    m_Objects.push_back(Set);
                     break;
                 }
 
-                default: CLIENT_ASSERT(false, "No idea how we got here: %d", ConstructionData[OldPosition + 1]) break;
+                default: CLIENT_ASSERT(false, "No idea how we got here: %d", ConstructionData[BegPos + 1]) break;
             }
         }
     }
+
+    Draw(m_DrawPath.c_str());
+    PrintConstructor(ConstructionDataPath);
+}
+
+/* PROTECTED */
+DataStack::DataStack(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : DataSet(Type, ConstructionData, i_DataProperties)
+{
+    CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__);
+}
+
+void DataStack::Draw(const char* DrawPath) const
+{
+    TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetMargin(CANVASMARGIN);
+    gStyle->SetGridColor(kGray);
+    Canvas->SetGrid();
+
+    m_Graph->Draw("PA");
+    for (FToolsObject* Set : m_Objects)
+    {
+        Set->FDraw();
+    }
+
+    TLegend* Legend = new TLegend(LegendPos[0], LegendPos[1], LegendPos[2], LegendPos[3]);
+    gStyle->SetLegendTextSize(LegendSize);
+
+    for (FToolsObject* Set : m_Objects) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "p");
+
+    Legend->Draw();
+
+    Canvas->Update();
+    Canvas->SaveAs(DrawPath);
+
+    delete Canvas;
 }
 
 std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#LegendSize " << LegendSize << "\n#LegendPosition " << LegendPos[0] << ", "
+    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#LegendSize " << LegendSize << "\n#LegendPos " << LegendPos[0] << ", "
                   << LegendPos[1] << ", " << LegendPos[2] << ", " << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", "
                   << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
@@ -176,11 +163,24 @@ void DataStack::PrintConstructor(const char* ConstructionDataPath) const
 
     OutputStream << "#DataStack " << GetConstructor();
 
-    for (DataSet* Set : m_DataSets)
+    for (FToolsObject* Set : m_Objects)
     {
         OutputStream << std::endl;
         Set->PrintConstructor(OutputStream);
     }
 
     OutputStream.close();
+}
+
+void DataStack::PrintConstructor(std::ofstream&) const
+{
+    CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__);
+}
+
+void DataStack::FDraw() const { CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__); }
+
+/* PUBLIC */
+DataStack::~DataStack()
+{
+    for (FToolsObject* Set : m_Objects) delete Set;
 }

@@ -1,7 +1,7 @@
 #DataStack Fixed Distance (20 cm)
 #DrawPath ../IO_Plots/FD_PR.png
 #LegendSize 0.015
-#LegendPosition 0.8, 0.8, 0.95, 0.95
+#LegendPos 0.8, 0.8, 0.95, 0.95
 #xAxis R (#Omega), 0, 3200
 #yAxis P (W), 0, 0.008
 
@@ -13,6 +13,7 @@
 #yAxis P (W), 0, 0.008
 #Marker 1, 2, 1
 #Line 1, 3, 2
+
 #Integral (of the DataSet) = 2.0908339394e+00
 
 #Function a/x | Chi^2 = 0.583924
@@ -28,6 +29,7 @@ a = 3.6093559581e+00 (+- 1.0912448100e-01)
 #yAxis P (W), 0, 0.008
 #Marker 2, 20, 1
 #Line 2, 1, 2
+
 #Integral (of the DataSet) = 1.1552187260e+01
 
 #Results of interpolating the dataset "20 cm, 0 deg" with Spline5
@@ -44,6 +46,7 @@ a = 3.6093559581e+00 (+- 1.0912448100e-01)
 #yAxis P (W), 0, 0.008
 #Marker 3, 20, 1
 #Line 3, 1, 2
+
 #Integral (of the DataSet) = 1.0985837185e+01
 
 #Results of interpolating the dataset "20 cm, 20 deg" with Spline5
@@ -60,6 +63,7 @@ a = 3.6093559581e+00 (+- 1.0912448100e-01)
 #yAxis P (W), 0, 0.008
 #Marker 4, 20, 1
 #Line 4, 1, 2
+
 #Integral (of the DataSet) = 9.9611626400e+00
 
 #Results of interpolating the dataset "20 cm, 40 deg" with Spline5
@@ -76,6 +80,7 @@ a = 3.6093559581e+00 (+- 1.0912448100e-01)
 #yAxis P (W), 0, 0.008
 #Marker 5, 20, 1
 #Line 5, 1, 2
+
 #Integral (of the DataSet) = 7.7130619600e+00
 
 #Results of interpolating the dataset "20 cm, 60 deg" with Spline5

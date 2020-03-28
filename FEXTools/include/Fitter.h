@@ -25,25 +25,21 @@ struct strsize_less
 
 class Fitter : public DataSet
 {
-public:
+public: // Functions
     Fitter(const char* ConstructionDataPath);
 
-    virtual ~Fitter();
+protected: // Functions
+    Fitter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
-    Fitter()              = delete;
-    Fitter(const Fitter&) = delete;
-    Fitter operator=(const Fitter&) = delete;
-
-protected:
+    // Virtual
     virtual void Draw(const char* DrawPath) const override;
 
-    virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
-
     virtual std::string GetConstructor() const override;
-    virtual void        PrintConstructor(const char* ConstructionDataPath) const override;
-    virtual void        PrintConstructor(std::ofstream& OutputStream) const override;
 
-private:
+    virtual void PrintConstructor(const char* ConstructionDataPath) const override;
+    virtual void PrintConstructor(std::ofstream& OutputStream) const override;
+
+private: // Function
     // For own use
     void    ReadFunction(const std::string& Function);
     TString ProcessFormula();
@@ -53,10 +49,9 @@ private:
     // For use in DataStack
     friend class DataStack;
 
-    Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
     virtual void FDraw() const override;
 
-private:
+private: // Data
     TF1*        m_Function2Fit;
     std::string m_FormulaStr;
 
@@ -65,6 +60,13 @@ private:
     std::vector<double>                               m_VariableErrors;
 
     double m_Integral[2];
+
+public: // Functions
+    virtual ~Fitter();
+
+    Fitter()              = delete;
+    Fitter(const Fitter&) = delete;
+    Fitter operator=(const Fitter&) = delete;
 };
 
 #endif

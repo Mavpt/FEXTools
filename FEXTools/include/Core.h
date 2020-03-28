@@ -3,12 +3,15 @@
 #ifndef __CORE_H__
 #define __CORE_H__
 
+#include <string>
 #include <iomanip>
 
 #include <TStyle.h>
 #include <TColor.h>
 #include <TMarker.h>
 #include <TLine.h>
+
+#include "Log.h"
 
 #define FORMATL(width, precision) std::left << std::setw(width) << std::setprecision(precision)
 #define FORMATR(width, precision) std::right << std::setw(width) << std::setprecision(precision)
@@ -20,16 +23,6 @@
 #define CANVASWIDTH  1000
 #define CANVASHEIGHT 1000
 #define CANVASMARGIN 0.13, 0.1, 0.1, 0.1
-
-#define COLOREDSET(x)                   \
-    {                                   \
-        x, kFullCircle, 1, x, kSolid, 2 \
-    }
-
-#define SINGLESET()                               \
-    {                                             \
-        kBlack, kFullCircle, 1, kBlack, kSolid, 2 \
-    }
 
 struct DataProperties
 {
@@ -52,31 +45,6 @@ struct DataProperties
     DataProperties(const DataProperties& i_DataProperties);
 };
 
-struct DataProperties3D
-{
-    const char* Title;
-
-    const char*  xTitle;
-    const double xMin, xMax;
-
-    const char*  yTitle;
-    const double yMin, yMax;
-
-    const char*  zTitle;
-    const double zMin, zMax;
-
-    DataProperties3D(const char*  Title,
-                     const char*  xTitle,
-                     const double xMin,
-                     const double xMax,
-                     const char*  yTitle,
-                     const double yMin,
-                     const double yMax,
-                     const char*  zTitle,
-                     const double zMin,
-                     const double zMax);
-};
-
 struct DrawProperties
 {
     Color_t      MarkerColor;
@@ -96,5 +64,7 @@ struct DrawProperties
 
     DrawProperties(const DrawProperties& i_DrawProperties);
 };
+
+std::string GetFileContents(const char* Filepath);
 
 #endif

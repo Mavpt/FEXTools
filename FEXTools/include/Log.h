@@ -25,16 +25,7 @@
 #define BrightWhitePrint(X, ...)   printf("\x1b[97m" X "\x1b[0m", __VA_ARGS__)
 
 // Erros
-#define CORE_ASSERT(x, ...)                                       \
-    if (!(x))                                                     \
-    {                                                             \
-        RedPrint("\n\nCORE ERROR: %s:%d : ", __FILE__, __LINE__); \
-        RedPrint(__VA_ARGS__);                                    \
-        RedPrint("\n\n");                                         \
-        exit(1);                                                  \
-    }
-
-#define CLIENT_ASSERT(x, ...)                                   \
+#define CORE_ASSERT(x, ...)                                     \
     if (!(x))                                                   \
     {                                                           \
         printf("\n\nCORE ERROR: %s:%d : ", __FILE__, __LINE__); \
@@ -43,18 +34,27 @@
         exit(1);                                                \
     }
 
-#define FSTREAMTEST(STREAM, FILEPATH)                                                                 \
-    if (!(STREAM))                                                                                    \
-    {                                                                                                 \
-        BrightCyanPrint("\n\nERROR: There was an error opening the following file %s\n\n", FILEPATH); \
-        exit(2);                                                                                      \
+#define CLIENT_ASSERT(x, ...)                                     \
+    if (!(x))                                                     \
+    {                                                             \
+        printf("\n\nCLIENT ERROR: %s:%d : ", __FILE__, __LINE__); \
+        printf(__VA_ARGS__);                                      \
+        printf("\n\n");                                           \
+        exit(1);                                                  \
     }
 
-#define PROPERTYTEST(POS, PROPERTY, CONTENT)                                                             \
-    if (POS == std::string::npos)                                                                        \
-    {                                                                                                    \
-        BrightYellowPrint("\n\nERROR: The %s property wasn't found in:\n%s", PROPERTY, CONTENT.c_str()); \
-        exit(3);                                                                                         \
+#define FSTREAMTEST(STREAM, FILEPATH)                                                                   \
+    if (!(STREAM))                                                                                      \
+    {                                                                                                   \
+        BrightCyanPrint("\n\nERROR: There was an error opening the following file : %s\n\n", FILEPATH); \
+        exit(2);                                                                                        \
+    }
+
+#define PROPERTYTEST(POS, PROPERTY, CONTENT)                                                                 \
+    if (POS == std::string::npos)                                                                            \
+    {                                                                                                        \
+        BrightYellowPrint("\n\nERROR: The %s property wasn't found in:\n%s\n\n", PROPERTY, CONTENT.c_str()); \
+        exit(3);                                                                                             \
     }
 
 #endif

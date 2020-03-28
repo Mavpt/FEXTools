@@ -5,6 +5,7 @@
 #yAxis P (W), 0, 0.025
 #Marker 1, 2, 1
 #Line 1, 1, 2
+
 #Integral (of the DataSet) = 2.0421953412e-03
 
 #Function a/(x+d)**2 | Chi^2 = 300.288

@@ -10,25 +10,20 @@
 
 class Interpolator : public DataSet
 {
-public:
+public: // Functions
     Interpolator(const char* ConstructionDataPath);
 
-    virtual ~Interpolator();
+protected: // Functions
+    Interpolator(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
-    Interpolator()                    = delete;
-    Interpolator(const Interpolator&) = delete;
-    Interpolator operator=(const Interpolator&) = delete;
-
-protected:
     virtual void Draw(const char* DrawPath) const override;
 
-    virtual void Construct(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL) override;
-
     virtual std::string GetConstructor() const override;
-    virtual void        PrintConstructor(const char* ConstructionDataPath) const override;
-    virtual void        PrintConstructor(std::ofstream& OutputStream) const override;
 
-private:
+    virtual void PrintConstructor(const char* ConstructionDataPath) const override;
+    virtual void PrintConstructor(std::ofstream& OutputStream) const override;
+
+private: // Functions
     // For own use
     double Calculate(double* fx, double*) { return m_Spline5->Eval(fx[0]); }
 
@@ -44,12 +39,18 @@ private:
     // For use in DataStack
     friend class DataStack;
 
-    Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
     virtual void FDraw() const override;
 
-private:
+private: // Data
     TSpline5* m_Spline5;
     TF1*      m_OverlayFunction;
+
+public: // Functions
+    virtual ~Interpolator();
+
+    Interpolator()                    = delete;
+    Interpolator(const Interpolator&) = delete;
+    Interpolator operator=(const Interpolator&) = delete;
 };
 
 #endif

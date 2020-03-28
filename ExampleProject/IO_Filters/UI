@@ -1,7 +1,7 @@
 #DataStack Filters
 #DrawPath ../IO_Plots/Filt_UI.png
 #LegendSize 0.015
-#LegendPosition 0.8, 0.8, 0.95, 0.95
+#LegendPos 0.8, 0.8, 0.95, 0.95
 #xAxis U (V), 0, 2.5
 #yAxis I (A), 0, 0.0025
 
@@ -13,6 +13,7 @@
 #yAxis I (A), 0, 0.0025
 #Marker 4, 20, 1
 #Line 4, 1, 2
+
 #Integral (of the DataSet) = 1.5839010000e-04
 
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 400.321
@@ -33,6 +34,7 @@ n             = 3.3131795199e+03 (+- 1.1513089591e+02)
 #yAxis I (A), 0, 0.0025
 #Marker 3, 20, 1
 #Line 3, 1, 2
+
 #Integral (of the DataSet) = 1.7909900000e-03
 
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 639.654
@@ -53,6 +55,7 @@ n             = 3.7645740323e+01 (+- 1.1765208082e-02)
 #yAxis I (A), 0, 0.0025
 #Marker 2, 20, 1
 #Line 2, 1, 2
+
 #Integral (of the DataSet) = 1.2292025000e-03
 
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 170.225
@@ -73,6 +76,7 @@ n             = 5.1852512307e+01 (+- 3.2397950755e-02)
 #yAxis I (A), 0, 0.0025
 #Marker 5, 20, 1
 #Line 5, 1, 2
+
 #Integral (of the DataSet) = 4.5614930000e-03
 
 #Function Imax - I0 * exp(((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 522.074

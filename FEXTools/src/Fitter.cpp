@@ -6,8 +6,8 @@
 
 #include <TCanvas.h>
 #include <TStyle.h>
+#include <TAxis.h>
 
-#include "Core.h"
 #include "Log.h"
 #include "Fitter.h"
 
@@ -22,30 +22,67 @@ void ReplaceString(std::string& subject, const std::string& search, const std::s
 }
 
 /* PUBLIC */
-Fitter::Fitter(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 2)
+Fitter::Fitter(const char* ConstructionDataPath) : DataSet(2, GetFileContents(ConstructionDataPath))
 {
-    std::string FileContent;
+    size_t BegPos = std::string::npos;
 
-    std::ifstream InputStream(ConstructionDataPath);
-    FSTREAMTEST(InputStream, ConstructionDataPath);
+    std::string ConstructionData(GetFileContents(ConstructionDataPath));
 
-    InputStream.seekg(0, std::ios::end);
-    FileContent.resize(InputStream.tellg());
-    InputStream.seekg(0, std::ios::beg);
-    InputStream.read(&FileContent[0], FileContent.size());
-    InputStream.close();
+    BegPos = ConstructionData.find("#Function");
+    PROPERTYTEST(BegPos, "Function", ConstructionData);
 
-    Construct(FileContent);
-    if (Type == 2)
-    {
-        Draw(m_DrawPath.c_str());
-        PrintConstructor(ConstructionDataPath);
-    }
+    ReadFunction(ConstructionData.substr(BegPos, ConstructionData.size() - BegPos).c_str());
+
+    m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
+
+    m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
+
+    m_Function2Fit->GetXaxis()->SetLimits(GetxMin(), GetxMax());
+
+    m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
+
+    m_Function2Fit->SetLineColor(GetLineColor());
+    m_Function2Fit->SetLineStyle(GetLineStyle());
+    m_Function2Fit->SetLineWidth(GetLineWidth());
+
+    Fit();
+
+    m_Integral[0] = m_Function2Fit->Integral(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]);
+    m_Integral[1] = m_Function2Fit->IntegralError(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]);
+
+    Draw(m_DrawPath.c_str());
+    PrintConstructor(ConstructionDataPath);
 }
 
-Fitter::~Fitter() { delete m_Function2Fit; }
-
 /* PROTECTED */
+Fitter::Fitter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : DataSet(Type, ConstructionData, i_DataProperties)
+{
+    size_t BegPos = std::string::npos;
+
+    BegPos = ConstructionData.find("#Function");
+    PROPERTYTEST(BegPos, "Function", ConstructionData);
+
+    ReadFunction(ConstructionData.substr(BegPos, ConstructionData.size() - BegPos).c_str());
+
+    m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
+
+    m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
+
+    m_Function2Fit->GetXaxis()->SetLimits(GetxMin(), GetxMax());
+
+    m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
+
+    m_Function2Fit->SetLineColor(GetLineColor());
+    m_Function2Fit->SetLineStyle(GetLineStyle());
+    m_Function2Fit->SetLineWidth(GetLineWidth());
+
+    Fit();
+
+    m_Integral[0] = m_Function2Fit->Integral(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]);
+    m_Integral[1] = m_Function2Fit->IntegralError(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]);
+}
+
 void Fitter::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
@@ -60,39 +97,6 @@ void Fitter::Draw(const char* DrawPath) const
     Canvas->SaveAs(DrawPath);
 
     delete Canvas;
-}
-
-void Fitter::Construct(const std::string& ConstructionData, const DataProperties*)
-{
-    // Tools
-    size_t BegPos;
-
-    // Function
-    {
-        BegPos = ConstructionData.find("#Function");
-        PROPERTYTEST(BegPos, "Function", ConstructionData);
-
-        ReadFunction(ConstructionData.substr(BegPos, ConstructionData.size() - BegPos).c_str());
-
-        m_Function2Fit = new TF1(GetTitle(), ProcessFormula(), GetxMin(), GetxMax());
-    }
-
-    m_Function2Fit->SetNameTitle(GetTitle(), GetTitle());
-
-    m_Function2Fit->GetXaxis()->SetLimits(GetxMin(), GetxMax());
-    m_Function2Fit->GetXaxis()->SetMaxDigits(4);
-
-    m_Function2Fit->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
-    m_Function2Fit->GetYaxis()->SetMaxDigits(3);
-
-    m_Function2Fit->SetLineColor(GetLineColor());
-    m_Function2Fit->SetLineStyle(GetLineStyle());
-    m_Function2Fit->SetLineWidth(GetLineWidth());
-
-    Fit();
-
-    m_Integral[0] = m_Function2Fit->Integral(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]);
-    m_Integral[1] = m_Function2Fit->IntegralError(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]);
 }
 
 std::string Fitter::GetConstructor() const
@@ -208,13 +212,11 @@ void Fitter::Fit()
         }
 }
 
-Fitter::Fitter(const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(ConstructionData, i_DataProperties, 2)
-{
-    Construct(ConstructionData, i_DataProperties);
-}
-
 void Fitter::FDraw() const
 {
     m_Graph->Draw("P");
     m_Function2Fit->Draw("SAME");
 }
+
+/* PUBLIC */
+Fitter::~Fitter() { delete m_Function2Fit; }

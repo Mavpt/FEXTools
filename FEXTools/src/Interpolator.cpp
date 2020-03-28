@@ -11,34 +11,35 @@
 #include "Interpolator.h"
 
 /* PUBLIC */
-Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(ConstructionDataPath, 3)
+Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(3, GetFileContents(ConstructionDataPath))
 {
-    std::string FileContent;
+    m_Spline5         = new TSpline5("m_Spline5", m_Graph);
+    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline5->GetXmin(), m_Spline5->GetXmax(), 0, 1);
 
-    std::ifstream InputStream(ConstructionDataPath);
-    FSTREAMTEST(InputStream, ConstructionDataPath);
+    m_Spline5->SetNameTitle(GetTitle(), GetTitle());
 
-    InputStream.seekg(0, std::ios::end);
-    FileContent.resize(InputStream.tellg());
-    InputStream.seekg(0, std::ios::beg);
-    InputStream.read(&FileContent[0], FileContent.size());
-    InputStream.close();
+    m_Spline5->SetLineColor(GetLineColor());
+    m_Spline5->SetLineStyle(GetLineStyle());
+    m_Spline5->SetLineWidth(GetLineWidth());
 
-    Construct(FileContent);
-    if (Type == 3)
-    {
-        Draw(m_DrawPath.c_str());
-        PrintConstructor(ConstructionDataPath);
-    }
-}
-
-Interpolator::~Interpolator()
-{
-    delete m_Spline5;
-    delete m_OverlayFunction;
+    Draw(m_DrawPath.c_str());
+    PrintConstructor(ConstructionDataPath);
 }
 
 /* PROTECTED */
+Interpolator::Interpolator(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : DataSet(Type, ConstructionData, i_DataProperties)
+{
+    m_Spline5         = new TSpline5("m_Spline5", m_Graph);
+    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline5->GetXmin(), m_Spline5->GetXmax(), 0, 1);
+
+    m_Spline5->SetNameTitle(GetTitle(), GetTitle());
+
+    m_Spline5->SetLineColor(GetLineColor());
+    m_Spline5->SetLineStyle(GetLineStyle());
+    m_Spline5->SetLineWidth(GetLineWidth());
+}
+
 void Interpolator::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
@@ -53,18 +54,6 @@ void Interpolator::Draw(const char* DrawPath) const
     Canvas->SaveAs(DrawPath);
 
     delete Canvas;
-}
-
-void Interpolator::Construct(const std::string&, const DataProperties*)
-{
-    m_Spline5         = new TSpline5("m_Spline5", m_Graph);
-    m_OverlayFunction = new TF1("m_OverlayFunction", this, &Interpolator::Calculate, m_Spline5->GetXmin(), m_Spline5->GetXmax(), 0, 1);
-
-    m_Spline5->SetNameTitle(GetTitle(), GetTitle());
-
-    m_Spline5->SetLineColor(GetLineColor());
-    m_Spline5->SetLineStyle(GetLineStyle());
-    m_Spline5->SetLineWidth(GetLineWidth());
 }
 
 std::string Interpolator::GetConstructor() const
@@ -151,14 +140,15 @@ const double* Interpolator::GetMaximum() const
     return Maximum;
 }
 
-Interpolator::Interpolator(const std::string& ConstructionData, const DataProperties* i_DataProperties)
-    : DataSet(ConstructionData, i_DataProperties, 3)
-{
-    Construct(ConstructionData, i_DataProperties);
-}
-
 void Interpolator::FDraw() const
 {
     m_Graph->Draw("P");
     m_Spline5->Draw("LSAME");
+}
+
+/* PUBLIC */
+Interpolator::~Interpolator()
+{
+    delete m_Spline5;
+    delete m_OverlayFunction;
 }
