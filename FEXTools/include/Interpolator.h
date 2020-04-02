@@ -13,6 +13,8 @@ class Interpolator : public DataSet
 public: // Functions
     Interpolator(const char* ConstructionDataPath);
 
+    double Eval(const double x) { return m_Spline5->Eval(x); }
+
 protected: // Functions
     Interpolator(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
