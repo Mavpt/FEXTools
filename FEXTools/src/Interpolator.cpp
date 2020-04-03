@@ -26,6 +26,25 @@ Interpolator::Interpolator(const char* ConstructionDataPath) : DataSet(3, GetFil
     PrintConstructor(ConstructionDataPath);
 }
 
+const std::pair<double, double> Interpolator::Eval(const double x)
+{
+    std::pair<double, double> Result;
+    Result.first = m_Spline5->Eval(x);
+
+    if (x < m_Graph->GetX()[0] || x > m_Graph->GetX()[m_Graph->GetN() - 1])
+        Result.second = DBL_MAX;
+
+    else
+    {
+        int i = 0;
+        while (m_Graph->GetX()[i] < x) i++;
+
+        Result.second = (fabs(m_Graph->GetX()[i - 1] - x) > fabs(m_Graph->GetX()[i] - x)) ? fabs(m_Graph->GetX()[i - 1] - x) : fabs(m_Graph->GetX()[i] - x);
+    }
+
+    return Result;
+}
+
 /* PROTECTED */
 Interpolator::Interpolator(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
     : DataSet(Type, ConstructionData, i_DataProperties)
