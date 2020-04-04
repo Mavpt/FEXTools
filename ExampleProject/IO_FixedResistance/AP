@@ -1,9 +1,0 @@
-#DataSet Fixed Resistance
-#DataPath ../IO_Input/FR_AP.txt
-#DrawPath ../IO_Plots/FR_AP.png
-#xAxis theta (deg), 0, 100
-#yAxis P (W), 0, 0.006
-#Marker 1, 2, 1
-#Line 1, 1, 2
-
-#Integral (of the DataSet) = 3.5739500000e-01

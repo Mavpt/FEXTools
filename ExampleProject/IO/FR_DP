@@ -1,0 +1,9 @@
+#DataSet Fixed Resistance
+#DataPath ../Input/FR_DP.txt
+#DrawPath ../Output/FR_DP.png
+#xAxis d (m), 0, 0.35
+#yAxis P (W), 0, 0.008
+#Marker 1, 2, 1
+#Line 1, 1, 2
+
+#Integral (of the DataSet) = 1.6840700000e-03

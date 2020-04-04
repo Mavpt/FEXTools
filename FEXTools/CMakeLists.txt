@@ -19,16 +19,18 @@ if (NOT CONFIGURED_ONCE)
 endif()
 
 # Include Directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 # Source files
 set (SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Core.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/FToolsObject.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/DataSet.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/DataStack.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fitter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Interpolator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Core.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/FToolsObject.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/DataSet.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/DataStack.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/Fitter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/Interpolator.cpp
 )
 
 # Define library

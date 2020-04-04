@@ -19,7 +19,7 @@ if (NOT CONFIGURED_ONCE)
 endif()
 
 # Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../FEXTools/include)
+include_directories(/home/bruno/Dev/FEXTools/FEXTools)
 
 # Source files
 set (SOURCES
@@ -35,7 +35,7 @@ find_package(ROOT REQUIRED COMPONENTS RIO Net)
 include(${ROOT_USE_FILE})
 
 # FEXTools
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../FEXTools ${CMAKE_CURRENT_SOURCE_DIR}/../FEXTools/build) 
+add_subdirectory(/home/bruno/Dev/FEXTools/FEXTools /home/bruno/Dev/FEXTools/FEXTools/build) 
 
 # Link Libraries
 target_link_libraries(${PROJECT_NAME} FEXTools ${ROOT_LIBRARIES})

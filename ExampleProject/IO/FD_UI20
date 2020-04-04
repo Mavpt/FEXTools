@@ -1,0 +1,48 @@
+#DataStack Fixed Distance (20 cm)
+#DrawPath ../Output/FD20_UI.png
+#LegendSize 0.015
+#LegendPos 0.8, 0.8, 0.95, 0.95
+#xAxis U (V), 0, 2.5
+#yAxis I (A), 0, 0.005
+
+
+#Fitter 20 cm, 20 deg
+#DataPath ../Input/UI_20cm20deg.txt
+#DrawPath 
+#xAxis U (V), 0, 2.5
+#yAxis I (A), 0, 0.005
+#Marker 3, 20, 1
+#Line 3, 1, 2
+
+#Integral (of the DataSet) = 9.1636800000e-03
+
+#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 534.759
+#Integral (of the fitted function) = 9.3599782439e-03 (+-4.0842656557e-06)
+
+Const echarge = 1.6021770000e-19
+Const kb      = 1.3806490000e-23
+Imax          = 4.3904786180e-03 (+- 1.6076686297e-06)
+I0            = 1.0311840150e-07 (+- 1.3030953390e-10)
+T             = 2.5057857485e+02 (+- 3.1211353796e-02)
+n             = 1.0312139528e+01 (+- 1.2844682935e-03)
+
+
+#Fitter 20 cm, -20 deg
+#DataPath ../Input/UI_20cm20degneg.txt
+#DrawPath 
+#xAxis U (V), 0, 2.5
+#yAxis I (A), 0, 0.005
+#Marker 30, 20, 1
+#Line 30, 1, 2
+
+#Integral (of the DataSet) = 9.2972550000e-03
+
+#Function Imax - I0 * (exp((echarge*x)/(n*kb*T)) - 1) | Chi^2 = 643.242
+#Integral (of the fitted function) = 9.2885285111e-03 (+-5.4896729670e-06)
+
+Const echarge = 1.6021770000e-19
+Const kb      = 1.3806490000e-23
+Imax          = 4.3590212553e-03 (+- 2.2916041870e-06)
+I0            = 5.8827396625e-08 (+- 7.3782503327e-11)
+T             = 2.4396109052e+02 (+- 2.8689650933e-02)
+n             = 1.0039809926e+01 (+- 1.1806540304e-03)

@@ -9,55 +9,55 @@ int main()
     /* FIXED DISTANCE */
     {
         /* P(R) */
-        DataStack RPStack("../IO_FixedDistance/RP");
-        DataStack RPStack20("../IO_FixedDistance/RP20");
+        DataStack RPStack("../IO/FD_RP");
+        DataStack RPStack20("../IO/FD_RP20");
 
         /* I(U) */
-        DataStack UIStack("../IO_FixedDistance/UI");
-        DataStack UIStack20("../IO_FixedDistance/UI20");
+        DataStack UIStack("../IO/FD_UI");
+        DataStack UIStack20("../IO/FD_UI20");
     }
 
     /* FIXED RESISTANCE */
     {
         /* P(D) */
-        DataSet DP("../IO_FixedResistance/DP");
+        DataSet DP("../IO/FR_DP");
 
         /* P(A) */
-        DataSet AP("../IO_FixedResistance/AP");
+        DataSet AP("../IO/FR_AP");
 
         /* P(cos(theta)) */
-        DataSet AP2("../IO_FixedResistance/AP2");
+        DataSet AP2("../IO/FR_AP2");
     }
 
     /* FIXED ANGLE */
     {
         /* P(R) */
-        DataStack RPStack("../IO_FixedAngle/RP");
+        DataStack RPStack("../IO/FA_RP");
 
         /* I(U) */
-        DataStack UIStack("../IO_FixedAngle/UI");
+        DataStack UIStack("../IO/FA_UI");
     }
 
     /* FILTERS */
     {
         /* P(R) */
-        DataStack RPStack("../IO_Filters/RP");
+        DataStack RPStack("../IO/Filter_RP");
 
         /* I(U) */
-        DataStack UIStack("../IO_Filters/UI");
+        DataStack UIStack("../IO/Filter_UI");
     }
 
     /* ROPTIM */
     {
         /* P(R) */
-        Fitter RP("../IO_Pmax/RP");
+        Fitter RP("../IO/Pmax_RP");
 
         /* P(D) */
-        Fitter DP("../IO_Pmax/DP");
-        Fitter DP2("../IO_Pmax/DP2");
+        Fitter DP("../IO/Pmax_DP");
+        Fitter DP2("../IO/Pmax_DP2");
 
         /* P(cos(theta)) */
-        Fitter AP("../IO_Pmax/AP");
+        Fitter AP("../IO/Pmax_AP");
     }
 
     return 0;

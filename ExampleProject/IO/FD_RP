@@ -1,0 +1,90 @@
+#DataStack Fixed Distance (20 cm)
+#DrawPath ../Output/FD_PR.png
+#LegendSize 0.015
+#LegendPos 0.8, 0.8, 0.95, 0.95
+#xAxis R (#Omega), 0, 3200
+#yAxis P (W), 0, 0.008
+
+
+#Fitter Optimal Resistance
+#DataPath ../Input/FD_Roptim.txt
+#DrawPath 
+#xAxis R (#Omega), 0, 3200
+#yAxis P (W), 0, 0.008
+#Marker 1, 2, 1
+#Line 1, 3, 2
+
+#Integral (of the DataSet) = 2.0908339394e+00
+
+#Function a/x | Chi^2 = 0.583924
+#Integral (of the fitted function) = 2.6344993326e+00 (+-7.9650878361e-02)
+
+a = 3.6093559581e+00 (+- 1.0912448100e-01)
+
+
+#Interpolator 20 cm, 0 deg
+#DataPath ../Input/RP_20cm0deg.txt
+#DrawPath 
+#xAxis R (#Omega), 0, 3200
+#yAxis P (W), 0, 0.008
+#Marker 2, 20, 1
+#Line 2, 1, 2
+
+#Integral (of the DataSet) = 1.1552187260e+01
+
+#Results of interpolating the dataset "20 cm, 0 deg" with Spline5
+#Maximum (x, y, ex, ey):
+4.3010375776e+02	7.9713781650e-03	3.4103757755e+01	5.1378164954e-05
+#Minimum (x, y, ex, ey):
+4.4000000000e+00	8.8200000000e-05	4.4000000000e+00	0.0000000000e+00
+
+
+#Interpolator 20 cm, 20 deg
+#DataPath ../Input/RP_20cm20deg.txt
+#DrawPath 
+#xAxis R (#Omega), 0, 3200
+#yAxis P (W), 0, 0.008
+#Marker 3, 20, 1
+#Line 3, 1, 2
+
+#Integral (of the DataSet) = 1.0985837185e+01
+
+#Results of interpolating the dataset "20 cm, 20 deg" with Spline5
+#Maximum (x, y, ex, ey):
+4.9564184244e+02	7.3572872279e-03	5.2641842443e+01	7.2872279383e-06
+#Minimum (x, y, ex, ey):
+3.9000000000e+00	5.7700000000e-05	3.9000000000e+00	0.0000000000e+00
+
+
+#Interpolator 20 cm, 40 deg
+#DataPath ../Input/RP_20cm40deg.txt
+#DrawPath 
+#xAxis R (#Omega), 0, 3200
+#yAxis P (W), 0, 0.008
+#Marker 4, 20, 1
+#Line 4, 1, 2
+
+#Integral (of the DataSet) = 9.9611626400e+00
+
+#Results of interpolating the dataset "20 cm, 40 deg" with Spline5
+#Maximum (x, y, ex, ey):
+5.9594294031e+02	6.1102790231e-03	4.4942940311e+01	2.7902308597e-07
+#Minimum (x, y, ex, ey):
+5.2000000000e+00	5.9600000000e-05	5.2000000000e+00	0.0000000000e+00
+
+
+#Interpolator 20 cm, 60 deg
+#DataPath ../Input/RP_20cm60deg.txt
+#DrawPath 
+#xAxis R (#Omega), 0, 3200
+#yAxis P (W), 0, 0.008
+#Marker 5, 20, 1
+#Line 5, 1, 2
+
+#Integral (of the DataSet) = 7.7130619600e+00
+
+#Results of interpolating the dataset "20 cm, 60 deg" with Spline5
+#Maximum (x, y, ex, ey):
+9.0424448135e+02	4.0295534280e-03	8.3755518652e+01	9.5534280140e-06
+#Minimum (x, y, ex, ey):
+6.7000000000e+00	4.8400000000e-05	6.7000000000e+00	0.0000000000e+00

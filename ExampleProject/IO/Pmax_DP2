@@ -1,0 +1,15 @@
+#Fitter Optimal Resistance
+#DataPath ../Input/PmaxDP.txt
+#DrawPath ../Output/Pmax_DP2.png
+#xAxis d (m), 0, 0.4
+#yAxis P (W), 0, 0.025
+#Marker 1, 2, 1
+#Line 1, 1, 2
+
+#Integral (of the DataSet) = 2.0421953412e-03
+
+#Function a/(x+d)**2 | Chi^2 = 300.288
+#Integral (of the fitted function) = 2.0350839004e-03 (+-6.8665701249e-06)
+
+a = 3.4829125631e-04 (+- 1.8516281196e-06)
+d = 1.6683387141e-02 (+- 7.0465336451e-04)
