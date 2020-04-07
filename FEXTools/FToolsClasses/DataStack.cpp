@@ -11,10 +11,18 @@
 #include "FToolsClasses/DataSet.h"
 #include "FToolsClasses/Fitter.h"
 #include "FToolsClasses/Interpolator.h"
+#include "FToolsClasses/FunctionPlotter.h"
+
+size_t GetMin(size_t PossiblePositions[4])
+{
+    size_t CurrentMin = PossiblePositions[0];
+    for (int i = 1; i < 4; i++) CurrentMin = (CurrentMin < PossiblePositions[i]) ? CurrentMin : PossiblePositions[i];
+
+    return CurrentMin;
+}
 
 /* PUBLIC */
-DataStack::DataStack(const char* ConstructionDataPath)
-    : DataSet(0, GetFileContents(ConstructionDataPath)), LegendSize(0.015), LegendPos{ .8, .8, .95, .95 }
+DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileContents(ConstructionDataPath)), LegendSize(0.015), LegendPos{ .8, .8, .95, .95 }
 {
     size_t BegPos = std::string::npos, EndPos = std::string::npos;
 
@@ -59,51 +67,51 @@ DataStack::DataStack(const char* ConstructionDataPath)
 
     // DataSets, Fitters and Interpolators
     {
-        EndPos = (ConstructionData.find("#DataSet") < ConstructionData.find("#Fitter"))
-                     ? ((ConstructionData.find("#DataSet") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#DataSet")
-                                                                                                     : ConstructionData.find("#Interpolator"))
-                     : ((ConstructionData.find("#Fitter") < ConstructionData.find("#Interpolator")) ? ConstructionData.find("#Fitter")
-                                                                                                    : ConstructionData.find("#Interpolator"));
+        size_t PossiblePositions[4] = { ConstructionData.find("#DataSet"), ConstructionData.find("#Fitter"), ConstructionData.find("#Interpolator"), ConstructionData.find("#FunctionPlotter") };
+
+        EndPos = GetMin(PossiblePositions);
 
         while (EndPos != std::string::npos)
         {
             BegPos = EndPos;
-            EndPos = (ConstructionData.find("#DataSet", EndPos + 1) < ConstructionData.find("#Fitter", EndPos + 1))
-                         ? ((ConstructionData.find("#DataSet", EndPos + 1) < ConstructionData.find("#Interpolator", EndPos + 1))
-                                ? ConstructionData.find("#DataSet", EndPos + 1)
-                                : ConstructionData.find("#Interpolator", EndPos + 1))
-                         : ((ConstructionData.find("#Fitter", EndPos + 1) < ConstructionData.find("#Interpolator", EndPos + 1))
-                                ? ConstructionData.find("#Fitter", EndPos + 1)
-                                : ConstructionData.find("#Interpolator", EndPos + 1));
 
-            switch (ConstructionData[BegPos + 1])
+            PossiblePositions[0] = ConstructionData.find("#DataSet", EndPos + 1);
+            PossiblePositions[1] = ConstructionData.find("#Fitter", EndPos + 1);
+            PossiblePositions[2] = ConstructionData.find("#Interpolator", EndPos + 1);
+            PossiblePositions[3] = ConstructionData.find("#FunctionPlotter", EndPos + 1);
+
+            EndPos = GetMin(PossiblePositions);
+
+            if (ConstructionData.find("#DataSet") != std::string::npos) // DataSet
             {
-                case 68: // DataSet
-                {
-                    FToolsObject* Set = new DataSet(
-                        1, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
-                    m_Objects.push_back(Set);
-                    break;
-                }
-
-                case 70: // Fitter
-                {
-                    FToolsObject* Set = new Fitter(
-                        2, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
-                    m_Objects.push_back(Set);
-                    break;
-                }
-
-                case 73: // Interpolator
-                {
-                    FToolsObject* Set = new Interpolator(
-                        3, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
-                    m_Objects.push_back(Set);
-                    break;
-                }
-
-                default: CLIENT_ASSERT(false, "No idea how we got here: %d", ConstructionData[BegPos + 1]) break;
+                FToolsObject* Set = new DataSet(1, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
+                m_Objects.push_back(Set);
+                break;
             }
+
+            else if (ConstructionData.find("#Fitter") != std::string::npos) // Fitter
+            {
+                FToolsObject* Set = new Fitter(2, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
+                m_Objects.push_back(Set);
+                break;
+            }
+
+            else if (ConstructionData.find("#Interpolator") != std::string::npos) // Interpolator
+            {
+                FToolsObject* Set = new Interpolator(3, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
+                m_Objects.push_back(Set);
+                break;
+            }
+
+            else if (ConstructionData.find("#FunctionPlotter") != std::string::npos) // FunctionPlotter
+            {
+                FToolsObject* Set = new FunctionPlotter(-1, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
+                m_Objects.push_back(Set);
+                break;
+            }
+
+            else
+                CLIENT_ASSERT(false, "No idea how we got here: %s", ConstructionData.c_str()) break;
         }
     }
 
@@ -112,8 +120,7 @@ DataStack::DataStack(const char* ConstructionDataPath)
 }
 
 /* PROTECTED */
-DataStack::DataStack(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
-    : DataSet(Type, ConstructionData, i_DataProperties)
+DataStack::DataStack(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(Type, ConstructionData, i_DataProperties)
 {
     CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__);
 }
@@ -134,7 +141,7 @@ void DataStack::Draw(const char* DrawPath) const
     TLegend* Legend = new TLegend(LegendPos[0], LegendPos[1], LegendPos[2], LegendPos[3]);
     gStyle->SetLegendTextSize(LegendSize);
 
-    for (FToolsObject* Set : m_Objects) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "p");
+    for (FToolsObject* Set : m_Objects) Legend->AddEntry(Set->GetGraph(), Set->GetTitle(), "pl");
 
     Legend->Draw();
 
@@ -148,9 +155,8 @@ std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#LegendSize " << LegendSize << "\n#LegendPos " << LegendPos[0] << ", "
-                  << LegendPos[1] << ", " << LegendPos[2] << ", " << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", "
-                  << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#LegendSize " << LegendSize << "\n#LegendPos " << LegendPos[0] << ", " << LegendPos[1] << ", " << LegendPos[2] << ", "
+                  << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
     return ConstructorSS.str();
 }
@@ -171,10 +177,7 @@ void DataStack::PrintConstructor(const char* ConstructionDataPath) const
     OutputStream.close();
 }
 
-void DataStack::PrintConstructor(std::ofstream&) const
-{
-    CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__);
-}
+void DataStack::PrintConstructor(std::ofstream&) const { CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__); }
 
 void DataStack::FDraw() const { CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__); }
 

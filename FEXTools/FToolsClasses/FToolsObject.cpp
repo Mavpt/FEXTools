@@ -5,8 +5,7 @@
 #include "FToolsClasses/FToolsObject.h"
 
 /* PUBLIC */
-FToolsObject::FToolsObject(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
-    : InDataStack(i_DataProperties), Type(Type)
+FToolsObject::FToolsObject(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : InDataStack(i_DataProperties), Type(Type)
 {
     size_t BegPos = std::string::npos, EndPos = std::string::npos;
 
@@ -43,6 +42,14 @@ FToolsObject::FToolsObject(const int& Type, const std::string& ConstructionData,
                 BegPos = ConstructionData.find("#Interpolator");
                 PROPERTYTEST(BegPos, "Interpolator Title", ConstructionData);
                 BegPos = ConstructionData.find_first_not_of(" ", BegPos + 13);
+                break;
+            }
+
+            case -1:
+            {
+                BegPos = ConstructionData.find("#FunctionPlotter");
+                PROPERTYTEST(BegPos, "FunctionPlotter Title", ConstructionData);
+                BegPos = ConstructionData.find_first_not_of(" ", BegPos + 16);
                 break;
             }
 
@@ -173,10 +180,9 @@ std::string FToolsObject::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << GetTitle() << "\n#DataPath " << m_DataPath << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin()
-                  << ", " << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << "\n#Marker " << GetMarkerColor()
-                  << ", " << GetMarkerStyle() << ", " << GetMarkerSize() << "\n#Line " << GetLineColor() << ", " << GetLineStyle() << ", "
-                  << GetLineWidth() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DataPath " << m_DataPath << "\n#DrawPath " << m_DrawPath << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis " << GetyTitle()
+                  << ", " << GetyMin() << ", " << GetyMax() << "\n#Marker " << GetMarkerColor() << ", " << GetMarkerStyle() << ", " << GetMarkerSize() << "\n#Line " << GetLineColor() << ", "
+                  << GetLineStyle() << ", " << GetLineWidth() << std::endl;
 
     return ConstructorSS.str();
 }

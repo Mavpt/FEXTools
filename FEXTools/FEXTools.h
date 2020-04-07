@@ -3,3 +3,5 @@
 #include "FToolsClasses/DataStack.h"
 #include "FToolsClasses/Fitter.h"
 #include "FToolsClasses/Interpolator.h"
+
+#include "FToolsClasses/FunctionPlotter.h"

@@ -31,6 +31,7 @@ set (SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/DataStack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/Fitter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/Interpolator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FToolsClasses/FunctionPlotter.cpp
 )
 
 # Define library

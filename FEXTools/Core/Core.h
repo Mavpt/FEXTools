@@ -59,16 +59,13 @@ struct DrawProperties
     ELineStyle LineStyle;
     Width_t    LineWidth;
 
-    DrawProperties(const Color_t      MarkerColor = kWhite,
-                   const EMarkerStyle MarkerStyle = kDot,
-                   const Size_t       MarkerSize  = 0,
-                   const Color_t      LineColor   = kWhite,
-                   const ELineStyle   LineStyle   = kSolid,
-                   const Width_t      LineWidth   = 0);
+    DrawProperties(const Color_t MarkerColor = kWhite, const EMarkerStyle MarkerStyle = kDot, const Size_t MarkerSize = 0, const Color_t LineColor = kWhite, const ELineStyle LineStyle = kSolid, const Width_t LineWidth = 0);
 
     DrawProperties(const DrawProperties& i_DrawProperties);
 };
 
 std::string GetFileContents(const char* Filepath);
+
+void ReplaceString(std::string& subject, const std::string& search, const std::string& replace);
 
 #endif

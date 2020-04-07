@@ -6,16 +6,7 @@
 #include "Core/Core.h"
 #include "Core/Log.h"
 
-DataProperties::DataProperties(const char*  Title,
-                               const char*  xTitle,
-                               const double xMin,
-                               const double xMax,
-                               const char*  yTitle,
-                               const double yMin,
-                               const double yMax,
-                               const char*  zTitle,
-                               const double zMin,
-                               const double zMax)
+DataProperties::DataProperties(const char* Title, const char* xTitle, const double xMin, const double xMax, const char* yTitle, const double yMin, const double yMax, const char* zTitle, const double zMin, const double zMax)
     : Title(Title), xTitle(xTitle), xMin(xMin), xMax(xMax), yTitle(yTitle), yMin(yMin), yMax(yMax), zTitle(zTitle), zMin(zMin), zMax(zMax)
 {
 }
@@ -64,4 +55,14 @@ std::string GetFileContents(const char* Filepath)
     InputStream.close();
 
     return FileContent;
+}
+
+void ReplaceString(std::string& subject, const std::string& search, const std::string& replace)
+{
+    size_t pos = 0;
+    while ((pos = subject.find(search, pos)) != std::string::npos)
+    {
+        subject.replace(pos, search.length(), replace);
+        pos += replace.length();
+    }
 }

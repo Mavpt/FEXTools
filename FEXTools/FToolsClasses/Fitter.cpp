@@ -1,4 +1,4 @@
-/* DataStack */
+/* Fitter */
 
 #include <fstream>
 #include <sstream>
@@ -9,16 +9,6 @@
 #include <TAxis.h>
 
 #include "FToolsClasses/Fitter.h"
-
-void ReplaceString(std::string& subject, const std::string& search, const std::string& replace)
-{
-    size_t pos = 0;
-    while ((pos = subject.find(search, pos)) != std::string::npos)
-    {
-        subject.replace(pos, search.length(), replace);
-        pos += replace.length();
-    }
-}
 
 /* PUBLIC */
 Fitter::Fitter(const char* ConstructionDataPath) : DataSet(2, GetFileContents(ConstructionDataPath))
@@ -54,8 +44,7 @@ Fitter::Fitter(const char* ConstructionDataPath) : DataSet(2, GetFileContents(Co
 }
 
 /* PROTECTED */
-Fitter::Fitter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
-    : DataSet(Type, ConstructionData, i_DataProperties)
+Fitter::Fitter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(Type, ConstructionData, i_DataProperties)
 {
     size_t BegPos = std::string::npos;
 
@@ -104,8 +93,8 @@ std::string Fitter::GetConstructor() const
 
     std::stringstream ConstructorSS;
 
-    ConstructorSS << DataSet::GetConstructor() << "\n#Function " << m_FormulaStr << " | Chi^2 = " << m_Function2Fit->GetChisquare()
-                  << "\n#Integral (of the fitted function) = " << FORMATD() << m_Integral[0] << " (+-" << FORMATD() << m_Integral[1] << ")\n"
+    ConstructorSS << DataSet::GetConstructor() << "\n#Function " << m_FormulaStr << " | Chi^2 = " << m_Function2Fit->GetChisquare() << "\n#Integral (of the fitted function) = " << FORMATD()
+                  << m_Integral[0] << " (+-" << FORMATD() << m_Integral[1] << ")\n"
                   << std::endl;
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
@@ -116,8 +105,7 @@ std::string Fitter::GetConstructor() const
 
         else
         {
-            ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << " (+- " << FORMATD()
-                          << m_VariableErrors[Variable.second] << ")" << std::endl;
+            ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << " (+- " << FORMATD() << m_VariableErrors[Variable.second] << ")" << std::endl;
         }
 
     return ConstructorSS.str();
@@ -159,8 +147,8 @@ void Fitter::ReadFunction(const std::string& Function)
 
         else
         {
-            Start = 0;
-            End   = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
+            Start                                          = 0;
+            End                                            = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
             m_VariableMap[line.substr(Start, End - Start)] = i;
 
             Start = line.find_first_not_of(" = ", End);
