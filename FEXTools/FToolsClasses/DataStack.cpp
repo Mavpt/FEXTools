@@ -16,7 +16,7 @@
 size_t GetMin(size_t PossiblePositions[4])
 {
     size_t CurrentMin = PossiblePositions[0];
-    for (int i = 1; i < 4; i++) CurrentMin = (CurrentMin < PossiblePositions[i]) ? CurrentMin : PossiblePositions[i];
+    for (int i = 1; i < 4; i++) CurrentMin = (CurrentMin <= PossiblePositions[i]) ? CurrentMin : PossiblePositions[i];
 
     return CurrentMin;
 }
@@ -71,7 +71,7 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileConte
 
         EndPos = GetMin(PossiblePositions);
 
-        while (EndPos != std::string::npos)
+        while (EndPos != ConstructionData.size())
         {
             BegPos = EndPos;
 
@@ -81,37 +81,60 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileConte
             PossiblePositions[3] = ConstructionData.find("#FunctionPlotter", EndPos + 1);
 
             EndPos = GetMin(PossiblePositions);
+            EndPos = (EndPos != std::string::npos) ? EndPos : ConstructionData.size();
 
-            if (ConstructionData.find("#DataSet") != std::string::npos) // DataSet
+            switch (ConstructionData[BegPos + 1])
             {
-                FToolsObject* Set = new DataSet(1, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
-                m_Objects.push_back(Set);
-                break;
-            }
+                case 'D': // DataSet
+                {
+                    FToolsObject* Set = new DataSet(1, ConstructionData.substr(BegPos, EndPos - BegPos), &m_DataProperties);
+                    m_Objects.push_back(Set);
+                    break;
+                }
 
-            else if (ConstructionData.find("#Fitter") != std::string::npos) // Fitter
-            {
-                FToolsObject* Set = new Fitter(2, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
-                m_Objects.push_back(Set);
-                break;
-            }
+                case 'I': // Interpolator
+                {
+                    FToolsObject* Set = new Interpolator(3, ConstructionData.substr(BegPos, EndPos - BegPos), &m_DataProperties);
+                    m_Objects.push_back(Set);
+                    break;
+                }
 
-            else if (ConstructionData.find("#Interpolator") != std::string::npos) // Interpolator
-            {
-                FToolsObject* Set = new Interpolator(3, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
-                m_Objects.push_back(Set);
-                break;
-            }
+                case 'F': // Fitter, FunctionPlotter
+                {
+                    switch (ConstructionData[BegPos + 2])
+                    {
+                        case 'i': // Fitter
+                        {
+                            FToolsObject* Set = new Fitter(2, ConstructionData.substr(BegPos, EndPos - BegPos), &m_DataProperties);
+                            m_Objects.push_back(Set);
+                            break;
+                        }
 
-            else if (ConstructionData.find("#FunctionPlotter") != std::string::npos) // FunctionPlotter
-            {
-                FToolsObject* Set = new FunctionPlotter(-1, ConstructionData.substr(BegPos, (EndPos != std::string::npos) ? EndPos - BegPos : ConstructionData.size() - BegPos), &m_DataProperties);
-                m_Objects.push_back(Set);
-                break;
-            }
+                        case 'u': // FunctionPlotter
+                        {
+                            FToolsObject* Set = new FunctionPlotter(-1, ConstructionData.substr(BegPos, EndPos - BegPos), &m_DataProperties);
+                            m_Objects.push_back(Set);
+                            break;
+                        }
 
-            else
-                CLIENT_ASSERT(false, "No idea how we got here: %s", ConstructionData.c_str()) break;
+                        default:
+                        {
+                            CORE_ASSERT(false, "Error while building DataStack:\n BegPos =%ld,\n EndPos = %ld,\n ConstructionData[BegPos+2] = %d (%c)\n\n%s", BegPos, EndPos,
+                                        ConstructionData[BegPos + 2], ConstructionData[BegPos + 2], ConstructionData.c_str());
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    CORE_ASSERT(false, "Error while building DataStack:\n BegPos =%ld,\n EndPos = %ld,\n ConstructionData[BegPos+2] = %d (%c)\n\n%s", BegPos, EndPos, ConstructionData[BegPos + 1],
+                                ConstructionData[BegPos + 1], ConstructionData.c_str());
+                    break;
+                }
+            }
         }
     }
 

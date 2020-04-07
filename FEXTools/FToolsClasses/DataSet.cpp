@@ -40,8 +40,7 @@ DataSet::DataSet(const char* ConstructionDataPath) : FToolsObject(1, GetFileCont
 }
 
 /* PROTECTED */
-DataSet::DataSet(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
-    : FToolsObject(Type, ConstructionData, i_DataProperties)
+DataSet::DataSet(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : FToolsObject(Type, ConstructionData, i_DataProperties)
 {
     if (Type)
     {
@@ -74,11 +73,13 @@ DataSet::DataSet(const int& Type, const std::string& ConstructionData, const Dat
         const double DummyVar = 0;
         m_Graph               = new TGraphErrors(1, &DummyVar, &DummyVar);
 
+        m_Graph->SetNameTitle(GetTitle(), GetTitle());
+
         m_Graph->GetXaxis()->SetTitle(GetxTitle());
         m_Graph->GetXaxis()->SetLimits(GetxMin(), GetxMax());
         m_Graph->GetXaxis()->SetMaxDigits(4);
 
-        m_Graph->GetYaxis()->SetTitle(GetxTitle());
+        m_Graph->GetYaxis()->SetTitle(GetyTitle());
         m_Graph->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
         m_Graph->GetYaxis()->SetMaxDigits(3);
     }
@@ -132,8 +133,7 @@ void DataSet::PrintData(const char* DataPath) const
     FSTREAMTEST(Stream, DataPath);
 
     for (int i = 0; i < m_Graph->GetN(); i++)
-        Stream << FORMATD() << m_Graph->GetX()[i] << "\t" << FORMATD() << m_Graph->GetY()[i] << "\t" << FORMATD() << m_Graph->GetEX()[i] << "\t"
-               << FORMATD() << m_Graph->GetEY()[i] << std::endl;
+        Stream << FORMATD() << m_Graph->GetX()[i] << "\t" << FORMATD() << m_Graph->GetY()[i] << "\t" << FORMATD() << m_Graph->GetEX()[i] << "\t" << FORMATD() << m_Graph->GetEY()[i] << std::endl;
 
     Stream.close();
 }

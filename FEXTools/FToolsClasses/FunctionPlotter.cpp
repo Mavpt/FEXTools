@@ -128,17 +128,7 @@ void FunctionPlotter::ReadFunction(const std::string& Function)
             EndPosV = line.find_first_of("\n", BegPosV);
 
             m_VariableMap[line.substr(BegPos, EndPos - BegPos)] = std::stod(line.substr(BegPosV, EndPosV - BegPosV + 1));
-
-            std::cout << "-> " << line << " : " << line.substr(BegPos, EndPos - BegPos) << " : " << line.substr(BegPosV, EndPosV - BegPosV + 1) << " : "
-                      << std::stod(line.substr(BegPosV, EndPosV - BegPosV + 1)) << " : " << m_VariableMap[line.substr(BegPos, EndPos - BegPos)] << std::endl;
         }
-
-        for (std::pair<std::string, const int> Variable : m_VariableMap)
-        {
-            std::cout << "=> " << Variable.first << " = " << Variable.second << std::endl;
-        }
-
-        std::cout << "\n\n\n" << std::endl;
     }
 }
 
@@ -153,8 +143,6 @@ TString FunctionPlotter::ProcessFormula()
         ss << "(" << it->second << ")";
         ReplaceString(tmpFormula, it->first, ss.str());
     }
-
-    std::cout << "String = " << m_FormulaStr << " : Final = " << tmpFormula << std::endl;
 
     return TString(tmpFormula.c_str());
 }

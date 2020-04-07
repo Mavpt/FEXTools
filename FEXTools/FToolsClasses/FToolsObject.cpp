@@ -159,7 +159,7 @@ FToolsObject::FToolsObject(const int& Type, const std::string& ConstructionData,
             BegPos = ConstructionData.find("#yAxis");
             PROPERTYTEST(BegPos, "yAxis", ConstructionData);
 
-            BegPos = ConstructionData.find_first_not_of("#yAxis ", BegPos);
+            BegPos = ConstructionData.find_first_not_of(" ", BegPos + 6);
             EndPos = ConstructionData.find(",", BegPos);
 
             m_DataProperties.yTitle = ConstructionData.substr(BegPos, EndPos - BegPos);
