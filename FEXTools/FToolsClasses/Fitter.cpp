@@ -44,7 +44,8 @@ Fitter::Fitter(const char* ConstructionDataPath) : DataSet(2, GetFileContents(Co
 }
 
 /* PROTECTED */
-Fitter::Fitter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(Type, ConstructionData, i_DataProperties)
+Fitter::Fitter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : DataSet(Type, ConstructionData, i_DataProperties)
 {
     size_t BegPos = std::string::npos;
 
@@ -78,8 +79,8 @@ void Fitter::Draw(const char* DrawPath) const
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();
 
+    m_Function2Fit->Draw();
     m_Graph->Draw("PA");
-    m_Function2Fit->Draw("SAME");
 
     Canvas->Update();
     Canvas->SaveAs(DrawPath);
@@ -93,8 +94,8 @@ std::string Fitter::GetConstructor() const
 
     std::stringstream ConstructorSS;
 
-    ConstructorSS << DataSet::GetConstructor() << "\n#Function " << m_FormulaStr << " | Chi^2 = " << m_Function2Fit->GetChisquare() << "\n#Integral (of the fitted function) = " << FORMATD()
-                  << m_Integral[0] << " (+-" << FORMATD() << m_Integral[1] << ")\n"
+    ConstructorSS << DataSet::GetConstructor() << "\n#Function " << m_FormulaStr << " | Chi^2 = " << m_Function2Fit->GetChisquare()
+                  << "\n#Integral (of the fitted function) = " << FORMATD() << m_Integral[0] << " (+-" << FORMATD() << m_Integral[1] << ")\n"
                   << std::endl;
 
     for (std::pair<std::string, const int> Variable : m_VariableMap)
@@ -105,7 +106,8 @@ std::string Fitter::GetConstructor() const
 
         else
         {
-            ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << " (+- " << FORMATD() << m_VariableErrors[Variable.second] << ")" << std::endl;
+            ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << m_VariableValues[Variable.second] << " (+- " << FORMATD()
+                          << m_VariableErrors[Variable.second] << ")" << std::endl;
         }
 
     return ConstructorSS.str();
@@ -147,8 +149,8 @@ void Fitter::ReadFunction(const std::string& Function)
 
         else
         {
-            Start                                          = 0;
-            End                                            = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
+            Start = 0;
+            End   = line.find_first_of(" ", line.find("Const") != std::string::npos ? line.find("Const ") + 6 : Start);
             m_VariableMap[line.substr(Start, End - Start)] = i;
 
             Start = line.find_first_not_of(" = ", End);
@@ -201,8 +203,8 @@ void Fitter::Fit()
 
 void Fitter::FDraw() const
 {
-    m_Graph->Draw("P");
     m_Function2Fit->Draw("SAME");
+    m_Graph->Draw("P");
 }
 
 /* PUBLIC */

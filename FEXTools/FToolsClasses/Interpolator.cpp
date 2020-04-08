@@ -65,8 +65,8 @@ void Interpolator::Draw(const char* DrawPath) const
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();
 
+    m_Spline5->Draw("L");
     m_Graph->Draw("PA");
-    m_Spline5->Draw("LSAME");
 
     Canvas->Update();
     Canvas->SaveAs(DrawPath);
@@ -160,8 +160,8 @@ const double* Interpolator::GetMaximum() const
 
 void Interpolator::FDraw() const
 {
+    m_Spline5->Draw("L");
     m_Graph->Draw("P");
-    m_Spline5->Draw("LSAME");
 }
 
 /* PUBLIC */
