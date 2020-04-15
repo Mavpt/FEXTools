@@ -31,6 +31,9 @@ public: // Functions
 protected: // Functions
     Fitter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
+    // Non-virtual
+    inline virtual const TObject* GetGraph() const override { return m_Function2Fit; }
+
     // Virtual
     virtual void Draw(const char* DrawPath) const override;
 

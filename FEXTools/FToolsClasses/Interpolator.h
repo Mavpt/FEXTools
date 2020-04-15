@@ -18,6 +18,10 @@ public: // Functions
 protected: // Functions
     Interpolator(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties = NULL);
 
+    // Non-virtual
+    inline virtual const TObject* GetGraph() const override { return m_Spline5; }
+
+    // Virtual
     virtual void Draw(const char* DrawPath) const override;
 
     virtual std::string GetConstructor() const override;
