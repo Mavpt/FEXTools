@@ -40,7 +40,8 @@ DataSet::DataSet(const char* ConstructionDataPath) : FToolsObject(1, GetFileCont
 }
 
 /* PROTECTED */
-DataSet::DataSet(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : FToolsObject(Type, ConstructionData, i_DataProperties)
+DataSet::DataSet(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : FToolsObject(Type, ConstructionData, i_DataProperties)
 {
     if (Type)
     {
@@ -106,7 +107,7 @@ std::string DataSet::GetConstructor() const
 
     TGraph* TempGraph = new TGraph(*m_Graph);
     TempGraph->InsertPointBefore(0, m_Graph->GetX()[0], 0);
-    TempGraph->SetPoint(m_Graph->GetN(), m_Graph->GetX()[m_Graph->GetN() - 1], 0);
+    TempGraph->SetPoint(m_Graph->GetN() + 1, m_Graph->GetX()[m_Graph->GetN() - 1], 0);
 
     ConstructorSS << FToolsObject::GetConstructor() << "\n#Integral (of the DataSet) = " << FORMATD() << TempGraph->Integral() << std::endl;
 
@@ -133,7 +134,8 @@ void DataSet::PrintData(const char* DataPath) const
     FSTREAMTEST(Stream, DataPath);
 
     for (int i = 0; i < m_Graph->GetN(); i++)
-        Stream << FORMATD() << m_Graph->GetX()[i] << "\t" << FORMATD() << m_Graph->GetY()[i] << "\t" << FORMATD() << m_Graph->GetEX()[i] << "\t" << FORMATD() << m_Graph->GetEY()[i] << std::endl;
+        Stream << FORMATD() << m_Graph->GetX()[i] << "\t" << FORMATD() << m_Graph->GetY()[i] << "\t" << FORMATD() << m_Graph->GetEX()[i] << "\t"
+               << FORMATD() << m_Graph->GetEY()[i] << std::endl;
 
     Stream.close();
 }
