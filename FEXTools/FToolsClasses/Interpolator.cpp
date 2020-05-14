@@ -61,6 +61,7 @@ Interpolator::Interpolator(const int& Type, const std::string& ConstructionData,
 void Interpolator::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetCanvasSize(CANVASWIDTH, CANVASHEIGHT);
     Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();

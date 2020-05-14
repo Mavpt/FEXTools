@@ -75,6 +75,7 @@ Fitter::Fitter(const int& Type, const std::string& ConstructionData, const DataP
 void Fitter::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetCanvasSize(CANVASWIDTH, CANVASHEIGHT);
     Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();

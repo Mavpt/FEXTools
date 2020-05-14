@@ -37,7 +37,8 @@ FunctionPlotter::FunctionPlotter(const char* ConstructionDataPath) : FToolsObjec
 }
 
 /* PROTECTED */
-FunctionPlotter::FunctionPlotter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : FToolsObject(Type, ConstructionData, i_DataProperties)
+FunctionPlotter::FunctionPlotter(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : FToolsObject(Type, ConstructionData, i_DataProperties)
 {
     size_t BegPos = ConstructionData.find("#Function ");
     PROPERTYTEST(BegPos, "Function", ConstructionData);
@@ -59,6 +60,7 @@ FunctionPlotter::FunctionPlotter(const int& Type, const std::string& Constructio
 void FunctionPlotter::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetCanvasSize(CANVASWIDTH, CANVASHEIGHT);
     Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();
@@ -79,7 +81,8 @@ std::string FunctionPlotter::GetConstructor() const
 
     ConstructorSS << FToolsObject::GetConstructor() << "\n#Function " << m_FormulaStr << std::endl;
 
-    for (std::pair<std::string, const double> Variable : m_VariableMap) ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << Variable.second << std::endl;
+    for (std::pair<std::string, const double> Variable : m_VariableMap)
+        ConstructorSS << FORMATL(VS, 0) << Variable.first << " = " << FORMATD() << Variable.second << std::endl;
 
     return ConstructorSS.str();
 }

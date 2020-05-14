@@ -20,7 +20,10 @@
 #define CANVASTITLE  "Canvas"
 #define CANVASWIDTH  1000
 #define CANVASHEIGHT 1000
-#define CANVASMARGIN 0.13, 0.1, 0.1, 0.1
+#define CANVASMARGIN 0.15, 0.1, 0.1, 0.1
+
+#define XDIGITS 3
+#define YDIGITS 3
 
 struct DataProperties
 {
@@ -59,7 +62,12 @@ struct DrawProperties
     ELineStyle LineStyle;
     Width_t    LineWidth;
 
-    DrawProperties(const Color_t MarkerColor = kWhite, const EMarkerStyle MarkerStyle = kDot, const Size_t MarkerSize = 0, const Color_t LineColor = kWhite, const ELineStyle LineStyle = kSolid, const Width_t LineWidth = 0);
+    DrawProperties(const Color_t      MarkerColor = kWhite,
+                   const EMarkerStyle MarkerStyle = kDot,
+                   const Size_t       MarkerSize  = 0,
+                   const Color_t      LineColor   = kWhite,
+                   const ELineStyle   LineStyle   = kSolid,
+                   const Width_t      LineWidth   = 0);
 
     DrawProperties(const DrawProperties& i_DrawProperties);
 };

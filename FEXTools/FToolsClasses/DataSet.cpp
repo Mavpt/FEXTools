@@ -22,14 +22,14 @@ DataSet::DataSet(const char* ConstructionDataPath) : FToolsObject(1, GetFileCont
 
     m_Graph->GetXaxis()->SetTitleSize(0.04);
     m_Graph->GetXaxis()->SetLabelSize(0.04);
-    m_Graph->GetXaxis()->SetMaxDigits(3);
+    m_Graph->GetXaxis()->SetMaxDigits(YDIGITS);
 
     m_Graph->GetYaxis()->SetTitle(GetyTitle());
     m_Graph->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
 
     m_Graph->GetYaxis()->SetTitleSize(0.04);
     m_Graph->GetYaxis()->SetLabelSize(0.04);
-    m_Graph->GetYaxis()->SetMaxDigits(3);
+    m_Graph->GetYaxis()->SetMaxDigits(YDIGITS);
 
     m_Graph->SetMarkerColor(GetMarkerColor());
     m_Graph->SetMarkerStyle(GetMarkerStyle());
@@ -55,14 +55,14 @@ DataSet::DataSet(const int& Type, const std::string& ConstructionData, const Dat
 
         m_Graph->GetXaxis()->SetTitleSize(0.04);
         m_Graph->GetXaxis()->SetLabelSize(0.04);
-        m_Graph->GetXaxis()->SetMaxDigits(3);
+        m_Graph->GetXaxis()->SetMaxDigits(YDIGITS);
 
         m_Graph->GetYaxis()->SetTitle(GetyTitle());
         m_Graph->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
 
         m_Graph->GetYaxis()->SetTitleSize(0.04);
         m_Graph->GetYaxis()->SetLabelSize(0.04);
-        m_Graph->GetYaxis()->SetMaxDigits(3);
+        m_Graph->GetYaxis()->SetMaxDigits(YDIGITS);
 
         m_Graph->SetMarkerColor(GetMarkerColor());
         m_Graph->SetMarkerStyle(GetMarkerStyle());
@@ -82,13 +82,14 @@ DataSet::DataSet(const int& Type, const std::string& ConstructionData, const Dat
 
         m_Graph->GetYaxis()->SetTitle(GetyTitle());
         m_Graph->GetYaxis()->SetRangeUser(GetyMin(), GetyMax());
-        m_Graph->GetYaxis()->SetMaxDigits(3);
+        m_Graph->GetYaxis()->SetMaxDigits(YDIGITS);
     }
 }
 
 void DataSet::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetCanvasSize(CANVASWIDTH, CANVASHEIGHT);
     Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();

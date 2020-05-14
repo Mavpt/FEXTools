@@ -22,7 +22,8 @@ size_t GetMin(size_t PossiblePositions[4])
 }
 
 /* PUBLIC */
-DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileContents(ConstructionDataPath)), LegendSize(0.015), LegendPos{ .8, .8, .95, .95 }
+DataStack::DataStack(const char* ConstructionDataPath)
+    : DataSet(0, GetFileContents(ConstructionDataPath)), LegendSize(0.015), LegendPos{ .8, .8, .95, .95 }
 {
     size_t BegPos = std::string::npos, EndPos = std::string::npos;
 
@@ -67,7 +68,8 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileConte
 
     // DataSets, Fitters and Interpolators
     {
-        size_t PossiblePositions[4] = { ConstructionData.find("#DataSet"), ConstructionData.find("#Fitter"), ConstructionData.find("#Interpolator"), ConstructionData.find("#FunctionPlotter") };
+        size_t PossiblePositions[4] = { ConstructionData.find("#DataSet"), ConstructionData.find("#Fitter"), ConstructionData.find("#Interpolator"),
+                                        ConstructionData.find("#FunctionPlotter") };
 
         EndPos = GetMin(PossiblePositions);
 
@@ -119,8 +121,9 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileConte
 
                         default:
                         {
-                            CORE_ASSERT(false, "Error while building DataStack:\n BegPos =%ld,\n EndPos = %ld,\n ConstructionData[BegPos+2] = %d (%c)\n\n%s", BegPos, EndPos,
-                                        ConstructionData[BegPos + 2], ConstructionData[BegPos + 2], ConstructionData.c_str());
+                            CORE_ASSERT(false,
+                                        "Error while building DataStack:\n BegPos =%ld,\n EndPos = %ld,\n ConstructionData[BegPos+2] = %d (%c)\n\n%s",
+                                        BegPos, EndPos, ConstructionData[BegPos + 2], ConstructionData[BegPos + 2], ConstructionData.c_str());
                             break;
                         }
                     }
@@ -130,8 +133,8 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileConte
 
                 default:
                 {
-                    CORE_ASSERT(false, "Error while building DataStack:\n BegPos =%ld,\n EndPos = %ld,\n ConstructionData[BegPos+2] = %d (%c)\n\n%s", BegPos, EndPos, ConstructionData[BegPos + 1],
-                                ConstructionData[BegPos + 1], ConstructionData.c_str());
+                    CORE_ASSERT(false, "Error while building DataStack:\n BegPos =%ld,\n EndPos = %ld,\n ConstructionData[BegPos+2] = %d (%c)\n\n%s",
+                                BegPos, EndPos, ConstructionData[BegPos + 1], ConstructionData[BegPos + 1], ConstructionData.c_str());
                     break;
                 }
             }
@@ -143,7 +146,8 @@ DataStack::DataStack(const char* ConstructionDataPath) : DataSet(0, GetFileConte
 }
 
 /* PROTECTED */
-DataStack::DataStack(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties) : DataSet(Type, ConstructionData, i_DataProperties)
+DataStack::DataStack(const int& Type, const std::string& ConstructionData, const DataProperties* i_DataProperties)
+    : DataSet(Type, ConstructionData, i_DataProperties)
 {
     CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__);
 }
@@ -151,6 +155,7 @@ DataStack::DataStack(const int& Type, const std::string& ConstructionData, const
 void DataStack::Draw(const char* DrawPath) const
 {
     TCanvas* Canvas = new TCanvas(GetTitle(), GetTitle(), CANVASWIDTH, CANVASHEIGHT);
+    Canvas->SetCanvasSize(CANVASWIDTH, CANVASHEIGHT);
     Canvas->SetMargin(CANVASMARGIN);
     gStyle->SetGridColor(kGray);
     Canvas->SetGrid();
@@ -178,8 +183,9 @@ std::string DataStack::GetConstructor() const
 {
     std::stringstream ConstructorSS;
 
-    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#LegendSize " << LegendSize << "\n#LegendPos " << LegendPos[0] << ", " << LegendPos[1] << ", " << LegendPos[2] << ", "
-                  << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", " << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
+    ConstructorSS << GetTitle() << "\n#DrawPath " << m_DrawPath << "\n#LegendSize " << LegendSize << "\n#LegendPos " << LegendPos[0] << ", "
+                  << LegendPos[1] << ", " << LegendPos[2] << ", " << LegendPos[3] << "\n#xAxis " << GetxTitle() << ", " << GetxMin() << ", "
+                  << GetxMax() << "\n#yAxis " << GetyTitle() << ", " << GetyMin() << ", " << GetyMax() << std::endl;
 
     return ConstructorSS.str();
 }
@@ -200,7 +206,10 @@ void DataStack::PrintConstructor(const char* ConstructionDataPath) const
     OutputStream.close();
 }
 
-void DataStack::PrintConstructor(std::ofstream&) const { CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__); }
+void DataStack::PrintConstructor(std::ofstream&) const
+{
+    CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__);
+}
 
 void DataStack::FDraw() const { CORE_ASSERT(false, "DataStack is attempting to use a prohibited function (%s)", __PRETTY_FUNCTION__); }
 
