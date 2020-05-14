@@ -34,6 +34,8 @@ Fitter::Fitter(const char* ConstructionDataPath) : DataSet(2, GetFileContents(Co
     m_Function2Fit->SetLineStyle(GetLineStyle());
     m_Function2Fit->SetLineWidth(GetLineWidth());
 
+    m_Function2Fit->SetNpx(m_Graph->GetN() * 2);
+
     Fit();
 
     m_Integral[0] = m_Function2Fit->Integral(m_Graph->GetX()[0], m_Graph->GetX()[m_Graph->GetN() - 1]);
