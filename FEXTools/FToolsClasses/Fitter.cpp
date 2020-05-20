@@ -34,7 +34,7 @@ Fitter::Fitter(const char* ConstructionDataPath) : DataSet(2, GetFileContents(Co
     m_Function2Fit->SetLineStyle(GetLineStyle());
     m_Function2Fit->SetLineWidth(GetLineWidth());
 
-    m_Function2Fit->SetNpx(m_Graph->GetN() * 2);
+    m_Function2Fit->SetNpx(m_Graph->GetN() * 100);
 
     Fit();
 
@@ -67,6 +67,8 @@ Fitter::Fitter(const int& Type, const std::string& ConstructionData, const DataP
     m_Function2Fit->SetLineColor(GetLineColor());
     m_Function2Fit->SetLineStyle(GetLineStyle());
     m_Function2Fit->SetLineWidth(GetLineWidth());
+
+    m_Function2Fit->SetNpx(m_Graph->GetN() * 100);
 
     Fit();
 
